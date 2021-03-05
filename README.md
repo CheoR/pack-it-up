@@ -20,15 +20,17 @@ Boxes have assoicated QR codes so users/movers can keep track of when an a box l
 
 [ ] User should be able to link/delink QR code from a box.
 
-[ ] User should be able to link/delink items from boxe.
+[ ] User should be able to link/delink items from boxes.
 
 [ ] User should not be able to see other user's QR codes, boxes, items.
 
-[ ] User should not be able to modifiy other user's informatin.
+[ ] User should not be able to modifiy other user's information.
 
 [ ] User should be able to save their QR codes, boxes, items.
 
 [ ] User should be able to authenticate.
+
+[ ] User should only be able to add/remove/edit QR codes, boxes, items if they are logged in.
 
 ## ERD
 
