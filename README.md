@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# Introduction
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hi, my name's Cheo.
 
-## Available Scripts
+This is my front-end capstone project.
 
-In the project directory, you can run:
+## What is PackItUp
 
-### `yarn start`
+PackItUp is a moving app to help users keep track of what items went into what box for moving/storage.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Boxes have assoicated QR codes so users/movers can keep track of when an a box leave the original destination and when it arrives.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Capabilities
 
-### `yarn test`
+[ ] User should be able to add/remove/update item(s).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+[ ] User should be able to add/remove/update boxe(s).
 
-### `yarn build`
+[ ] User should be able to add/remove/update QR codes.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[ ] User should be able to link/delink QR code from a box.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+[ ] User should be able to link/delink items from boxe.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+[ ] User should not be able to see other user's QR codes, boxes, items.
 
-### `yarn eject`
+[ ] User should not be able to modifiy other user's informatin.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+[ ] User should be able to save their QR codes, boxes, items.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+[ ] User should be able to authenticate.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## ERD
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Intial entity relationship diagram below.
 
-## Learn More
+<img src="./images/PackItUp.png" alt="entity relationship diagram for pack it up" />
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Layout
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Initial layout
 
-### Code Splitting
+<img src="./images/Layout.png" alt="layout for pack it up" />
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# REQUIREMENTS
 
-### Analyzing the Bundle Size
+### Technical Requirements:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- React Application, this means there should be no direct querying of the DOM (i.e., no `document.querySelector()`, `document.getElementById()`, `document.getElementsByClassName()`, etc.)
+- Single Page Application, this means no page refreshes (i.e., no `window.reload()` or `document.reload()` ).
+- CRUD using JS Fetch API
+- Login: Users must be able to authenticate
+- Users and User dependent data: When users authenticate, they use data that only relates to them.
+- Persistent data storage (i.e., json-server)
+- **Your database must look like the ERD your mentor approved!!!**
+- All primary keys and foreign keys in your database need to be integers
+- The console in your developer tools should not have any errors, warnings are ok.
+- Your application should be data driven. This means no hard-coded values for dynamic routes, drop-downs, etc. These should always be fetched from the database.
+- It is NOT required to use an external API.
+- Minimal Styling (Your app should be visually appealing to the eye and have a logical, simple interface for the user. Styling should be your last priority and worked on only when your mentor approves.)
 
-### Making a Progressive Web App
+### Planning:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Use dbdiagram.io, Lucidchart, etc. to build your ERD.
+- Create wireframes (using moqups, lucidchart, photoshop, adobe XD, Figma, etc.)
+- Issue tickets on Github must be written following [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development#Behavioral_specifications), like the issue tickets for Nutshell.
+- If you are using an external API, gather all sample data and be prepared to demo your api at your one on one (via Postman) before committing to use the API.
+- If you want to use to use something we haven’t covered in class, you have to prove that you’ve implemented the code before your proposal will be accepted. If it is accepted, you will be given lower priority if you need help on that technology.
+- Make sure you have a project board set up in github and migrate your issue tickets.
+- Once your ERD is approved, **NO CHANGES SHOULD BE MADE TO IT without your capstone mentorss approval.**
+- **You should not start writing any code until you have had your one on one with your capstone mentor and they have approved your full proposal. If you have not fleshed out your planning enough, your capstone mentor will not let you code.**
 
-### Advanced Configuration
+### Project NoNos:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- No MVP can include a calendar. Do not try to integrate with Google Calendar (or anything else).
+- No Web Sockets. Yeah, we know it’s cool. It’s also a tremendous obstacle and provides absolutely zero value to solving your problem.
+- No games
 
-### Deployment
+### Factors for a Successful capstone
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Here are some additional things to consider that will help you plan and build [a successful capstone](https://docs.google.com/presentation/d/1yND0ZBCrKyz5PnDujtE1IL74MQ5D_xNNzwtzpOAmOLo/edit?usp=sharing).
