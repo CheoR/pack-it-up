@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
+import QRCode from "react-qr-code"
 
 function App() {
+  const test = [1, 2, 3, 4, 5]
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +20,11 @@ function App() {
           Learn React
         </a>
       </header>
+      cow
+      
+      {
+        test.map(num => <li key={num}><QRCode value={`cow--${num}`} size="128" bgColor="#FF2" fgColor="#A23"/></li>)
+      }
     </div>
   );
 }
