@@ -32,6 +32,20 @@ Boxes have assoicated QR codes so users/movers can keep track of when an a box l
 
 [ ] User should only be able to add/remove/edit QR codes, boxes, items if they are logged in.
 
+## Endpoints
+
+GET, POST, PUT, DELETE supported for the following routes
+
+- /users
+- /users/1
+- /users/edit/1
+- /boxes
+- /boxes/1
+- /boxes/edit/1
+- /items
+- /items/1
+- /items/edit/1
+
 ## ERD
 
 Intial entity relationship diagram below.
