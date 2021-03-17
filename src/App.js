@@ -1,7 +1,40 @@
 import logo from './logo.svg';
 import './App.css';
+import QRCode from "react-qr-code"
 
 function App() {
+  const test = [1, 2, 3, 4, 5]
+  const imgFilePath = "../images"
+
+  /*
+    this would be box object
+    itemId will be expend
+    userId will be expand
+    moveId will be expand
+  */
+ 
+  const payloads = [
+    {
+    "id": 1,
+    "userId": 1,
+    "itemId": 1,
+  },
+    {
+    "id": 2,
+    "userId": 1,
+    "itemId": 6,
+  },
+    {
+    "id": 3,
+    "userId": 2,
+    "itemId": 4,
+  },
+    {
+    "id": 4,
+    "userId": 1,
+    "itemId": 2,
+  },
+  ]
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +51,15 @@ function App() {
           Learn React
         </a>
       </header>
+      cow
+      
+      {
+        payloads.map(load => {
+          const code = <QRCode value={`move--${load.id}`} size="128" bgColor="#FF2" fgColor="#A23"/>
+
+          return <li key={load.id}>Move-{load.id}<br />{code}}</li>
+        })
+      }
     </div>
   );
 }
