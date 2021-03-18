@@ -6,6 +6,7 @@ import { Register } from "./auth/Register";
 
 import { ApplicationViews } from "./ApplicationViews";
 import { LandingPage } from "./routes/landingPage/LandingPage"
+import { UserPage } from "./routes/users/UserPage";
 
 export const PackItUp = () => (
   <>
@@ -15,7 +16,7 @@ export const PackItUp = () => (
    return (
     <>
     { /* Components that are rendered when the user is authenticated go inside this React fragment */}
-    <div>test</div>
+    <UserPage />
     </>
    )
   } else {
