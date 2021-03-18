@@ -53,7 +53,7 @@ export const Register = () => {
                         .then(createdUser => {
                             if (createdUser.hasOwnProperty("id")) {
                                 sessionStorage.setItem(userStorageKey, createdUser.id)
-                                history.push("/")
+                                history.push("/users")
                             }
                         })
                 }
