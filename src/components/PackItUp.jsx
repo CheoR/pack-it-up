@@ -5,10 +5,12 @@ import { userStorageKey } from "./auth/authSettings"
 import { ApplicationViews } from "./ApplicationViews";
 import { Login } from "./auth/Login";
 import { Register } from "./auth/Register";
+import { LandingPage } from "./routes/LandingPage";
 
 
 export const PackItUp = () => (
   <>
+
   <Route render={() => {
   if (sessionStorage.getItem(userStorageKey)) {
    return (
@@ -18,9 +20,15 @@ export const PackItUp = () => (
     </>
    )
   } else {
-   return <Redirect to="/login" />;
+    // return <Redirect to="/login" />;
+
+    return <Redirect to="/" />;
   }
-  }} /> {/* Route */}
+}} /> {/* Route */}
+
+  <Route exact path="/">
+    <LandingPage />
+  </Route>
 
   <Route path="/login">
    <Login />

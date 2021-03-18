@@ -1,6 +1,7 @@
 
 import React from "react"
 import { Route } from "react-router-dom"
+import { LandingPage } from "./routes/LandingPage"
 // import { Home } from "./Home"
 
 // import { CustomerList } from "./customer/CustomerList"
@@ -25,6 +26,9 @@ import { Route } from "react-router-dom"
 export const ApplicationViews = () => {
  return (
   <>
+    {/* <Route exact path="/">
+      <LandingPage />
+    </Route> */}
 
    {/* Render the animal list when http://localhost:3000/locations */}
    {/* <LocationProvider> */}
