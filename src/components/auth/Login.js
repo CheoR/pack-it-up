@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Link, useHistory } from "react-router-dom";
 import { authApi, userStorageKey } from "./authSettings"
+
 import "./Login.css"
 
 
@@ -30,7 +31,7 @@ export const Login = () => {
             .then(exists => {
                 if (exists) {
                     sessionStorage.setItem(userStorageKey, exists.id)
-                    history.push("/")
+                    history.push("/users")
                 } else {
                     setExistDialog(true)
                 }
@@ -40,15 +41,14 @@ export const Login = () => {
     return (
         <main className="container--login">
             <dialog className="dialog dialog--auth" open={existDialog}>
-                <div>User does not exist</div>
+                <div className="dialog__message">User does not exist</div>
                 <button className="button--close" onClick={e => setExistDialog(false)}>Close</button>
             </dialog>
             <section>
-                <form className="form--login" onSubmit={handleLogin}>
-                    <h1>PackItUp</h1>
-                    <h2>Please sign in</h2>
-                    <fieldset>
-                        <label htmlFor="inputEmail"> Email address </label>
+                <form className="containerform--login" onSubmit={handleLogin}>
+                    <h1 className="containerForm__header">PackItUp</h1>
+                    <fieldset className="container__fieldset">
+                        <label htmlFor="email"> Email address </label>
                         <input type="email"
                             id="email"
                             className="form-control"
@@ -57,15 +57,15 @@ export const Login = () => {
                             value={loginUser.email}
                             onChange={handleInputChange} />
                     </fieldset>
-                    <fieldset>
-                        <button type="submit">
+                    <fieldset className="container__fieldset--btn">
+                        <button className="container__btn--submit" type="submit">
                             Sign in
                         </button>
                     </fieldset>
                 </form>
             </section>
             <section className="link--register">
-                <Link to="/register">Register for an account</Link>
+                <Link className="container__register--link" to="/register">Register for an account</Link>
             </section>
         </main>
     )
