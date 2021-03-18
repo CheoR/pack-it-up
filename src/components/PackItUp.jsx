@@ -1,12 +1,11 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom"
 import { userStorageKey } from "./auth/authSettings"
-
-import { ApplicationViews } from "./ApplicationViews";
 import { Login } from "./auth/Login";
 import { Register } from "./auth/Register";
-import { LandingPage } from "./routes/LandingPage";
 
+import { ApplicationViews } from "./ApplicationViews";
+import { LandingPage } from "./routes/landingPage/LandingPage"
 
 export const PackItUp = () => (
   <>
@@ -28,6 +27,7 @@ export const PackItUp = () => (
 
   <Route exact path="/">
     <LandingPage />
+
   </Route>
 
   <Route path="/login">
