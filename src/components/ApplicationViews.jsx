@@ -1,7 +1,6 @@
 
 import React from "react"
 import { Route } from "react-router-dom"
-import { LandingPage } from "./routes/LandingPage"
 // import { Home } from "./Home"
 
 // import { CustomerList } from "./customer/CustomerList"
