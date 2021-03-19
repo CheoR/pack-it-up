@@ -1,7 +1,12 @@
 
 import React from "react"
 import { Route } from "react-router-dom"
-import { UserPage } from "./routes/users/UserPage"
+import { UserPage } from "./routes/userPages/UserPage"
+import { MoveProvider } from "./moves/MoveProvider"
+import { BoxProvider } from "./boxes/BoxProvider"
+import { ItemProvider } from "./items/ItemProvider"
+
+
 // import { Home } from "./Home"
 
 // import { CustomerList } from "./customer/CustomerList"
@@ -26,9 +31,11 @@ import { UserPage } from "./routes/users/UserPage"
 export const ApplicationViews = () => {
  return (
   <>
-    {/* <Route exact path="/users">
-      <UserPage />
-    </Route> */}
+    <Route exact path="/users">
+      <MoveProvider><BoxProvider><ItemProvider>
+        <UserPage />
+      </ItemProvider></BoxProvider></MoveProvider>
+    </Route>
 
    {/* Render the animal list when http://localhost:3000/locations */}
    {/* <LocationProvider> */}
