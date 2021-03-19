@@ -1,0 +1,40 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  overflow-wrap: break-word;
+
+  /* border: 1px solid red; */
+}
+
+.userPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.userPage,
+.userPage__header,
+.userPage__btn--logout {
+  padding: 1em;
+}
+
+.userPage__header,
+.userPage__btn--logout {
+  text-align: center;
+}
+
+.userPage__btn--logout {
+  display: block;
+  /* margin: 10px auto; */
+  width: 50%;
+  border: 2px solid blue;
+  border-radius: 10px;
+}

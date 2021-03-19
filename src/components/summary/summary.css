@@ -1,0 +1,48 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  overflow-wrap: break-word;
+
+  border: 1px solid blue;
+}
+
+.summary {
+  border: 2px solid blue;
+  display: flex;
+  background: orange;
+  text-align: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.summary__dataLength {
+  padding: 1em;
+  background: lightgreen;
+  width: 20%;
+  text-align: center;
+}
+
+.summary__buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.summary__moveType {
+  width: 100%;
+  display: block;
+  background: red;
+}
+
+.summary__linkBtn--view,
+.summary__linkBtn--edit,
+.summary__linkBtn--delete {
+  background: yellow;
+  padding: 1em;
+  margin: 0 10px;
+}
