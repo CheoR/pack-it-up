@@ -28,7 +28,6 @@ export const PackItUp = () => (
 
   <Route exact path="/">
     <LandingPage />
-
   </Route>
 
   <Route path="/login">
