@@ -35,14 +35,14 @@ export const SummaryList = ({ loggedInUserId }) => {
     collection: items.filter(item => boxesData.collection.find(box => item.boxId === box.id))
   }
   
-  const loggedInUserName = moves.find(move => move.userId === loggedInUserId)
+  const loggedInUser= moves.find(move => move.userId === loggedInUserId)
   const dataToRender = [movesData, boxesData, itemsData]
 
   return (
     <div className="summaryList">
-      <h1 className="summaryList__header">{ loggedInUserName?.user.username }'s Summary</h1>
+      <h1 className="summaryList__header">{ loggedInUser?.user.username }'s Summary</h1>
       {
-        dataToRender.map((payload, i) => <Summary key={i} data={payload} />)
+        dataToRender.map((data, i) => <Summary key={i} listType={{ data }} />)
       }
     </div>
   )

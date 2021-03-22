@@ -5,38 +5,38 @@ import { UserPage } from "./routes/userPages/UserPage"
 import { MoveProvider } from "./moves/MoveProvider"
 import { BoxProvider } from "./boxes/BoxProvider"
 import { ItemProvider } from "./items/ItemProvider"
+import { ItemList } from "./items/ItemList"
+import { BoxList } from "./boxes/BoxList"
+import { MoveList } from "./moves/MoveList"
 
 
 // import { Home } from "./Home"
 
-// import { CustomerList } from "./customer/CustomerList"
-// import { CustomerProvider } from "./customer/CustomerProvider"
-
-// import { AnimalList } from "./animal/AnimalList"
-// import { AnimalForm } from "./animal/AnimalForm"
-// import { AnimalDetail } from "./animal/AnimalDetail"
-// import { AnimalProvider } from "./animal/AnimalProvider"
-
-// import { EmployeeList } from "./employee/EmployeeList"
-// import { EmployeeForm } from "./employee/EmployeeForm"
-// import { EmployeeDetail } from "./employee/EmployeeDetail"
-// import { EmployeeProvider } from "./employee/EmployeeProvider"
-
-// import { LocationList } from "./location/LocationList"
-// import { LocationProvider } from "./location/LocationProvider"
-// import { LocationForm } from "./location/LocationForm"
-// import { LocationDetail } from "./location/LocationDetail"
-
-
 export const ApplicationViews = () => {
  return (
   <>
+  <MoveProvider><BoxProvider><ItemProvider>
     <Route exact path="/users">
-      <MoveProvider><BoxProvider><ItemProvider>
         <UserPage />
-      </ItemProvider></BoxProvider></MoveProvider>
     </Route>
 
+    <Route exact path="/items">
+        <ItemList />
+    </Route>
+
+    <Route exact path="/boxes">
+        <BoxList />
+    </Route>
+
+    <Route exact path="/moves">
+        <MoveList />
+    </Route>
+
+    {/* <Route path="/lists/:listType(\w+)/:userId(\d+)">
+        <ItemList />
+    </Route> */}
+  
+  </ItemProvider></BoxProvider></MoveProvider>
    {/* Render the animal list when http://localhost:3000/locations */}
    {/* <LocationProvider> */}
     {/* <Route exact path="/locations"> */}
