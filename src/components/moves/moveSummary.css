@@ -1,0 +1,90 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  overflow-wrap: break-word;
+
+  border: 1px solid red;
+}
+
+.moveSummary {
+  border: 2px solid green;
+  background: lightsalmon;
+  text-align: center;
+  margin-top: 10px;
+
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.moveName,
+.moveValue,
+.lowerRow {
+  grid-column-start: 3;
+  grid-column-end: 6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+}
+
+.boxCount,
+.itemCount {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  background: lightgreen;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+/* .lowerRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+} */
+
+.fragile {
+  display: flx;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+
+.boxCount__count,
+.itemCount__count {
+  height: 20px;
+  width: 20px;
+  background: white;
+  padding: 0.2em;
+}
+
+.count__items {
+  background: white;
+  height: 20px;
+  width: 20px;
+  padding: 2px;
+}
+
+.move__linkBtn--edit,
+.move__linkBtn--delete {
+  padding: 0.2em;
+  width: 70px;
+}
+
+.move__linkBtn--edit {
+  background: lightgreen;
+}
+
+.move__linkBtn--delete {
+  margin-left: 1em;
+  background: salmon;
+}
