@@ -27,8 +27,6 @@ export const ItemDetail = () => {
  const userMovesIds = moves.filter(move => move.userId === loggedInUserId).map(move => move.id)
  const userBoxes = boxes.filter(box => userMovesIds.includes(box.moveId)).map(box => { return {id: box.id, location: box.location} })
 
-  console.log(loggedInUserId)
-  console.table(item)
  const handleControlledInputChange = ( event ) => {
   console.log("selection made")
   /*
