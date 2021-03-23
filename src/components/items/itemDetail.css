@@ -1,0 +1,86 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  overflow-wrap: break-word;
+
+  border: 1px solid blue;
+}
+
+.itemDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.itemDetail__image {
+  /* border: 1px solid green; */
+  width: 90%;
+}
+
+.itemDetail__description,
+.itemDetail__value,
+.item__linkBtn--viewBox,
+label,
+#usersBoxes,
+.lowerRow {
+  /* border: 1px solid blue; */
+  padding: 1em;
+  width: 90%;
+}
+
+.itemDetail__description,
+.itemDetail__value {
+  display: flex;
+  justify-content: space-between;
+}
+
+label {
+  text-align: center;
+}
+
+.item__linkBtn--viewBox {
+  background: lightgreen;
+  width: 100%;
+  display: block;
+}
+
+Link {
+  padding: 5em;
+}
+
+.fragile {
+  display: flx;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+
+.checkBox {
+  height: 10px;
+  width: 10px;
+  background: white;
+  padding: 0.2em;
+}
+
+.item__linkBtn--camera,
+.item__linkBtn--delete {
+  padding: 0.2em;
+  width: 70px;
+}
+
+.item__linkBtn--camera {
+  background: lightgreen;
+}
+
+.item__linkBtn--delete {
+  margin-left: 1em;
+  background: salmon;
+}
