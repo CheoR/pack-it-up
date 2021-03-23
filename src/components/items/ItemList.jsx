@@ -6,14 +6,25 @@ import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "./ItemProvider"
 import { ItemSummary } from "./ItemSummary"
 import "./itemList.css"
+import { Counter } from "../counter/Counter"
 
 export const ItemList = () => {
 
  const { moves, getMoves } = useContext(MoveContext)
  const { boxes, getBoxes } = useContext(BoxContext)
- const { items, getItems } = useContext(ItemContext)
+ const { items, getItems, addItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
+ const payload = {
+   type: {
+    boxId: 0,
+    description: "",
+    value: 0,
+    isFragile: false,
+    imagePath: "'"
+   },
+   callAdd: addItems
+ }
 
  useEffect(() => {
   getMoves()
@@ -49,6 +60,7 @@ export const ItemList = () => {
       {
         itemsData.map((item, i) => <ItemSummary key={i} item={item} />)
       }
+      <Counter createType={payload}/>
     </div>
   )
 }
