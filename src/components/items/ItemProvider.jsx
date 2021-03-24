@@ -16,11 +16,24 @@ export const ItemProvider = ( props ) => {
  } // getItems
 
 
+ const addItems = ( item ) => {
+   return fetch(`${baseURL}/items`, {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json"
+     },
+     body: JSON.stringify(item)
+   })
+   .then(getItems)
+ } // addItem
+
+
  return (
   <ItemContext.Provider value={{
    items,
    getItems,
-   setItems
+   setItems,
+   addItems
   }}>
    { props.children }
   </ItemContext.Provider>

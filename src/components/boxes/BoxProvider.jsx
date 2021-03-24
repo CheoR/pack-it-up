@@ -15,12 +15,25 @@ export const BoxProvider = ( props ) => {
    .then(setBoxes)
  } // getBoxes
 
- 
+
+  const addBoxes = ( box ) => {
+   return fetch(`${baseURL}/boxes`, {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json"
+     },
+     body: JSON.stringify(box)
+   })
+   .then(getBoxes)
+ } // addItem
+
+
  return (
   <BoxContext.Provider value={{
    boxes,
    getBoxes,
-   setBoxes
+   setBoxes,
+   addBoxes
   }}>
    { props.children }
   </BoxContext.Provider>

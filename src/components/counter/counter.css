@@ -1,0 +1,63 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  overflow-wrap: break-word;
+
+  border: 1px solid orangered;
+}
+
+.counter {
+  width: 100%;
+}
+
+.counter__count {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid green;
+  display: flex;
+  justify-content: space-around;
+}
+
+.counter__increment,
+.counter__decrement,
+.counter__num {
+  padding: 1em;
+  width: 100px;
+  text-align: center;
+}
+
+.counter__num {
+  background: gray;
+}
+
+.counter__increment {
+  background: lightgreen;
+}
+
+.counter__decrement {
+  background: pink;
+}
+
+.counter__add {
+  background: lightgreen;
+  width: 80%;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+/*
+  <section className="counter">
+   <div className="counter__count">
+    <button className="counter__increment">-</button>
+    <div className="counter__num" value={num}>{ num }</div>
+    <button className="counter__decrement">+</button>
+   </div>
+   <button className="counter__add">add</button>
+  </section>
+*/
