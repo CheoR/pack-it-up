@@ -6,6 +6,7 @@ import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "./MoveProvider"
 import { MoveSummary } from "./MoveSummary"
 import "./moveList.css"
+import { Counter } from "../counter/Counter"
 
 
 const _getSum = ( valueList ) => {
@@ -30,17 +31,23 @@ const _getSum2 = ( valueList ) => {
 
 export const MoveList = () => {
 
- const { moves, getMoves } = useContext(MoveContext)
+ const { moves, getMoves, addMoves } = useContext(MoveContext)
  const { boxes, getBoxes } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
+ const newMove = {
+   type: {
+      "userId": 0,
+      "moveName": ""
+   },
+   addObj: addMoves
+ }
 
  useEffect(() => {
   getMoves()
     .then(getBoxes)
     .then(getItems)
-
  }, []) // useEffect
 
   const movesData = moves.filter(move => move.userId === loggedInUserId)
@@ -85,7 +92,7 @@ export const MoveList = () => {
       {
         movesData.map((move, i) => <MoveSummary key={i} move={ move } />)
       }
-      cows
+      <Counter objType={newMove} />
     </div>
   )
 }

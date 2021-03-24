@@ -15,7 +15,7 @@ export const ItemList = () => {
  const { items, getItems, addItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
- const payload = {
+ const newItem = {
    type: {
     boxId: 0,
     description: "",
@@ -23,7 +23,7 @@ export const ItemList = () => {
     isFragile: false,
     imagePath: "'"
    },
-   callAdd: addItems
+   addObj: addItems
  }
 
  useEffect(() => {
@@ -60,7 +60,7 @@ export const ItemList = () => {
       {
         itemsData.map((item, i) => <ItemSummary key={i} item={item} />)
       }
-      <Counter createType={payload}/>
+      <Counter objType={newItem}/>
     </div>
   )
 }
