@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react"
-import { useParams } from "react-router"
+import { Redirect, useHistory, useParams } from "react-router"
+import { Link } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
-import { ItemContext } from "./ItemProvider"
-import "./itemDetail.css"
 import { MoveContext } from "../moves/MoveProvider"
 import { BoxContext } from "../boxes/BoxProvider"
-import { Link } from "react-router-dom"
+import { ItemContext } from "./ItemProvider"
+import "./itemDetail.css"
 
 
 export const ItemDetail = () => {
@@ -14,8 +14,9 @@ export const ItemDetail = () => {
  const { itemId } = useParams()
  const { moves, getMoves } = useContext(MoveContext)
  const { boxes, getBoxes } = useContext(BoxContext)
- const { items, getItems } = useContext(ItemContext)
+ const { items, getItems, deleteItem } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+ const history = useHistory()
 
  useEffect(() => {
   getMoves()
@@ -26,6 +27,10 @@ export const ItemDetail = () => {
  const item = items.find(item => item.id === parseInt(itemId))
  const userMovesIds = moves.filter(move => move.userId === loggedInUserId).map(move => move.id)
  const userBoxes = boxes.filter(box => userMovesIds.includes(box.moveId)).map(box => { return {id: box.id, location: box.location} })
+//  const handleDelete = ( id ) => deleteItem(id).then(() => history.push("/items"))
+ 
+  const handleDelete = () => deleteItem(item.id).then(() => history.push("/items"))
+
 
  const handleControlledInputChange = ( event ) => {
   console.log("selection made")
@@ -57,11 +62,11 @@ export const ItemDetail = () => {
    <img className="itemDetail__image" src="https://source.unsplash.com/featured/?item" alt="user item" />
    <div className="itemDetail__description">
      <div>Description</div>
-     <div className="itemDetail__description--text">{ item.description.substring(0, 20) + " . ." }</div>
+     <div className="itemDetail__description--text">{ item?.description.substring(0, 20) + " . ." }</div>
     </div>
    <div className="itemDetail__value">
     <div>Value</div>
-    <div className="itemDetail__value--value">${ item.value ? item.value : "0.00" }</div>
+    <div className="itemDetail__value--value">${ item?.value ? item?.value : "0.00" }</div>
    </div>
    <label htmlFor="usersBoxes">Current Box Assignment</label>
    <select value={item.boxId} id="usersBoxes" className="form-control" onChange={handleControlledInputChange}>
@@ -86,9 +91,8 @@ export const ItemDetail = () => {
      <div className="checkBox">{ item.isFragile ? "X" : ""}</div>
     </div>
       <button id="camera" className="item__linkBtn--camera">Camera</button>
-     <Link to="/">
-      <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete">Delete</button>
-     </Link>
+      {/* <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={() => handleDelete(item.id)}>Delete</button> */}
+      <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={handleDelete}>Delete</button>
     </div> 
   </section>
  )

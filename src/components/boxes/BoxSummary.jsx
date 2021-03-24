@@ -1,10 +1,15 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useContext } from "react"
+import { Link, useHistory } from "react-router-dom"
 
+import { BoxContext } from "./BoxProvider"
 import "./boxSummary.css"
 
 
 export const BoxSummary = ({ box } ) => {
+
+  const { deleteBox } = useContext(BoxContext)
+  const history = useHistory()
+  const handleDelete = () => deleteBox(box.id).then(() => history.push("/users"))
 
  return (
   <section className="boxSummary">
@@ -38,9 +43,11 @@ export const BoxSummary = ({ box } ) => {
      <Link to={`/boxes/${box.id}`}>
       <button id={`btn--edit-${box.id}`} className="box__linkBtn--edit">Edit</button>
      </Link>
-     <Link to="/">
+     {/* <Link to="/">
       <button id={`btn--delete-${box.id}`} className="box__linkBtn--delete">Delete</button>
-     </Link>
+     </Link> */}
+           <button id={`btn--delete-${box.id}`} className="box__linkBtn--delete" onClick={handleDelete}>Delete</button>
+
     </div> 
   </section>
  )

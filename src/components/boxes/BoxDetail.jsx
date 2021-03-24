@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react"
-import { useParams } from "react-router"
+import { useHistory, useParams } from "react-router"
 import { Link } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
@@ -23,7 +23,7 @@ export const BoxDetail = () => {
 
  const { boxId } = useParams()
  const { moves, getMoves } = useContext(MoveContext)
- const { boxes, getBoxes } = useContext(BoxContext)
+ const { boxes, getBoxes, deleteBox } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
@@ -40,7 +40,8 @@ export const BoxDetail = () => {
  box.totalValue = _getSum(userItems.map(item => item.value ? item.value : 0))
  box.isFragile = items.some(item => item.isFragile)
 
-
+ const history = useHistory()
+ const handleDelete = () => deleteBox(box.id).then(() => history.push("/users"))
 
  const handleControlledInputChange = ( event ) => {
   console.log("selection made")
@@ -88,9 +89,10 @@ export const BoxDetail = () => {
      <p>Fragile</p>
      <div className="checkBox">{ box.isFragile ? "X" : ""}</div>
     </div>
-     <Link to="/">
+     {/* <Link to="/">
       <button id={`btn--delete-${box.id}`} className="box__linkBtn--delete">Delete</button>
-     </Link>
+     </Link> */}
+     <button id={`btn--delete-${box.id}`} className="box__linkBtn--delete" onClick={handleDelete}>Delete</button>
     </div> 
   </section>
  )

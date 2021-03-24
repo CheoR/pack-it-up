@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useParams } from "react-router"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
 import { ItemContext } from "../items/ItemProvider"
@@ -23,9 +23,13 @@ export const MoveDetail = () => {
 
  const { moveId } = useParams()
  const { moves, getMoves } = useContext(MoveContext)
- const { boxes, getBoxes } = useContext(BoxContext)
+ const { boxes, getBoxes, deleteMove } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+
+  const history = useHistory()
+  const handleDelete = () => deleteMove(move.id).then(() => history.push("/moves"))
+
 
  useEffect(() => {
   getMoves()
@@ -74,9 +78,10 @@ export const MoveDetail = () => {
      <p>Fragile</p>
      <div className="checkBox">{ move.isFragile ? "X" : ""}</div>
     </div>
-     <Link to="/">
+    <button id={`btn--delete-${move.id}`} className="move__linkBtn--delete" onClick={handleDelete} >Delete</button>
+     {/* <Link to="/">
       <button id={`btn--delete-${move.id}`} className="move__linkBtn--delete">Delete</button>
-     </Link>
+     </Link> */}
     </div>
 
    {/* <img className="moveDetail__image" src="https://source.unsplash.com/featured/?item" alt="user item" />

@@ -1,10 +1,15 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useContext } from "react"
+import { Link, useHistory } from "react-router-dom"
+import { MoveContext } from "./MoveProvider"
 
 import "./moveSummary.css"
 
 
 export const MoveSummary = ({ move } ) => {
+
+  const { deleteMove } = useContext(MoveContext)
+  const history = useHistory()
+  const handleDelete = () => deleteMove(move.id).then(() => history.push("/moves"))
 
  return (
   <section className="moveSummary">
@@ -35,7 +40,7 @@ export const MoveSummary = ({ move } ) => {
       <button id={`btn--edit-${move.id}`} className="move__linkBtn--edit">Edit</button>
      </Link>
      <Link to="/">
-      <button id={`btn--delete-${move.id}`} className="move__linkBtn--delete">Delete</button>
+      <button id={`btn--delete-${move.id}`} className="move__linkBtn--delete" onClick={handleDelete}>Delete</button>
      </Link>
     </div> 
   </section>

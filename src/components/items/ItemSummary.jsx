@@ -1,10 +1,16 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useContext } from "react"
+import { Link, useHistory } from "react-router-dom"
 
+import { ItemContext } from "./ItemProvider"
 import "./itemSummary.css"
 
 
 export const ItemSummary = ({ item } ) => {
+
+  const { deleteItem } = useContext(ItemContext)
+  const history = useHistory()
+
+  const handleDelete = () => deleteItem(item.id).then(() => history.push("/items"))
 
  return (
   <section className="itemSummary">
@@ -33,9 +39,7 @@ export const ItemSummary = ({ item } ) => {
      <Link to={`/items/${item.id}`}>
       <button id={`btn--edit-${item.id}`} className="summary__linkBtn--edit">Edit</button>
      </Link>
-     <Link to="/">
-      <button id={`btn--delete-${item.id}`} className="summary__linkBtn--delete">Delete</button>
-     </Link>
+     <button id={`btn--delete-${item.id}`} className="summary__linkBtn--delete" onClick={handleDelete}>Delete</button>
     </div>
   </section>
  )

@@ -15,12 +15,21 @@ export const BoxProvider = ( props ) => {
    .then(setBoxes)
  } // getBoxes
 
+
+ const deleteBox = ( id ) => {
+   return fetch(`${baseURL}/boxes/${id}`, {
+     method: "DELETE"
+   })
+   .then(getBoxes)
+ } // deleteBox
+
  
  return (
   <BoxContext.Provider value={{
    boxes,
    getBoxes,
-   setBoxes
+   setBoxes,
+   deleteBox
   }}>
    { props.children }
   </BoxContext.Provider>
