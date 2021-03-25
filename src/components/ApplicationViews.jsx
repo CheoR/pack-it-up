@@ -11,6 +11,7 @@ import { BoxDetail } from "./boxes/BoxDetail"
 import { MoveProvider } from "./moves/MoveProvider"
 import { MoveList } from "./moves/MoveList"
 import { MoveDetail } from "./moves/MoveDetail"
+import { UserProvider } from "./users/UserProvider"
 
 
 // import { Home } from "./Home"
@@ -18,7 +19,7 @@ import { MoveDetail } from "./moves/MoveDetail"
 export const ApplicationViews = () => {
  return (
   <>
-  <MoveProvider><BoxProvider><ItemProvider>
+  <UserProvider><MoveProvider><BoxProvider><ItemProvider>
     <Route exact path="/users">
         <UserPage />
     </Route>
@@ -55,7 +56,7 @@ export const ApplicationViews = () => {
         <ItemList />
     </Route> */}
   
-  </ItemProvider></BoxProvider></MoveProvider>
+  </ItemProvider></BoxProvider></MoveProvider></UserProvider>
    {/* Render the animal list when http://localhost:3000/locations */}
    {/* <LocationProvider> */}
     {/* <Route exact path="/locations"> */}
