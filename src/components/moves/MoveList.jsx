@@ -38,7 +38,7 @@ export const MoveList = () => {
 
  const newMove = {
    type: {
-      "userId": 0,
+      "userId": loggedInUserId,
       "moveName": ""
    },
    addObj: addMoves
