@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useParams } from "react-router"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
 import { ItemContext } from "../items/ItemProvider"
@@ -22,10 +22,14 @@ const _getSum = ( valueList ) => {
 export const MoveDetail = () => {
 
  const { moveId } = useParams()
- const { moves, getMoves } = useContext(MoveContext)
+ const { moves, getMoves, deleteMove } = useContext(MoveContext)
  const { boxes, getBoxes } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+
+  const history = useHistory()
+  const handleDelete = () => deleteMove(move?.id).then(() => history.push("/moves"))
+
 
  useEffect(() => {
   getMoves()
@@ -33,13 +37,16 @@ export const MoveDetail = () => {
    .then(getItems)
  }, []) // useEffect
 
- const move = moves.find(move => move.id === parseInt(moveId))
- const userBoxesIds = boxes.filter(box => box.moveId === move.id).map(box => box.id)
- const userItems = items.filter(item => userBoxesIds.includes(item.boxId))
+ const move = moves.find(move => move?.id === parseInt(moveId))
+ const userBoxesIds = boxes.filter(box => box?.moveId === move?.id).map(box => box?.id)
+ const userItems = items.filter(item => userBoxesIds.includes(item?.boxId))
 
- move.totalValue = _getSum(userItems.map(item => item.value ? item.value : 0))
- move.isFragile = userItems.some(item => item.isFragile)
- move.totalBoxes = userBoxesIds.length
+ if(move) {
+   move.totalValue = _getSum(userItems.map(item => item.value ? item.value : 0))
+   move.isFragile = userItems.some(item => item.isFragile)
+   move.totalBoxes = userBoxesIds.length
+}
+   
 
 
 
@@ -51,16 +58,16 @@ export const MoveDetail = () => {
   <section className="moveDetail">
    <div className="moveDetail__moveName">
     <div>Move</div>
-    <div className="moveDetail__moveName--text">{ move.moveName.substring(0, 20) + " . ." }</div>
+    <div className="moveDetail__moveName--text">{ move?.moveName.substring(0, 20) + " . ." }</div>
   </div>
    <div className="moveDetail__value">
     <div>Value</div>
-    <div className="moveDetail__value--value">${ move.totalValue ? move.totalValue : "0.00" }</div>
+    <div className="moveDetail__value--value">${ move?.totalValue ? move.totalValue : "0.00" }</div>
    </div>
 
     <div className="moveDetail__boxSummary">
       <div className="moveDetail__boxCount">
-      <div className="moveDetail__boxCount__count">{ move.totalBoxes}</div>
+      <div className="moveDetail__boxCount__count">{ move?.totalBoxes}</div>
       <div>Boxes</div>
       </div>
 
@@ -72,11 +79,12 @@ export const MoveDetail = () => {
 
   <div className="fragile">
      <p>Fragile</p>
-     <div className="checkBox">{ move.isFragile ? "X" : ""}</div>
+     <div className="checkBox">{ move?.isFragile ? "X" : ""}</div>
     </div>
-     <Link to="/">
+    <button id={`btn--delete-${move?.id}`} className="move__linkBtn--delete" onClick={handleDelete} >Delete</button>
+     {/* <Link to="/">
       <button id={`btn--delete-${move.id}`} className="move__linkBtn--delete">Delete</button>
-     </Link>
+     </Link> */}
     </div>
 
    {/* <img className="moveDetail__image" src="https://source.unsplash.com/featured/?item" alt="user item" />

@@ -16,6 +16,14 @@ export const ItemProvider = ( props ) => {
  } // getItems
 
 
+ const deleteItem = ( id ) => {
+   return fetch(`${baseURL}/items/${id}`, {
+     method: "DELETE"
+   })
+   .then(getItems)
+ } // deleteItem
+
+
  const addItems = ( item ) => {
    return fetch(`${baseURL}/items`, {
      method: "POST",
@@ -33,6 +41,7 @@ export const ItemProvider = ( props ) => {
    items,
    getItems,
    setItems,
+   deleteItem,
    addItems
   }}>
    { props.children }

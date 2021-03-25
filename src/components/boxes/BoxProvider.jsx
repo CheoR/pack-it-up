@@ -16,6 +16,14 @@ export const BoxProvider = ( props ) => {
  } // getBoxes
 
 
+ const deleteBox = ( id ) => {
+   return fetch(`${baseURL}/boxes/${id}`, {
+     method: "DELETE"
+   })
+   .then(getBoxes)
+ } // deleteBox
+
+ 
   const addBoxes = ( box ) => {
    return fetch(`${baseURL}/boxes`, {
      method: "POST",
@@ -33,6 +41,7 @@ export const BoxProvider = ( props ) => {
    boxes,
    getBoxes,
    setBoxes,
+   deleteBox,
    addBoxes
   }}>
    { props.children }
