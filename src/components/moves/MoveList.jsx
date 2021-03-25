@@ -51,8 +51,8 @@ export const MoveList = () => {
  }, []) // useEffect
 
   const movesData = moves.filter(move => move.userId === loggedInUserId)
-  const boxesData = boxes.filter(box => movesData.find(move => box.moveId === move.id))
-  const itemsData = items.filter(item => boxesData.find(box => item.boxId === box.id))
+  const boxesData = boxes.filter(box => box.userId === loggedInUserId)
+  const itemsData = items.filter(item => item.userId === loggedInUserId)
   const loggedInUserObj = moves.find(move => move.userId === loggedInUserId)
 
    movesData.forEach(move => {

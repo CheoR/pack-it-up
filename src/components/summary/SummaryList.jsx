@@ -27,12 +27,12 @@ export const SummaryList = ({ loggedInUserId }) => {
 
   const boxesData = {
     type: "boxes",
-    collection: boxes.filter(box => movesData.collection.find(move => box.moveId === move.id))
+    collection: boxes.filter(box => box.userId === loggedInUserId)
   }
 
   const itemsData = {
     type: "items",
-    collection: items.filter(item => boxesData.collection.find(box => item.boxId === box.id))
+    collection: items.filter(item => item.userId === loggedInUserId)
   }
   
   const loggedInUser= moves.find(move => move.userId === loggedInUserId)
