@@ -5,8 +5,8 @@ import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "./MoveProvider"
 import { MoveSummary } from "./MoveSummary"
-import "./moveList.css"
 import { Counter } from "../counter/Counter"
+import "./moveList.css"
 
 
 const _getSum = ( valueList ) => {

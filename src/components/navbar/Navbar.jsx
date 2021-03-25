@@ -28,15 +28,13 @@ export const Navbar = () => {
  const handleLogout = () => {
   console.log("logging out")
   sessionStorage.removeItem("app_user_id")
+  sessionStorage.removeItem("app_user_username")
   setIsLoggedIn(false)
   /*
    Page redirects but since there is no hard reload,
    logout button will still show up
   */
   history.push("/")
-  // {
-  //  <Redirect to="/" push={true}/>
-  // }
  }
 
  return (

@@ -44,7 +44,7 @@ export const BoxDetail = () => {
  }
 
  const history = useHistory()
- const handleDelete = () => deleteBox(box?.id).then(() => history.push("/users"))
+ const handleDelete = () => deleteBox(box?.id).then(() => history.push("/boxes"))
 
  const handleControlledInputChange = ( event ) => {
   console.log("selection made")

@@ -1,13 +1,11 @@
 import React, { useState } from "react"
 import { useHistory } from "react-router-dom"
-import { authApi, userStorageKey } from "./authSettings"
+import { authApi, userStorageKey, userStorageUserName } from "./authSettings"
 import "./register.css"
 
 export const Register = () => {
 
     const [registerUser, setRegisterUser] = useState({ 
-        // firstName: "", 
-        // lastName: "",
         username: "",
         email: "",
         password: "",
@@ -42,17 +40,16 @@ export const Register = () => {
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
-                            email: registerUser.email,
                             username: `${registerUser.username}`,
+                            email: registerUser.email,
                             password: `${registerUser.password}`
-                            // never save password like this
-                            // name: `${registerUser.firstName} ${registerUser.lastName}`
                         })
                     })
                         .then(res => res.json())
                         .then(createdUser => {
                             if (createdUser.hasOwnProperty("id")) {
                                 sessionStorage.setItem(userStorageKey, createdUser.id)
+                                sessionStorage.setItem(userStorageUserName, createdUser.username)
                                 history.push("/users")
                             }
                         })

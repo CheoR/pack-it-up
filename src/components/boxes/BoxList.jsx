@@ -33,8 +33,8 @@ export const BoxList = () => {
  const newBox = {
    type: {
     "userId": loggedInUserId,
-    "moveId": 0,
-    "location": "",
+    "moveId": 1,
+    "location": "Change Box Location",
     "qrCode": ""
    },
    addObj: addBoxes

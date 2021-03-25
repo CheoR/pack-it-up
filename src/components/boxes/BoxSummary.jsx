@@ -9,7 +9,7 @@ export const BoxSummary = ({ box } ) => {
 
   const { deleteBox } = useContext(BoxContext)
   const history = useHistory()
-  const handleDelete = () => deleteBox(box.id).then(() => history.push("/users"))
+  const handleDelete = () => deleteBox(box.id).then(() => history.push("/boxes"))
 
  return (
   <section className="boxSummary">

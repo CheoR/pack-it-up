@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react"
-import { useParams } from "react-router"
-import { Link, useHistory } from "react-router-dom"
+import { Link, useHistory, useParams } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
 import { ItemContext } from "../items/ItemProvider"
