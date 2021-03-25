@@ -33,7 +33,7 @@ export const BoxList = () => {
  const newBox = {
    type: {
     "userId": loggedInUserId,
-    "moveId": 0,
+    "moveId": 1,
     "location": "",
     "qrCode": ""
    },

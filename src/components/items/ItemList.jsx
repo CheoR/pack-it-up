@@ -16,23 +16,25 @@ export const ItemList = () => {
  const newItem = {
    type: {
     userId: loggedInUserId,
-    boxId: 0,
+    boxId: 1,
     description: "",
     value: 0,
     isFragile: false,
-    imagePath: "'"
+    imagePath: ""
    },
    addObj: addItems
  }
 
  useEffect(() => {
-  getUsers()
-    .then(getItems)
+   getUsers()
+   .then(getItems)
  }, []) // useEffect
- 
+
   const itemsData = items.filter(item => item.userId === loggedInUserId)
   const loggedInUserObj = users.find(user => user.userId === loggedInUserId)
-
+  
+  console.table(itemsData)
+ 
   itemsData.forEach(item => {
    /*
     item.hasAssociatedBox = item.boxId ? true : false
