@@ -24,12 +24,25 @@ export const BoxProvider = ( props ) => {
  } // deleteBox
 
  
+  const addBoxes = ( box ) => {
+   return fetch(`${baseURL}/boxes`, {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json"
+     },
+     body: JSON.stringify(box)
+   })
+   .then(getBoxes)
+ } // addItem
+
+
  return (
   <BoxContext.Provider value={{
    boxes,
    getBoxes,
    setBoxes,
-   deleteBox
+   deleteBox,
+   addBoxes
   }}>
    { props.children }
   </BoxContext.Provider>

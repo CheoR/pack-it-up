@@ -17,7 +17,6 @@ export const MoveProvider = ( props ) => {
 
 
  const deleteMove = ( id ) => {
-
    return fetch(`${baseURL}/moves/${id}`, {
      method: "DELETE"
    })
@@ -25,12 +24,25 @@ export const MoveProvider = ( props ) => {
  } // deleteItem
 
 
+  const addMoves = ( move ) => {
+   return fetch(`${baseURL}/moves`, {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json"
+     },
+     body: JSON.stringify(move)
+   })
+   .then(getMoves)
+ } // addMove
+
+
  return (
   <MoveContext.Provider value={{
    moves,
    getMoves,
    setMoves,
-   deleteMove
+   deleteMove,
+   addMoves
   }}>
    { props.children }
   </MoveContext.Provider>

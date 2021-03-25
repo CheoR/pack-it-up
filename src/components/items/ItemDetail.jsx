@@ -29,7 +29,7 @@ export const ItemDetail = () => {
  const userBoxes = boxes.filter(box => userMovesIds.includes(box.moveId)).map(box => { return {id: box.id, location: box.location} })
 //  const handleDelete = ( id ) => deleteItem(id).then(() => history.push("/items"))
  
-  const handleDelete = () => deleteItem(item.id).then(() => history.push("/items"))
+  const handleDelete = () => deleteItem(item?.id).then(() => history.push("/items"))
 
 
  const handleControlledInputChange = ( event ) => {
@@ -69,7 +69,7 @@ export const ItemDetail = () => {
     <div className="itemDetail__value--value">${ item?.value ? item?.value : "0.00" }</div>
    </div>
    <label htmlFor="usersBoxes">Current Box Assignment</label>
-   <select value={item.boxId} id="usersBoxes" className="form-control" onChange={handleControlledInputChange}>
+   <select value={item?.boxId} id="usersBoxes" className="form-control" onChange={handleControlledInputChange}>
      {/* TODO: Need to find a way to have "0" - no selection as an option since user can create items before assigning a box*/}
      {/* <option value="0">Select a location</option> */}
      {userBoxes.map(box => (
@@ -79,8 +79,8 @@ export const ItemDetail = () => {
      ))}
    </select>
 
-     <Link to={`/boxes/${item.boxId}`}>
-      <button id={`btn--edit-${item.boxId}`} className="item__linkBtn--viewBox">View Box Assgined</button>
+     <Link to={`/boxes/${item?.boxId}`}>
+      <button id={`btn--edit-${item?.boxId}`} className="item__linkBtn--viewBox">View Box Assgined</button>
      </Link>
    
   
@@ -88,11 +88,11 @@ export const ItemDetail = () => {
 
     <div className="fragile">
      <p>Fragile</p>
-     <div className="checkBox">{ item.isFragile ? "X" : ""}</div>
+     <div className="checkBox">{ item?.isFragile ? "X" : ""}</div>
     </div>
       <button id="camera" className="item__linkBtn--camera">Camera</button>
       {/* <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={() => handleDelete(item.id)}>Delete</button> */}
-      <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={handleDelete}>Delete</button>
+      <button id={`btn--delete-${item?.id}`} className="item__linkBtn--delete" onClick={handleDelete}>Delete</button>
     </div> 
   </section>
  )

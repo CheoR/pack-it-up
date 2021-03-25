@@ -6,6 +6,7 @@ import { BoxContext } from "./BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { BoxSummary } from "./BoxSummary"
 import "./boxList.css"
+import { Counter } from "../counter/Counter"
 
 
 const _getSum = ( valueList ) => {
@@ -24,16 +25,32 @@ const _getSum = ( valueList ) => {
 export const BoxList = () => {
 
  const { moves, getMoves } = useContext(MoveContext)
- const { boxes, getBoxes } = useContext(BoxContext)
+ const { boxes, getBoxes, addBoxes } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+//  const [ newBox, setNewBox] = useState({
+//    type: {
+//     "moveId": 0,
+//     "location": "CHICKEN",
+//     "qrCode": ""
+//    },
+//    addObj: addBoxes
+//  })
 
-
+ const newBox = {
+   type: {
+    "moveId": 0,
+    "location": "",
+    "qrCode": ""
+   },
+   addObj: addBoxes
+ }
+ 
  useEffect(() => {
-  getMoves()
-    .then(getBoxes)
-    .then(getItems)
-
+   getMoves()
+   .then(getBoxes)
+   .then(getItems)
+   
  }, []) // useEffect
 
   const movesData = moves.filter(move => move.userId === loggedInUserId)
@@ -48,12 +65,14 @@ export const BoxList = () => {
    box.moveName = movesData.find(move => move.id === box.moveId).moveName
   }) // boxes.forEach
 
+
    return (
     <div className="boxSummaryList">
       <h1 className="boxSummaryList__header">{ loggedInUserObj?.user.username }'s Boxes</h1>
       {
         boxesData.map((box, i) => <BoxSummary key={i} box={ box } />)
       }
+      <Counter objType={newBox} />
     </div>
   )
 }
