@@ -9,22 +9,16 @@
   list-style: none;
   overflow-wrap: break-word;
 
-  /* border: 1px solid red; */
+  /* border: 1px solid orangered; */
 }
 
-.userPage {
-  height: 100vh;
+.navbar__ul {
   display: flex;
-  flex-direction: column;
+  border-bottom: 1px solid blue;
   justify-content: space-around;
-  align-items: center;
+  padding: 0.5em;
 }
 
-.userPage,
-.userPage__header {
-  padding: 1em;
-}
-
-.userPage__header {
-  text-align: center;
+.navbar__li {
+  padding: 0.2em;
 }
