@@ -17,7 +17,7 @@ export const ItemList = () => {
    type: {
     userId: loggedInUserId,
     boxId: 1,
-    description: "",
+    description: "Change Item Description",
     value: 0,
     isFragile: false,
     imagePath: ""
@@ -32,9 +32,7 @@ export const ItemList = () => {
 
   const itemsData = items.filter(item => item.userId === loggedInUserId)
   const loggedInUserObj = users.find(user => user.userId === loggedInUserId)
-  
-  console.table(itemsData)
- 
+   
   itemsData.forEach(item => {
    /*
     item.hasAssociatedBox = item.boxId ? true : false

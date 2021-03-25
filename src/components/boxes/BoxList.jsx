@@ -34,7 +34,7 @@ export const BoxList = () => {
    type: {
     "userId": loggedInUserId,
     "moveId": 1,
-    "location": "",
+    "location": "Change Box Location",
     "qrCode": ""
    },
    addObj: addBoxes
