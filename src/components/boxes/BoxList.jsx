@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react"
 
 import { userStorageKey } from "../auth/authSettings"
-import { MoveContext } from "../moves/MoveProvider"
+import { UserContext } from "../users/UserProvider"
 import { BoxContext } from "./BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { BoxSummary } from "./BoxSummary"
-import "./boxList.css"
 import { Counter } from "../counter/Counter"
+import "./boxList.css"
 
 
 const _getSum = ( valueList ) => {
@@ -24,21 +24,15 @@ const _getSum = ( valueList ) => {
 
 export const BoxList = () => {
 
- const { moves, getMoves } = useContext(MoveContext)
  const { boxes, getBoxes, addBoxes } = useContext(BoxContext)
+ const { users, getUsers } = useContext(UserContext)
  const { items, getItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
-//  const [ newBox, setNewBox] = useState({
-//    type: {
-//     "moveId": 0,
-//     "location": "CHICKEN",
-//     "qrCode": ""
-//    },
-//    addObj: addBoxes
-//  })
+
 
  const newBox = {
    type: {
+    "userId": loggedInUserId,
     "moveId": 0,
     "location": "",
     "qrCode": ""
@@ -47,22 +41,20 @@ export const BoxList = () => {
  }
  
  useEffect(() => {
-   getMoves()
-   .then(getBoxes)
-   .then(getItems)
-   
+   getUsers()
+    .then(getBoxes)
+    .then(getItems)
  }, []) // useEffect
 
-  const movesData = moves.filter(move => move.userId === loggedInUserId)
-  const boxesData = boxes.filter(box => movesData.find(move => box.moveId === move.id))
+  const boxesData = boxes.filter(box => box.userId === loggedInUserId)
   const itemsData = items.filter(item => boxesData.find(box => item.boxId === box.id))
-  const loggedInUserObj = moves.find(move => move.userId === loggedInUserId)
+  const loggedInUserObj = users.find(user => user.userId === loggedInUserId)
 
   boxesData.forEach(box => {
    box.totalCount = itemsData.filter(item => item.boxId === box.id).length
    box.totalValue = _getSum(itemsData.filter(item => item.boxId === box.id ? item.value : 0))
    box.isFragile = itemsData.some(item => item.isFragile ? true : false)
-   box.moveName = movesData.find(move => move.id === box.moveId).moveName
+   box.moveName = box?.move?.moveName// movesData.find(move => move.id === box.moveId).moveName
   }) // boxes.forEach
 
 
