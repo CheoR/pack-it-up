@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 import { BoxContext } from "../boxes/BoxProvider"
@@ -22,20 +22,26 @@ const _getSum = ( valueList ) => {
 }
 
 export const MoveList = () => {
+  /*
+    Todo: refactor code below.
+  */
 
+ const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+ const loggedInUserName = sessionStorage.getItem(userStorageUserName)
  const { moves, getMoves, addMoves } = useContext(MoveContext)
  const { boxes, getBoxes } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
- const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
- const loggedInUserName = sessionStorage.getItem(userStorageUserName)
-
- const newMove = {
-   type: {
+ const [ newMove, setNewMove ] = useState({
+      type: {
       "userId": loggedInUserId,
       "moveName": ""
    },
    addObj: addMoves
- }
+ })
+
+const [formField, setFormField] = useState({
+  moveName: ""
+})
 
  useEffect(() => {
   getMoves()
@@ -47,6 +53,20 @@ export const MoveList = () => {
   const boxesData = boxes.filter(box => box.userId === loggedInUserId)
   const itemsData = items.filter(item => item.userId === loggedInUserId)
   const loggedInUserObj = moves.find(move => move.userId === loggedInUserId)
+
+  
+  const handleControlledInputChange = ( event ) =>  {
+    /*
+      newMove should have latest user input in case user decides
+      to change move name before adding.
+    */
+    const newformField = { ...formField }
+    const moveObj = { ...newMove }
+    newformField[event.target.id] = event.target.value
+    moveObj.type.moveName = event.target.value
+    setNewMove(moveObj)
+    setFormField(newformField)
+  } // handleControlledInputChange
 
    movesData.forEach(move => {
      /*
@@ -85,6 +105,20 @@ export const MoveList = () => {
       {
         movesData.map((move, i) => <MoveSummary key={i} move={ move } />)
       }
+      <form action="" className="moveSummaryList__form">
+        <fieldset className="form-group">
+          <label htmlFor="moveName">Move Name: </label>
+          <input 
+          type="text" 
+          id="moveName" 
+          name="moveName"
+          className="form-control" 
+          placeholder="Add Move Name..."
+          value={formField.moveName}
+          onChange={(e) => {handleControlledInputChange(e)}}
+          autoFocus />
+        </fieldset>
+      </form>
       <Counter objType={newMove} />
     </div>
   )

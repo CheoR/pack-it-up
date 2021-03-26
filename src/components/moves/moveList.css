@@ -20,3 +20,16 @@
   background: pink;
   text-align: center;
 }
+
+.moveSummaryList__form {
+  background: lightblue;
+  padding: 1em;
+}
+
+.form-group {
+  padding: 1em;
+  width: 90%;
+  margin: 0 auto;
+  /* background: red; */
+  display: flex;
+}
