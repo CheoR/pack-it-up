@@ -33,6 +33,7 @@ export const BoxDetail = () => {
   })
 
   const [ isLoaded, setIsLoaded ] = useState(false)
+  const [ hasSaved, setHasSaved ] = useState(false)
   const [ newBox, setNewBox ] = useState({})
   const { boxId } = useParams()
 
@@ -55,6 +56,10 @@ export const BoxDetail = () => {
         "qrCode": ""
       })
   } // if
+
+  if(hasSaved) {
+    window.alert("Updated")
+  }
  }, [isLoaded])
 
  const box = boxes.find(box => box?.id === parseInt(boxId))
@@ -71,7 +76,6 @@ export const BoxDetail = () => {
  const handleDelete = () => deleteBox(box?.id).then(() => history.push("/boxes"))
 
  const handleControlledDropDownChange = ( event ) => {
-  console.log("selection made")
   const newformField = { ...formField }
   newformField[event.target.id] = event.target.value
 
@@ -80,14 +84,14 @@ export const BoxDetail = () => {
 
     newformField.moveId = parseInt(optionId)
   setFormField(newformField)
-  // setHasSaved(false)
+  setHasSaved(false)
 } // handleControlledInputChange
 
   const handleControlledInputChange = ( event ) => {
     const newformField = { ...formField }
     newformField[event.target.id] = event.target.value
     setFormField(newformField)
-    // setHasSaved(false)
+    setHasSaved(false)
 } // handleControlledInputChange
 
 const submitUpdate = (event) => {
@@ -99,7 +103,7 @@ const submitUpdate = (event) => {
   */
   delete newformField.usersMoves
   updateBox(newformField)
-    // .then(() => setHasSaved(true))
+    setHasSaved(true)
 } // updateMove
 
  return (<>

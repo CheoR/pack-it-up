@@ -37,7 +37,7 @@ export const BoxProvider = ( props ) => {
       body: JSON.stringify(box)
     })
      .then(getBoxes)
-  } // sendMessage
+  } // updateBox
 
 
  const deleteBox = ( id ) => {
