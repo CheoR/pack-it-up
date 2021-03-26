@@ -5,6 +5,7 @@ import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { Summary } from "./Summary"
 import "./summaryList.css"
+import { Instructions } from "../helpers/Instructions"
 
 
 export const SummaryList = () => {
@@ -43,6 +44,7 @@ const loggedInUser = sessionStorage.getItem("app_user_username")
   return (
     <div className="summaryList">
       <h1 className="summaryList__header">{ loggedInUser }'s Summary</h1>
+      <Instructions />
       {
         dataToRender.map((data, i) => <Summary key={i} listType={{ data }} />)
       }
