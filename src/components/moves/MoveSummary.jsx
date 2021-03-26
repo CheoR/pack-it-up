@@ -39,9 +39,7 @@ export const MoveSummary = ({ move } ) => {
      <Link to={`/moves/${move.id}`}>
       <button id={`btn--edit-${move.id}`} className="move__linkBtn--edit">Edit</button>
      </Link>
-     <Link to="/">
       <button id={`btn--delete-${move.id}`} className="move__linkBtn--delete" onClick={handleDelete}>Delete</button>
-     </Link>
     </div> 
   </section>
  )
