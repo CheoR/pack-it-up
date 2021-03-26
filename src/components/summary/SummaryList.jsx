@@ -7,11 +7,14 @@ import { Summary } from "./Summary"
 import "./summaryList.css"
 
 
-export const SummaryList = ({ loggedInUserId }) => {
+export const SummaryList = () => {
 
  const { moves, getMoves } = useContext(MoveContext)
  const { boxes, getBoxes } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
+
+const loggedInUserId = parseInt(sessionStorage.getItem("app_user_id"))
+const loggedInUser = sessionStorage.getItem("app_user_username")
 
  useEffect(() => {
   getMoves()
@@ -20,27 +23,26 @@ export const SummaryList = ({ loggedInUserId }) => {
  }, []) // useEffect
 
  
-  const movesData = {
+  const usersMoves = {
     type: "moves",
     collection: moves.filter(move => move.userId === loggedInUserId)
   }
 
-  const boxesData = {
+  const usersBoxes = {
     type: "boxes",
     collection: boxes.filter(box => box.userId === loggedInUserId)
   }
 
-  const itemsData = {
+  const usersItems = {
     type: "items",
     collection: items.filter(item => item.userId === loggedInUserId)
   }
   
-  const loggedInUser= moves.find(move => move.userId === loggedInUserId)
-  const dataToRender = [movesData, boxesData, itemsData]
+  const dataToRender = [usersMoves, usersBoxes, usersItems]
 
   return (
     <div className="summaryList">
-      <h1 className="summaryList__header">{ loggedInUser?.user.username }'s Summary</h1>
+      <h1 className="summaryList__header">{ loggedInUser }'s Summary</h1>
       {
         dataToRender.map((data, i) => <Summary key={i} listType={{ data }} />)
       }

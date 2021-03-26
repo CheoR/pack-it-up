@@ -13,11 +13,13 @@
 }
 
 .summaryList {
-  /* border: 2px solid red; */
+  border: 2px solid green;
   padding: 1em;
+  width: 90%;
 }
 .summaryList__header {
   text-align: center;
-  color: red;
+  color: green;
   margin-bottom: 50px;
+  border: 1px solid red;
 }

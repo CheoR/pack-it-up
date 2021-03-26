@@ -3,12 +3,11 @@ import { SummaryList } from "../../summary/SummaryList"
 import "./userPage.css"
 
 export const UserPage = () => {
- const loggedInUserId = parseInt(sessionStorage.getItem("app_user_id"))
 
  return (
   <main className="userPage">
    <h1 className="userPage__header">PackItUp</h1>
-   <SummaryList loggedInUserId={loggedInUserId} />
+   <SummaryList />
   </main>
  )
 }
