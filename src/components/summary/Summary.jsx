@@ -13,7 +13,7 @@ export const Summary = ({ listType }) => {
    <div className="summary__btnContainer">
     <Link to={`/${listType.data.type}`}>
       <button className="summary__btn--view" >
-        View
+        Add/View
       </button>
     </Link>
    </div>

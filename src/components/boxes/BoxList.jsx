@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 
-import { userStorageKey } from "../auth/authSettings"
-import { UserContext } from "../users/UserProvider"
+import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 import { BoxContext } from "./BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { BoxSummary } from "./BoxSummary"
@@ -25,9 +24,9 @@ const _getSum = ( valueList ) => {
 export const BoxList = () => {
 
  const { boxes, getBoxes, addBoxes } = useContext(BoxContext)
- const { users, getUsers } = useContext(UserContext)
  const { items, getItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+ const loggedInUserName = sessionStorage.getItem(userStorageUserName)
 
 
  const newBox = {
@@ -40,15 +39,14 @@ export const BoxList = () => {
    addObj: addBoxes
  }
  
- useEffect(() => {
-   getUsers()
-    .then(getBoxes)
+
+  useEffect(() => {
+   getBoxes()
     .then(getItems)
  }, []) // useEffect
 
   const boxesData = boxes.filter(box => box.userId === loggedInUserId)
   const itemsData = items.filter(item => boxesData.find(box => item.boxId === box.id))
-  const loggedInUserObj = users.find(user => user.userId === loggedInUserId)
 
   boxesData.forEach(box => {
    box.totalCount = itemsData.filter(item => item.boxId === box.id).length
@@ -60,7 +58,7 @@ export const BoxList = () => {
 
    return (
     <div className="boxSummaryList">
-      <h1 className="boxSummaryList__header">{ loggedInUserObj?.user.username }'s Boxes</h1>
+      <h1 className="boxSummaryList__header">{ loggedInUserName }'s Boxes</h1>
       {
         boxesData.map((box, i) => <BoxSummary key={i} box={ box } />)
       }

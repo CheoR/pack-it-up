@@ -44,28 +44,20 @@ export const Navbar = () => {
      <Link className="navbar__link" to="/users">Home</Link>
     </li>
     <li className="navbar__li">
-     <Link className="navbar__link" to="/moves">Moves</Link>
+      <Link className="navbar__link" to="/moves">Moves</Link>
     </li>
     <li className="navbar__li">
-     <Link className="navbar__link" to="/boxes">Boxes</Link>
+      <Link className="navbar__link" to="/boxes">Boxes</Link>
     </li>
     <li className="navbar__li">
-     <Link className="navbar__link" to="/items">Items</Link>
+      <Link className="navbar__link" to="/items">Items</Link>
     </li>
-    {
-     isLoggedIn
-     ?
-     <>
+    <li className="navbar__li">
+      <Link className="navbar__link" to="/Settings">Settings</Link>
+    </li>
       <li className="navbar__li">
-       <Link className="navbar__link" to="/Settings">Settings</Link>
+      <button className="navbar__link" onClick={handleLogout}>Logout</button>
       </li>
-       <li className="navbar__li">
-        <button className="navbar__link" onClick={handleLogout}>Logout</button>
-       </li>
-     </>
-     :
-      <></>
-    }
    </ul>
   </nav>
  )
