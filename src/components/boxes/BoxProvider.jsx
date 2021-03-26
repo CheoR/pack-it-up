@@ -16,15 +16,7 @@ export const BoxProvider = ( props ) => {
  } // getBoxes
 
 
- const deleteBox = ( id ) => {
-   return fetch(`${baseURL}/boxes/${id}`, {
-     method: "DELETE"
-   })
-   .then(getBoxes)
- } // deleteBox
-
- 
-  const addBoxes = ( box ) => {
+  const addBox = ( box ) => {
    return fetch(`${baseURL}/boxes`, {
      method: "POST",
      headers: {
@@ -36,13 +28,35 @@ export const BoxProvider = ( props ) => {
  } // addItem
 
 
+   const updateBox = ( box ) => {
+     return fetch(`${baseURL}/boxes/${box.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(box)
+    })
+     .then(getBoxes)
+  } // updateBox
+
+
+ const deleteBox = ( id ) => {
+   return fetch(`${baseURL}/boxes/${id}`, {
+     method: "DELETE"
+   })
+   .then(getBoxes)
+ } // deleteBox
+
+ 
+
  return (
   <BoxContext.Provider value={{
    boxes,
+   addBox,
+   updateBox,
    getBoxes,
    setBoxes,
    deleteBox,
-   addBoxes
   }}>
    { props.children }
   </BoxContext.Provider>

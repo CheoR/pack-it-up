@@ -20,3 +20,10 @@
   background: red;
   text-align: center;
 }
+
+.usersBoxesLabel {
+  background: lightblue;
+  padding: 1em;
+  width: 100%;
+  display: block;
+}

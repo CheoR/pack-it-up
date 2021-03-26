@@ -35,6 +35,8 @@ export const Counter = ({ objType }) => {
 
   const addFuncs = []
 
+  // console.table(objType)
+  // debugger
 
   for(let i=0; i <  num; i ++) {
    addFuncs.push(objType.addObj)

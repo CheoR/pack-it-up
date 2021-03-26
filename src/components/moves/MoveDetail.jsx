@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Link, useHistory, useParams } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
@@ -20,92 +20,116 @@ const _getSum = ( valueList ) => {
 
 export const MoveDetail = () => {
 
- const { moveId } = useParams()
- const { moves, getMoves, deleteMove } = useContext(MoveContext)
- const { boxes, getBoxes } = useContext(BoxContext)
- const { items, getItems } = useContext(ItemContext)
- const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
-
-  const history = useHistory()
+  const { moves, getMoves, updateMove, deleteMove } = useContext(MoveContext)
+  const { boxes, getBoxes } = useContext(BoxContext)
+  const { items, getItems } = useContext(ItemContext)
+  const [ isLoaded, setIsLoaded ] = useState(false)
+  const [ hasSaved, setHasSaved ] = useState(false)
+  const [ move, setMove ] = useState({})
+  const [ formField, setFormField ] = useState({
+    moveName: ""
+  })
+  
   const handleDelete = () => deleteMove(move?.id).then(() => history.push("/moves"))
+  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+
+  const { moveId } = useParams()
+  const history = useHistory()
 
 
- useEffect(() => {
-  getMoves()
-   .then(getBoxes)
-   .then(getItems)
- }, []) // useEffect
-
- const move = moves.find(move => move?.id === parseInt(moveId))
- const userBoxesIds = boxes.filter(box => box?.moveId === move?.id).map(box => box?.id)
- const userItems = items.filter(item => userBoxesIds.includes(item?.boxId))
-
- if(move) {
-   move.totalValue = _getSum(userItems.map(item => item.value ? item.value : 0))
-   move.isFragile = userItems.some(item => item.isFragile)
-   move.totalBoxes = userBoxesIds.length
-}
-   
+  useEffect(() => {
+    getMoves()
+      .then(getBoxes)
+      .then(getItems)
+      .then(() => setIsLoaded(true))
+  }, [])
 
 
+  useEffect(() => {
+    const tmpMove = moves.find(move => move.id === parseInt(moveId))
+    if(tmpMove) {
+      /*
+        Aggregate number of boxes for this move, total value, and if anything is fragile.
+      */
+      const userBoxesIds = boxes.filter(box => box?.moveId === move?.id).map(box => box?.id)
+      const userItems = items.filter(item => userBoxesIds.includes(item?.boxId))
 
- const handleControlledInputChange = ( event ) => {
-  console.log("selection made")
+      tmpMove.totalValue = _getSum(userItems.map(item => item.value ? item.value : 0))
+      tmpMove.isFragile = userItems.some(item => item.isFragile)
+      tmpMove.totalBoxes = userBoxesIds.length
+
+      setFormField(tmpMove)
+    }
+    if(hasSaved) {
+      window.alert("Updated")
+    }
+  }, [isLoaded, hasSaved])
+
+  const handleControlledInputChange = ( event ) => {
+    const newformField = { ...formField }
+    newformField[event.target.id] = event.target.value
+    setFormField(newformField)
+    setHasSaved(false)
 } // handleControlledInputChange
 
- return (
-  <section className="moveDetail">
-   <div className="moveDetail__moveName">
-    <div>Move</div>
-    <div className="moveDetail__moveName--text">{ move?.moveName.substring(0, 20) + " . ." }</div>
-  </div>
-   <div className="moveDetail__value">
-    <div>Value</div>
-    <div className="moveDetail__value--value">${ move?.totalValue ? move.totalValue : "0.00" }</div>
-   </div>
+const submitUpdate = (event) => {
+  event.preventDefault()
+  const newformField = { ...formField }
 
-    <div className="moveDetail__boxSummary">
-      <div className="moveDetail__boxCount">
-      <div className="moveDetail__boxCount__count">{ move?.totalBoxes}</div>
-      <div>Boxes</div>
-      </div>
+  /*
+    Cleanup. Does not belong to ERD.
+  */
+  delete newformField.user
+  delete newformField.totalValue
+  delete newformField.isFragile
+  delete newformField.totalBoxes
 
-     <Link to={`/boxes`}>
-      <button id={`btn--edit-boxes`} className="moveDetail__linkBtn--edit">add/update boxes</button>
-     </Link>
-   </div>
-       <div className="lowerRow">
-
-  <div className="fragile">
-     <p>Fragile</p>
-     <div className="checkBox">{ move?.isFragile ? "X" : ""}</div>
-    </div>
-    <button id={`btn--delete-${move?.id}`} className="move__linkBtn--delete" onClick={handleDelete} >Delete</button>
-     {/* <Link to="/">
-      <button id={`btn--delete-${move.id}`} className="move__linkBtn--delete">Delete</button>
-     </Link> */}
-    </div>
-
-   {/* <img className="moveDetail__image" src="https://source.unsplash.com/featured/?item" alt="user item" />
+  updateMove(newformField)
+    .then(() => setHasSaved(true))
+} // updateMove
 
 
+ return (<>
+   {
+     isLoaded
+     ? 
+      <form action="" className="moveDetailForm">
+        <fieldset className="form-group">
+          <label className="moveNameLabel" htmlFor="moveName">Move Name: </label>
+          <input 
+          type="text" 
+          id="moveName" 
+          name="moveName"
+          className="form-control" 
+          placeholder="Add Move Name..."
+          value={formField.moveName}
+          onChange={(e) => {handleControlledInputChange(e)}}
+          autoFocus />
+        </fieldset>
+        <div className="moveDetail__value">
+          <div>Value</div>
+          <div className="moveDetail__value--value">${ move.totalValue ? move.totalValue : "0.00" }</div>
+        </div> {/* moveDetail__value */}
+        <div className="moveDetail__boxSummary">
+          <div className="moveDetail__boxCount">
+            <div className="moveDetail__boxCount__count">{ move.totalBoxes ? move.totalBoxes : "0"}</div>
+            <div>Boxes</div>
+          </div>
+          <Link to={`/boxes`}>
+            <button id={`btn--edit-boxes`} className="moveDetail__linkBtn--edit">add/update boxes</button>
+          </Link>
+        </div>{/** moveDetail__boxSummary */}
 
-
-      <label htmlFor="usersMoves">Current Move Assignment</label>
-   <select value={box.move.id} id="usersMoves" className="form-control" onChange={handleControlledInputChange}>
-      TODO: Need to find a way to have "0" - no selection as an option since user can create items before assigning a box*
-     <option value="0">Select a location</option>
-     {userMoves.map(move => (
-      <option key={move.id} value={move.moveName}>
-       {move.moveName}
-     </option>
-     ))}
-   </select>
-   
-     <Link to={`/moves/${box.moveId}`}>
-      <button id={`btn--viewMove`} className="boxDetail__linkBtn--viewMove">view move</button>
-     </Link>
- */}
-  </section> 
- )
+        <div className="lowerRow">
+          <div className="fragile">
+            <p>Fragile</p>
+            <div className="checkBox">{ move.isFragile ? "X" : ""}</div>
+          </div>
+          <button className="btn--submit-moves" type="submit" onClick={submitUpdate}>Update</button>
+          <button id={`btn--delete-${move?.id}`} className="move__linkBtn--delete" onClick={handleDelete} >Delete</button>
+        </div> {/* lowerRow */}
+      </form>
+     : <> loading. . </>
+   }
+ </>)
 }

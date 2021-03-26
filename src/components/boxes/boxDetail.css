@@ -12,6 +12,100 @@
   border: 1px solid red;
 }
 
+.boxDetail__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.boxDetail__image {
+  border: 5px solid green;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.form-control {
+  background: red;
+}
+
+.form-group {
+  background: blue;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.locationLable {
+  background: green;
+}
+
+.moveNameLabel {
+  background: green;
+  color: yellow;
+  width: 25%;
+}
+
+.boxDetail__value {
+  background: green;
+  display: flex;
+  padding: 1em;
+  justify-content: space-between;
+}
+
+.boxDetail__summary {
+  background: lightblue;
+  display: flex;
+  padding: 1em;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.boxDetail__itemCount {
+  background: orange;
+  display: flex;
+  width: 25%;
+  justify-content: space-between;
+  padding: 0.5em;
+}
+
+.boxDetail__linkBtn--edit {
+  background: orange;
+  width: 100%;
+  padding: 0.5em;
+}
+
+.lowerRow {
+  display: flex;
+  background: orange;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fragile {
+  background: green;
+  display: flex;
+  width: 25%;
+}
+
+.btn--submit-boxes {
+  background: lightgreen;
+  display: block;
+  padding: 1em;
+}
+
+.form-control {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.boxDetail__linkBtn--viewMove {
+  display: block;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+/* 
 .boxDetail {
   display: flex;
   flex-direction: column;
@@ -68,7 +162,7 @@ label {
 .boxDetail__linkBtn--viewMove {
   background: lightgreen;
   display: block;
-  /* width: 100%; */
+  width: 100%;
   padding: 1em;
 }
 
@@ -100,4 +194,4 @@ Link {
 .item__linkBtn--delete {
   margin-left: 1em;
   background: salmon;
-}
+} */

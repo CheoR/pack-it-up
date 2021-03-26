@@ -15,16 +15,7 @@ export const ItemProvider = ( props ) => {
    .then(setItems)
  } // getItems
 
-
- const deleteItem = ( id ) => {
-   return fetch(`${baseURL}/items/${id}`, {
-     method: "DELETE"
-   })
-   .then(getItems)
- } // deleteItem
-
-
- const addItems = ( item ) => {
+ const addItem = ( item ) => {
    return fetch(`${baseURL}/items`, {
      method: "POST",
      headers: {
@@ -36,13 +27,34 @@ export const ItemProvider = ( props ) => {
  } // addItem
 
 
+   const updateItem = ( item ) => {
+     return fetch(`${baseURL}/items/${item.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(item)
+    })
+     .then(getItems)
+  } // updateItem
+
+
+ const deleteItem = ( id ) => {
+   return fetch(`${baseURL}/items/${id}`, {
+     method: "DELETE"
+   })
+   .then(getItems)
+ } // deleteItem
+
+
  return (
   <ItemContext.Provider value={{
    items,
    getItems,
    setItems,
-   deleteItem,
-   addItems
+   addItem,
+   updateItem,
+   deleteItem
   }}>
    { props.children }
   </ItemContext.Provider>
