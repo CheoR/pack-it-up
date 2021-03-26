@@ -28,7 +28,7 @@ export const MoveList = () => {
 
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
  const loggedInUserName = sessionStorage.getItem(userStorageUserName)
- const { moves, getMoves, addMoves } = useContext(MoveContext)
+ const { moves, getMoves, addMove } = useContext(MoveContext)
  const { boxes, getBoxes } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
  const [ newMove, setNewMove ] = useState({
@@ -36,7 +36,7 @@ export const MoveList = () => {
       "userId": loggedInUserId,
       "moveName": ""
    },
-   addObj: addMoves
+   addObj: addMove
  })
 
 const [formField, setFormField] = useState({
