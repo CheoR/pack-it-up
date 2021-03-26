@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 
-import { userStorageKey } from "../auth/authSettings"
-import { UserContext } from "../users/UserProvider"
+import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 import { ItemContext } from "./ItemProvider"
 import { ItemSummary } from "./ItemSummary"
 import { Counter } from "../counter/Counter"
@@ -10,8 +9,8 @@ import "./itemList.css"
 export const ItemList = () => {
 
  const { items, getItems, addItems } = useContext(ItemContext)
- const { users, getUsers } = useContext(UserContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+ const loggedInUserName = sessionStorage.getItem(userStorageUserName)
 
  const newItem = {
    type: {
@@ -26,12 +25,10 @@ export const ItemList = () => {
  }
 
  useEffect(() => {
-   getUsers()
-   .then(getItems)
+   getItems()
  }, []) // useEffect
 
   const itemsData = items.filter(item => item.userId === loggedInUserId)
-  const loggedInUserObj = users.find(user => user.userId === loggedInUserId)
    
   itemsData.forEach(item => {
    /*
@@ -45,7 +42,7 @@ export const ItemList = () => {
 
    return (
     <div className="itemSummaryList">
-      <h1 className="itemSummaryList__header">{ loggedInUserObj?.user.username }'s Items</h1>
+      <h1 className="itemSummaryList__header">{ loggedInUserName }'s Items</h1>
       {
         itemsData.map((item, i) => <ItemSummary key={i} item={item} />)
       }

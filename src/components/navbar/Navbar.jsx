@@ -1,39 +1,45 @@
 import { Link, Redirect, useHistory } from "react-router-dom"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
-import { userStorageKey } from "../auth/authSettings"
+import { userStorageKey, userStorageUserName } from "../auth/authSettings"
+import { UserContext } from "../users/UserProvider"
 import "./navbar.css"
 
 export const Navbar = () => {
 
- let loggedInUserId;
- const [isLoggedIn, setIsLoggedIn ] = useState(false)
+const [isLoggedIn, setIsLoggedIn ] = useState(false)
+const { users, getUsers } = useContext(UserContext)
+const history = useHistory()
 
- const history = useHistory()
+let loggedInUserId;
+
 
  useEffect(() => {
-   loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey)) 
-   if(loggedInUserId) {
-     setIsLoggedIn(true)
-   } else {
-     setIsLoggedIn(false)
-   }
-  
+   getUsers()
+   .then(() => {
+    const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+
+    if(loggedInUserId) {
+      const loggedInUser = users.find(user => user.id === loggedInUserId)
+      
+      /*
+        Not sure why ? is needed.
+        First render causes error, but if loggedInUserId is true, shouldn't
+        users already be fufilled?
+      */
+      sessionStorage.setItem(userStorageUserName, loggedInUser?.username)
+      setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
+    }
+  }) // then
  }, [isLoggedIn]) // useEffect
- 
- /*
-  TODO: FIX LOG IN WHERE LOGOUT/SETTINGS BUTTONS SHOW UP AFTER SUCCESSFU LOG IN.
- */
+
 
  const handleLogout = () => {
-  console.log("logging out")
   sessionStorage.removeItem("app_user_id")
   sessionStorage.removeItem("app_user_username")
   setIsLoggedIn(false)
-  /*
-   Page redirects but since there is no hard reload,
-   logout button will still show up
-  */
   history.push("/")
  }
 
@@ -44,28 +50,20 @@ export const Navbar = () => {
      <Link className="navbar__link" to="/users">Home</Link>
     </li>
     <li className="navbar__li">
-     <Link className="navbar__link" to="/moves">Moves</Link>
+      <Link className="navbar__link" to="/moves">Moves</Link>
     </li>
     <li className="navbar__li">
-     <Link className="navbar__link" to="/boxes">Boxes</Link>
+      <Link className="navbar__link" to="/boxes">Boxes</Link>
     </li>
     <li className="navbar__li">
-     <Link className="navbar__link" to="/items">Items</Link>
+      <Link className="navbar__link" to="/items">Items</Link>
     </li>
-    {
-     isLoggedIn
-     ?
-     <>
+    <li className="navbar__li">
+      <Link className="navbar__link" to="/Settings">Settings</Link>
+    </li>
       <li className="navbar__li">
-       <Link className="navbar__link" to="/Settings">Settings</Link>
+      <button className="navbar__link" onClick={handleLogout}>Logout</button>
       </li>
-       <li className="navbar__li">
-        <button className="navbar__link" onClick={handleLogout}>Logout</button>
-       </li>
-     </>
-     :
-      <></>
-    }
    </ul>
   </nav>
  )

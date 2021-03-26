@@ -9,17 +9,18 @@
   list-style: none;
   overflow-wrap: break-word;
 
-  /* border: 1px solid red; */
+  /* border: 1px solid blue; */
 }
 
-.summaryList {
-  border: 2px solid green;
+.summaryList__instructions {
   padding: 1em;
-  width: 90%;
 }
-.summaryList__header {
+
+.summaryList__instructions--header {
   text-align: center;
-  color: green;
-  margin-bottom: 20px;
-  border: 1px solid red;
+  margin-bottom: 10px;
+}
+
+.summaryList__instructions--text {
+  margin-bottom: 10px;
 }

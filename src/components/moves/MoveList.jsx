@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 
-import { userStorageKey } from "../auth/authSettings"
+import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "./MoveProvider"
@@ -21,20 +21,13 @@ const _getSum = ( valueList ) => {
  return numList.reduce((acc, curr) => acc + curr, 0)
 }
 
-const _getSum2 = ( valueList ) => {
-
- if(!valueList.length) return 0;
-
- return valueList.reduce((acc, curr) => acc + curr, 0)
-}
-
-
 export const MoveList = () => {
 
  const { moves, getMoves, addMoves } = useContext(MoveContext)
  const { boxes, getBoxes } = useContext(BoxContext)
  const { items, getItems } = useContext(ItemContext)
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+ const loggedInUserName = sessionStorage.getItem(userStorageUserName)
 
  const newMove = {
    type: {
@@ -88,7 +81,7 @@ export const MoveList = () => {
 
    return (
     <div className="moveSummaryList">
-      <h1 className="moveSummaryList__header">{ loggedInUserObj?.user.username }'s Moves</h1>
+      <h1 className="moveSummaryList__header">{loggedInUserName}'s Moves</h1>
       {
         movesData.map((move, i) => <MoveSummary key={i} move={ move } />)
       }

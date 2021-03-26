@@ -9,15 +9,16 @@
   list-style: none;
   overflow-wrap: break-word;
 
-  /* border: 1px solid red; */
+  border: 1px solid red;
 }
 
 .userPage {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  border: 1px solid blue;
 }
 
 .userPage,

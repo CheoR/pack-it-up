@@ -43,11 +43,8 @@ export const BoxSummary = ({ box } ) => {
      <Link to={`/boxes/${box.id}`}>
       <button id={`btn--edit-${box.id}`} className="box__linkBtn--edit">Edit</button>
      </Link>
-     {/* <Link to="/">
-      <button id={`btn--delete-${box.id}`} className="box__linkBtn--delete">Delete</button>
-     </Link> */}
-           <button id={`btn--delete-${box.id}`} className="box__linkBtn--delete" onClick={handleDelete}>Delete</button>
 
+    <button id={`btn--delete-${box.id}`} className="box__linkBtn--delete" onClick={handleDelete}>Delete</button>
     </div> 
   </section>
  )
