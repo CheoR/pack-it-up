@@ -26,16 +26,19 @@ const loggedInUser = sessionStorage.getItem("app_user_username")
  
   const usersMoves = {
     type: "moves",
+    canUse: false,
     collection: moves.filter(move => move.userId === loggedInUserId)
   }
 
   const usersBoxes = {
     type: "boxes",
+    canUse: usersMoves.collection.length ? false : true,
     collection: boxes.filter(box => box.userId === loggedInUserId)
   }
 
   const usersItems = {
     type: "items",
+    canUse: usersBoxes.collection.length ? false : true,
     collection: items.filter(item => item.userId === loggedInUserId)
   }
   
