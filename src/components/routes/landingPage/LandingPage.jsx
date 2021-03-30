@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { Instructions } from '../../helpers/Instructions'
 import "./landingPage.css"

@@ -12,52 +12,50 @@
   border: 1px solid orangered;
 }
 
-.counter {
-  width: 100%;
-}
-
-.counter__count {
-  width: 100%;
-  margin: 0 auto;
-  border: 1px solid green;
-  display: flex;
-  justify-content: space-around;
-}
-
-.counter__increment,
-.counter__decrement,
-.counter__num {
-  padding: 1em;
-  width: 100px;
-  text-align: center;
-}
-
-.counter__num {
-  background: gray;
-}
-
-.counter__increment {
-  background: lightgreen;
-}
-
-.counter__decrement {
-  background: pink;
-}
-
-.counter__add {
-  background: lightgreen;
-  width: 80%;
-  margin: 0 auto;
-  padding: 1em;
-}
-
 /*
   <section className="counter">
    <div className="counter__count">
-    <button className="counter__increment">-</button>
+    <button className="counter__decrement" onClick={decrementNum}>-</button>
     <div className="counter__num" value={num}>{ num }</div>
-    <button className="counter__decrement">+</button>
+    <button className="counter__increment" onClick={incrementNum}>+</button>
    </div>
-   <button className="counter__add">add</button>
+   <div className="btn__container" ><button id="btn--add" className="counter__add" onClick={callAdd}>add</button></div>
   </section>
 */
+
+.counter {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  background: lightblue;
+}
+
+.counter__count,
+.btn__container,
+.counter__add {
+  grid-column-start: 1;
+  grid-column-end: 6;
+}
+
+.counter__count {
+  background: lightgreen;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.counter__add {
+  background: pink;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  width: 100%;
+  padding: 1em;
+}
+
+.counter__decrement,
+.counter__increment,
+.counter__num {
+  padding: 1em;
+  display: block;
+  width: 25%;
+  text-align: center;
+}

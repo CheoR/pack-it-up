@@ -6,7 +6,6 @@ import { Register } from "./auth/Register";
 
 import { ApplicationViews } from "./ApplicationViews";
 import { LandingPage } from "./routes/landingPage/LandingPage"
-import { UserPage } from "./routes/userPages/UserPage";
 import { Navbar } from "./navbar/Navbar";
 import { UserProvider } from "./users/UserProvider";
 

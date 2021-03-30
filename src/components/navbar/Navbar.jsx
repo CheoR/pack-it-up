@@ -1,4 +1,4 @@
-import { Link, Redirect, useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import React, { useContext, useEffect, useState } from "react"
 
 import { userStorageKey, userStorageUserName } from "../auth/authSettings"
@@ -10,8 +10,6 @@ export const Navbar = () => {
 const [isLoggedIn, setIsLoggedIn ] = useState(false)
 const { users, getUsers } = useContext(UserContext)
 const history = useHistory()
-
-let loggedInUserId;
 
 
  useEffect(() => {
