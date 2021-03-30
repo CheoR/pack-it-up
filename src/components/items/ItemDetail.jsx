@@ -66,6 +66,7 @@ export const ItemDetail = () => {
    const handleControlledInputChange = ( event ) => {
     const newformField = { ...formField }
     newformField[event.target.id] = event.target.value
+    newformField.value = parseInt(newformField.value) || 0
     setFormField(newformField)
     setHasSaved(false)
 } // handleControlledInputChange
@@ -77,23 +78,30 @@ const submitUpdate = (event) => {
   /*
     Cleanup. Does not belong to ERD.
   */
-  // delete newformField.usersMoves
+
   updateItem(newformField)
-    setHasSaved(true)
+  setHasSaved(true)
 } // updateMove
 
 
  const handleControlledDropDownChange = ( event ) => {
-    const newformField = { ...formField }
+  const newformField = { ...formField }
   newformField[event.target.id] = event.target.value
 
-    const selectedIndex = parseInt(event.target.options.selectedIndex)
-    const optionId = event.target.options[selectedIndex].getAttribute('boxid')
+  const selectedIndex = parseInt(event.target.options.selectedIndex)
+  const optionId = event.target.options[selectedIndex].getAttribute('boxid')
 
-    newformField.moveId = parseInt(optionId)
+  newformField.moveId = parseInt(optionId)
   setFormField(newformField)
   setHasSaved(false)
  }
+
+  const handleCheckboxChange = ( event ) => {
+    const newformField = { ...formField }
+    newformField[event.target.id] = event.target.checked
+    setFormField(newformField)   
+  }
+
  return (<>
     {
       /*
@@ -130,7 +138,7 @@ const submitUpdate = (event) => {
           autoFocus />
         </fieldset>
         <label htmlFor="usersBoxes">Current Box Assignment</label>
-          <select value={item.boxId} id="usersBoxes" className="form-control" onChange={handleControlledInputChange}>
+          <select value={item.boxId} id="usersBoxes" className="form-control" onChange={handleControlledDropDownChange}>
             {boxes.map(box => (
               <option boxid={box.id} key={box.id} value={box.location}>
               {box.location}
@@ -144,10 +152,15 @@ const submitUpdate = (event) => {
 
             <div className="lowerRow">
 
-            <div className="fragile">
+            {/* <div className="fragileBlock">
             <p>Fragile</p>
             <div className="checkBox">{ item.isFragile ? "X" : ""}</div>
-            </div>
+            </div> */}
+            <fieldset className="fragile__checkbox">
+                <label className="fragie__checkboxLabel" htmlFor="isFragile">Fragile</label>
+                <input type="checkbox" id="isFragile" onChange={handleCheckboxChange} checked={formField.isFragile}  className="form-control" />
+            </fieldset>
+
               <button id="camera" className="item__linkBtn--camera">Camera</button>
               <button className="btn--submit-boxes" type="submit" onClick={submitUpdate}>Update</button>
               <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={handleDelete}>Delete</button>
@@ -157,98 +170,3 @@ const submitUpdate = (event) => {
     }
   </>)
 }
-
-
-
-
-{/* 
-
-      <form action="" className="itemDetail__form">
-       
-       <fieldset className="form-group">
-          <input 
-          type="text" 
-          id="location" 
-          name="location"
-          className="form-control" 
-          placeholder="Add Box Location ..."
-          value={formField.location}
-          onChange={(e) => {handleControlledInputChange(e)}}
-          autoFocus />
-        </fieldset>
-        <div className="boxDetail__value">
-          <div>Value</div>
-          <div className="boxDetail__value--value">${ box.totalValue ? box.totalValue : "0.00" }</div>
-        </div> 
-        <div className="boxDetail__summary">
-          <div className="boxDetail__itemCount">
-            <div className="boxDetail__itemCount__count">{ box?.totalItems }</div>
-            <div>Items</div>
-          </div>
-          <Link to={`/items`}>
-            <button id={`btn--edit-items`} className="boxDetail__linkBtn--edit">add/update items</button>
-          </Link>
-        </div> 
-        <label htmlFor="usersMoves">Update Move Assignment</label>
-      <select value={userMoves[0]?.id} id="usersMoves" className="form-control" onChange={handleControlledDropDownChange}>
-        <option value="0">Select a location</option>
-            {userMoves.map(move => (
-            <option boxid={move.id} key={move.id} value={move.moveName}>
-              {move.moveName}
-            </option>
-            ))}
-        </select>
-        <Link to={`/moves/${box?.moveId}`}>
-          <button id={`btn--viewMove`} className="boxDetail__linkBtn--viewMove">view move</button>
-        </Link>
-    <div className="lowerRow">
-      <div className="fragile">
-        <p>Fragile</p>
-        <div className="checkBox">{ box?.isFragile ? "X" : ""}</div>
-      </div>
-      <button className="btn--submit-boxes" type="submit" onClick={submitUpdate}>Update</button>
-      <button id={`btn--delete-${box?.id}`} className="box__linkBtn--delete" onClick={handleDelete}>Delete</button>
-    </div> 
-     </form>
- */}
-
-
-
-{/* TODO: Need to find a way to have "0" - no selection as an option since user can create items before assigning a box*/}
-{/* <option value="0">Select a location</option> */}
-{/* <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={() => handleDelete(item.id)}>Delete</button> */}
-
-// </>
-
-          {/* <img className="itemDetail__image" src="https://source.unsplash.com/featured/?item" alt="user item" />
-          <div className="itemDetail__description">
-            <div>Description</div>
-            <div className="itemDetail__description--text">{ item.description.substring(0, 20) + " . ." }</div>
-            </div>
-          <div className="itemDetail__value">
-            <div>Value</div>
-            <div className="itemDetail__value--value">${ item.value ? item.value : "0.00" }</div>
-          </div>
-          <label htmlFor="usersBoxes">Current Box Assignment</label>
-          <select value={item.boxId} id="usersBoxes" className="form-control" onChange={handleControlledInputChange}>
-            {boxes.map(box => (
-              <option key={box.id} value={box.location}>
-              {box.location}
-            </option>
-            ))}
-          </select>
-
-            <Link to={`/boxes/${item.boxId}`}>
-              <button id={`btn--edit-${item.boxId}`} className="item__linkBtn--viewBox">View Box Assgined</button>
-            </Link>
-
-            <div className="lowerRow">
-
-            <div className="fragile">
-            <p>Fragile</p>
-            <div className="checkBox">{ item.isFragile ? "X" : ""}</div>
-            </div>
-              <button id="camera" className="item__linkBtn--camera">Camera</button>
-              <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={handleDelete}>Delete</button>
-            </div>
-        </> */}

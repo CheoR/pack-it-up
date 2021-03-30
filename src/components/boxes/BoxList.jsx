@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { useHistory } from "react-router"
+import { useLocation } from "react-router"
 
 import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 import { MoveContext } from "../moves/MoveProvider"
@@ -7,33 +7,27 @@ import { BoxContext } from "./BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { BoxSummary } from "./BoxSummary"
 import { Counter } from "../counter/Counter"
+import { getSum1 } from "../helpers/helpers"
 import "./boxList.css"
-
-
-const _getSum = ( valueList ) => {
- /*
-  Using .reduce on list of objects results with incorrect sum values.
- */
-
- if(!valueList.length) return 0;
-
- const numList = valueList.map(item => item.value)
-
- return numList.reduce((acc, curr) => acc + curr, 0)
-}
 
 
 export const BoxList = () => {
 
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
   const loggedInUserName = sessionStorage.getItem(userStorageUserName)
-  const { moves, getMoves, setMoves } = useContext(MoveContext)
-  const { boxes, getBoxes, addBox } = useContext(BoxContext)
-  const { items, getItems } = useContext(ItemContext)
+  const { moves, setMoves, getMoves } = useContext(MoveContext)
+  const { boxes, setBoxes, getBoxes, addBox } = useContext(BoxContext)
+  const { items, setItems, getItems } = useContext(ItemContext)
+  const [ formField, setFormField ] = useState({})
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ newBox, setNewBox ] = useState({})
-  const history = useHistory()
+  const location = useLocation()
 
+
+  /*
+    The .then doesn't wait since set_  
+    Good to have useEffec watch that state variable.
+  */
   useEffect(() => {
     getMoves()
     .then(getBoxes)
@@ -43,33 +37,50 @@ export const BoxList = () => {
 
 
  useEffect(() => {
+
   if(isLoaded) {
-    setNewBox(  {
-      type: {
-        "userId": loggedInUserId,
-        "moveId": 0,
-        "location": "Change Box Location",
-        "qrCode": ""
-      },
-      addObj: addBox
-    })
-  } // if
+
+    const [movesData, boxesData, itemsData] = [moves, boxes, items].map(type => type.filter(obj => obj.userId === loggedInUserId))
+    setMoves(movesData)
+    setBoxes(boxesData)
+    setItems(itemsData)
+ 
+     /*
+       If user comes from box detail page, assign new items to that box.
+     */
+ 
+     const defaultMoveId = location.state && location.state.move 
+       ? location.state.move
+       : moves[0].id
+ 
+ 
+     setNewBox(  {
+       type: {
+         "userId": loggedInUserId,
+         "moveId": defaultMoveId,
+         "location": "Change Box Location",
+         "qrCode": ""
+       },
+       addObj: addBox
+     }) // setNewBox
+  } // if isLoaded
+
  }, [isLoaded])
 
-
-  const userMoves = moves.filter(move => move.userId === loggedInUserId)
-  const boxesData = boxes.filter(box => box.userId === loggedInUserId)
-  const itemsData = items.filter(item => boxesData.find(box => item.boxId === box.id))
+ console.log("box list moves")
+ console.table(moves)
 
   /*
     Boxes should aggregate information about its contents.
   */
-  boxesData.forEach(box => {
-   box.totalCount = itemsData.filter(item => item.boxId === box.id).length
-   box.totalValue = _getSum(itemsData.filter(item => item.boxId === box.id ? item.value : 0))
-   box.isFragile = itemsData.some(item => item.isFragile ? true : false)
-   box.moveName = box?.move?.moveName// movesData.find(move => move.id === box.moveId).moveName
+  boxes.forEach(box => {
+    const itemsForThisBox = items.filter(item => item.boxId === box.id)
+   box.totalCount = itemsForThisBox.length
+   box.totalValue = getSum1(itemsForThisBox.map(item => item.value ? item.value : 0))
+   box.isFragile = itemsForThisBox.some(item => item.isFragile ? true : false)
+   box.moveName = box?.move?.moveName
   }) // boxes.forEach
+
 
   const handleControlledInputChange = ( event ) => {
     /*
@@ -82,19 +93,20 @@ export const BoxList = () => {
     setNewBox(updateBox)
   } // handleControlledInputChange
 
+
    return (<>
      { isLoaded
       ? <div className="boxSummaryList">
       <h1 className="boxSummaryList__header">{ loggedInUserName }'s Boxes</h1>
       {
-        boxesData.map((box, i) => <BoxSummary key={i} box={ box } />)
+        boxes.map((box, i) => <BoxSummary key={i} box={ box } />)
       }
       <label htmlFor="usersMoves">Assign To Move</label>
 
-      <select value={userMoves[0]?.id} id="usersMoves" className="form-control" onChange={handleControlledInputChange}>
+      <select value={moves[0]?.id} id="usersMoves" className="form-control" onChange={handleControlledInputChange}>
         <option value="0">Select a location</option>
         {
-          userMoves.map(move => (
+          moves.map(move => (
             <option moveid={move.id} key={move.id} value={move.moveName}>{move.moveName}</option>
           ))
         }

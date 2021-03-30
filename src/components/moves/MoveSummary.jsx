@@ -11,6 +11,8 @@ export const MoveSummary = ({ move } ) => {
   const history = useHistory()
   const handleDelete = () => deleteMove(move.id).then(() => history.push("/moves"))
 
+  console.log("\N==== MOVE DETAILE =====")
+  console.table(move)
  return (
   <section className="moveSummary">
     <div className="boxCount">

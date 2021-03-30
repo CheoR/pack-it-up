@@ -33,6 +33,7 @@ export const MoveList = () => {
 
 
  useEffect(() => {
+
   setFormField({
     type: {
       "userId": loggedInUserId,
