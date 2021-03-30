@@ -61,7 +61,6 @@ export const ItemDetail = () => {
 
 
  const handleDelete = () => deleteItem(item?.id).then(() => history.push("/items"))
-//  const handleControlledInputChange = ( event ) => console.log("selection made")
  
    const handleControlledInputChange = ( event ) => {
     const newformField = { ...formField }

@@ -67,9 +67,6 @@ export const BoxList = () => {
 
  }, [isLoaded])
 
- console.log("box list moves")
- console.table(moves)
-
   /*
     Boxes should aggregate information about its contents.
   */
