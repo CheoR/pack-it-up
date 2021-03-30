@@ -1,17 +1,3 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
-  overflow-wrap: break-word;
-
-  /* border: 1px solid blue; */
-}
-
 .summaryList__instructions {
   padding: 1em;
 }
