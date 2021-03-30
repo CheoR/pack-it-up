@@ -5,21 +5,10 @@ import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "./MoveProvider"
 import { MoveSummary } from "./MoveSummary"
+import { getSum2 } from "../helpers/helpers"
 import { Counter } from "../counter/Counter"
 import "./moveList.css"
 
-
-const _getSum = ( valueList ) => {
- /*
-  Using .reduce on list of objects results with incorrect sum values.
- */
-
- if(!valueList.length) return 0;
-
- const numList = valueList.map(item => item.value)
-
- return numList.reduce((acc, curr) => acc + curr, 0)
-}
 
 export const MoveList = () => {
   /*
@@ -28,82 +17,84 @@ export const MoveList = () => {
 
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
  const loggedInUserName = sessionStorage.getItem(userStorageUserName)
- const { moves, getMoves, addMove } = useContext(MoveContext)
- const { boxes, getBoxes } = useContext(BoxContext)
- const { items, getItems } = useContext(ItemContext)
- const [ newMove, setNewMove ] = useState({
-      type: {
-      "userId": loggedInUserId,
-      "moveName": ""
-   },
-   addObj: addMove
- })
+ const { moves, setMoves, getMoves, addMove } = useContext(MoveContext)
+ const { boxes, setBoxes, getBoxes } = useContext(BoxContext)
+ const { items, setItems, getItems } = useContext(ItemContext)
+ const [ formField, setFormField ] = useState({})
+ const [ isLoaded, setIsLoaded ] = useState(false)
 
-const [formField, setFormField] = useState({
-  moveName: ""
-})
 
  useEffect(() => {
   getMoves()
     .then(getBoxes)
     .then(getItems)
+    .then(() => setIsLoaded(true))
  }, []) // useEffect
 
-  const movesData = moves.filter(move => move.userId === loggedInUserId)
-  const boxesData = boxes.filter(box => box.userId === loggedInUserId)
-  const itemsData = items.filter(item => item.userId === loggedInUserId)
-  const loggedInUserObj = moves.find(move => move.userId === loggedInUserId)
 
-  
+ useEffect(() => {
+  setFormField({
+    type: {
+      "userId": loggedInUserId,
+      "moveName": "New Move"
+    },
+    addObj: addMove
+  }) // setFormField
+
+
+  const [movesData, boxesData, itemsData] = [moves, boxes, items].map(type => type.filter(obj => obj.userId === loggedInUserId))
+  setMoves(movesData)
+  setBoxes(boxesData)
+  setItems(itemsData)
+
+ }, [isLoaded]) // useEffect
+
+
   const handleControlledInputChange = ( event ) =>  {
     /*
-      newMove should have latest user input in case user decides
-      to change move name before adding.
+      TODO: Form needs to clear aroud after submission.
     */
     const newformField = { ...formField }
-    const moveObj = { ...newMove }
-    newformField[event.target.id] = event.target.value
-    moveObj.type.moveName = event.target.value
-    setNewMove(moveObj)
+    newformField.type[event.target.id] = event.target.value
     setFormField(newformField)
   } // handleControlledInputChange
 
-   movesData.forEach(move => {
+
+   moves.forEach(move => {
      /*
-      For each move
-        get the number of boxes associated with the move
-        for each box
-          get the total number of items in that box
-          update the number of total boxes for that move
-          get the total value of tims in that box
-          updatae the total number of items of rthat move
+      Aggregate box/item information per move.
      */
-    /*
-    TODO: find a way to make this _getSum generic wtih BoxList _getSum
-    TODO: instead of fetching objcts, only fetch ids
-    */
-    const boxesForThisMove = boxesData.filter(box => box.moveId === move.id)
+
+    const boxesForThisMove = boxes.filter(box => box.moveId === move.id)
 
     move.totalBoxCount = boxesForThisMove.length
     move.totalItemsCount = 0
     move.totalItemsValue = 0
 
     boxesForThisMove.forEach(box => {
-      move.totalItemsCount += itemsData.filter(item => item.boxId === box.id).length
-      move.totalItemsValue += _getSum(itemsData.filter(item => item.boxId === box.id ? item.value : 0))
-      box.isFragile = itemsData.some(item => item.isFragile ? true : false)
+      const itemsInBox = items.filter(item => item.boxId === box.id)
+
+      move.totalItemsCount += itemsInBox.length
+      move.totalItemsValue += getSum2(itemsInBox.filter(item => item.value ? item.value : 0))
+      box.isFragile = itemsInBox.some(item => item.isFragile ? true : false)
     }) // boxes.forEach
 
-    const anyFragile = boxesForThisMove.map(b => b.isFragile).some(f => f ? f : !f)
-    move.isFragile = anyFragile
+    /*
+      Mark move fragile if any of its boxes are marked fragile.
+      Boxes are marked fragile if any of its items are marked fragile.
+    */
+    move.isFragile = boxesForThisMove.some(b => b.isFragile)
   }) // moves.forEach
 
 
-   return (
-    <div className="moveSummaryList">
+   return (<>
+     {
+       isLoaded
+       ?
+       <div className="moveSummaryList">
       <h1 className="moveSummaryList__header">{loggedInUserName}'s Moves</h1>
       {
-        movesData.map((move, i) => <MoveSummary key={i} move={ move } />)
+        moves.map((move, i) => <MoveSummary key={i} move={ move } />)
       }
       <form action="" className="moveSummaryList__form">
         <fieldset className="form-group">
@@ -114,12 +105,14 @@ const [formField, setFormField] = useState({
           name="moveName"
           className="form-control" 
           placeholder="Add Move Name..."
-          value={formField.moveName}
+          value={formField.type.moveName}
           onChange={(e) => {handleControlledInputChange(e)}}
           autoFocus />
         </fieldset>
       </form>
-      <Counter objType={newMove} />
+      <Counter objType={formField} />
     </div>
-  )
+       : <>Loading</>
+     }
+  </>)
 }
