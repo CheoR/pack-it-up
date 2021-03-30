@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Instructions } from '../../helpers/Instructions'
+import { Instructions } from '../../helpers/instructions/Instructions'
 import "./landingPage.css"
 
 

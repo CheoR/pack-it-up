@@ -5,7 +5,7 @@ import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { Summary } from "./Summary"
 import "./summaryList.css"
-import { Instructions } from "../helpers/Instructions"
+import { Instructions } from "../helpers/instructions/Instructions"
 
 
 export const SummaryList = () => {
