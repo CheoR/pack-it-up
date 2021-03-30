@@ -27,16 +27,13 @@ export const Counter = ({ objType }) => {
  
  const decrementNum = () => num ? setNum(num - 1) : setNum(1) 
  const incrementNum = () => setNum(num + 1)
- 
+
  /* User should not be able to create <= 0 objects */
  if(!num) setNum(1)
  
  const callAdd = () => {
 
   const addFuncs = []
-
-  // console.table(objType)
-  // debugger
 
   for(let i=0; i <  num; i ++) {
    addFuncs.push(objType.addObj)
@@ -64,7 +61,9 @@ export const Counter = ({ objType }) => {
     <div className="counter__num" value={num}>{ num }</div>
     <button className="counter__increment" onClick={incrementNum}>+</button>
    </div>
-   <button id="btn--add" className="counter__add" onClick={callAdd}>add</button>
+   <div className="btn__container" >
+     <button id="btn--add" className="counter__add" onClick={callAdd}>add</button>
+    </div>
   </section>
  )
 }

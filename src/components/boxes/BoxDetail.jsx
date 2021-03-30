@@ -6,18 +6,10 @@ import { userStorageKey } from "../auth/authSettings"
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "../moves/MoveProvider"
 import { BoxContext } from "./BoxProvider"
+import { getSum3 } from "../helpers/helpers"
 import "./boxDetail.css"
 
 
-const _getSum = ( valueList ) => {
- /*
-  Using .reduce on list of objects results with incorrect sum values.
- */
-
- if(!valueList.length) return 0;
-
- return valueList.reduce((acc, curr) => acc + curr, 0)
-}
 
 export const BoxDetail = () => {
 
@@ -34,7 +26,7 @@ export const BoxDetail = () => {
 
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ hasSaved, setHasSaved ] = useState(false)
-  const [ newBox, setNewBox ] = useState({})
+  // const [ newBox, setNewBox ] = useState({})
   const { boxId } = useParams()
 
  useEffect(() => {
@@ -68,7 +60,7 @@ export const BoxDetail = () => {
 
  if(box){
    box.totalItems = userItems?.length
-   box.totalValue = _getSum(userItems.map(item => item?.value ? item?.value : 0))
+   box.totalValue = getSum3(userItems.map(item => item?.value ? item?.value : 0))
    box.isFragile = items.some(item => item?.isFragile)
  }
 
@@ -79,10 +71,10 @@ export const BoxDetail = () => {
   const newformField = { ...formField }
   newformField[event.target.id] = event.target.value
 
-    const selectedIndex = parseInt(event.target.options.selectedIndex)
-    const optionId = event.target.options[selectedIndex].getAttribute('boxid')
+  const selectedIndex = parseInt(event.target.options.selectedIndex)
+  const optionId = event.target.options[selectedIndex].getAttribute('boxid')
 
-    newformField.moveId = parseInt(optionId)
+  newformField.moveId = parseInt(optionId)
   setFormField(newformField)
   setHasSaved(false)
 } // handleControlledInputChange
@@ -132,7 +124,14 @@ const submitUpdate = (event) => {
             <div className="boxDetail__itemCount__count">{ box?.totalItems }</div>
             <div>Items</div>
           </div>
-          <Link to={`/items`}>
+          <Link to={
+            {
+              pathname: "/items",
+              state: {
+                box: parseInt(boxId)
+              }
+            }
+          }>
             <button id={`btn--edit-items`} className="boxDetail__linkBtn--edit">add/update items</button>
           </Link>
         </div> {/* boxDetail__itemSummary */}

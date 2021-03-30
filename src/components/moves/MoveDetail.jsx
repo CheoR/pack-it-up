@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Link, useHistory, useParams } from "react-router-dom"
 
-import { userStorageKey } from "../auth/authSettings"
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "./MoveProvider"
 import { BoxContext } from "../boxes/BoxProvider"
@@ -27,43 +26,51 @@ export const MoveDetail = () => {
   const [ hasSaved, setHasSaved ] = useState(false)
   const [ move, setMove ] = useState({})
   const [ formField, setFormField ] = useState({
-    moveName: ""
+    moveName: "",
+    userId: 0,
+    totalValue: 0,
+    isFragile: false,
+    totalBoxes: 0
   })
-  
-  const handleDelete = () => deleteMove(move?.id).then(() => history.push("/moves"))
-  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
+
+  const handleDelete = () => deleteMove(move?.id).then(() => history.push("/moves"))
   const { moveId } = useParams()
   const history = useHistory()
 
 
   useEffect(() => {
-    getMoves()
-      .then(getBoxes)
-      .then(getItems)
-      .then(() => setIsLoaded(true))
+    const getData = async () => {
+      const userMoves = await getMoves()
+      const userBoxes = await getBoxes()
+      const userItems = await getItems()
+      setIsLoaded(true)
+    }
+    getData()
   }, [])
 
 
   useEffect(() => {
-    const tmpMove = moves.find(move => move.id === parseInt(moveId))
-    if(tmpMove) {
-      /*
-        Aggregate number of boxes for this move, total value, and if anything is fragile.
-      */
-      const userBoxesIds = boxes.filter(box => box?.moveId === move?.id).map(box => box?.id)
-      const userItems = items.filter(item => userBoxesIds.includes(item?.boxId))
+    /*
+      Aggregate number of boxes for this move, total value, and if anything is fragile.
+    */
+    if(isLoaded) {
+      const move = moves.find(move => move.id === parseInt(moveId))
+      const userBoxes = boxes.filter(box => box.moveId === move.id)
+      const boxIds = userBoxes.map(box => box.id)
+      const userItems = items.filter(item => boxIds.includes(item.boxId))
 
-      tmpMove.totalValue = _getSum(userItems.map(item => item.value ? item.value : 0))
-      tmpMove.isFragile = userItems.some(item => item.isFragile)
-      tmpMove.totalBoxes = userBoxesIds.length
+      move.totalBoxes = userBoxes.length
+      move.totalValue = _getSum(userItems.map(item => item.value ? item.value : 0))
+      move.isFragile = userItems.some(item => item.isFragile)
+      setFormField(move)
+    } // if
 
-      setFormField(tmpMove)
-    }
     if(hasSaved) {
       window.alert("Updated")
     }
   }, [isLoaded, hasSaved])
+
 
   const handleControlledInputChange = ( event ) => {
     const newformField = { ...formField }
@@ -71,6 +78,7 @@ export const MoveDetail = () => {
     setFormField(newformField)
     setHasSaved(false)
 } // handleControlledInputChange
+
 
 const submitUpdate = (event) => {
   event.preventDefault()
@@ -88,6 +96,7 @@ const submitUpdate = (event) => {
     .then(() => setHasSaved(true))
 } // updateMove
 
+  if (!formField) return null
 
  return (<>
    {
@@ -108,14 +117,21 @@ const submitUpdate = (event) => {
         </fieldset>
         <div className="moveDetail__value">
           <div>Value</div>
-          <div className="moveDetail__value--value">${ move.totalValue ? move.totalValue : "0.00" }</div>
+          <div className="moveDetail__value--value">${ formField.totalValue ? formField.totalValue : "0.00" }</div>
         </div> {/* moveDetail__value */}
         <div className="moveDetail__boxSummary">
           <div className="moveDetail__boxCount">
-            <div className="moveDetail__boxCount__count">{ move.totalBoxes ? move.totalBoxes : "0"}</div>
+            <div className="moveDetail__boxCount__count">{ formField.totalBoxes ? formField.totalBoxes : "0"}</div>
             <div>Boxes</div>
           </div>
-          <Link to={`/boxes`}>
+            <Link to={
+              {
+                pathname: "/boxes",
+                state: {
+                  move: parseInt(moveId)
+                }
+              }
+            }>
             <button id={`btn--edit-boxes`} className="moveDetail__linkBtn--edit">add/update boxes</button>
           </Link>
         </div>{/** moveDetail__boxSummary */}
@@ -123,7 +139,7 @@ const submitUpdate = (event) => {
         <div className="lowerRow">
           <div className="fragile">
             <p>Fragile</p>
-            <div className="checkBox">{ move.isFragile ? "X" : ""}</div>
+            <div className="checkBox">{ formField.isFragile ? "X" : ""}</div>
           </div>
           <button className="btn--submit-moves" type="submit" onClick={submitUpdate}>Update</button>
           <button id={`btn--delete-${move?.id}`} className="move__linkBtn--delete" onClick={handleDelete} >Delete</button>

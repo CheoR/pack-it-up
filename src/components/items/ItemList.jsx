@@ -1,57 +1,54 @@
 import React, { useContext, useEffect, useState } from "react"
+import { useLocation } from "react-router"
 
 import { userStorageKey, userStorageUserName } from "../auth/authSettings"
+import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "./ItemProvider"
 import { ItemSummary } from "./ItemSummary"
 import { Counter } from "../counter/Counter"
 import "./itemList.css"
-import { BoxContext } from "../boxes/BoxProvider"
 
 export const ItemList = () => {
 
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
   const loggedInUserName = sessionStorage.getItem(userStorageUserName)
-  const { items, getItems, addItem, updateItem } = useContext(ItemContext)
+  const { items, getItems, addItem } = useContext(ItemContext)
   const { boxes, setBoxes, getBoxes } = useContext(BoxContext)
   const [ isLoaded, setIsLoaded ] = useState(false)
-  const [ newItem, setNewItem ] = useState({
-   type: {
-    userId: loggedInUserId,
-    boxId: 0,
-    description: "Change Item Description",
-    value: 0,
-    isFragile: false,
-    imagePath: ""
-   },
-   addObj: addItem
- })
+  const [ selectionMade, setSelectionMade ] = useState(false)
+  const [ newItem, setNewItem ] = useState({})
+  const  location = useLocation()
 
-
-//  const newItem = {
-//    type: {
-//     userId: loggedInUserId,
-//     boxId: 0,
-//     description: "Change Item Description",
-//     value: 0,
-//     isFragile: false,
-//     imagePath: ""
-//    },
-//    addObj: addItem
-//  }
 
  useEffect(() => {
    getBoxes()
     .then(getItems)
     .then(() => setIsLoaded(true))
+    .then(() => setSelectionMade(false))
  }, []) // useEffect
 
+
  useEffect(() => {
+
   if(isLoaded) {
-    console.log("all things loaded")
-    setNewItem({
+    /*
+    So following references to boxes only pertain to those linked to logged in user.
+    */
+   const userBoxes = boxes.filter(box => box.userId === loggedInUserId)
+   setBoxes(userBoxes)
+
+   /*
+    If user comes from box detail page, assign new items to that box.
+   */
+  
+  const defaultBoxId = location.state && location.state.box 
+  ? location.state.box 
+  : userBoxes[0].id
+
+  setNewItem({
       type: {
         userId: loggedInUserId,
-        boxId: 0,
+        boxId: defaultBoxId,
         description: "Change Item Description",
         value: 0,
         isFragile: false,
@@ -59,38 +56,41 @@ export const ItemList = () => {
       },
       addObj: addItem
     }) // setNewItem
-
-   const userBoxes = boxes.filter(box => box.userId === loggedInUserId)
-   setBoxes(userBoxes)
+   
   } // if
-
- }, [isLoaded])
+  
+ }, [isLoaded, selectionMade])
 
   const itemsData = items.filter(item => item.userId === loggedInUserId)
    
   itemsData.forEach(item => {
-   /*
+    /*
     item.hasAssociatedBox = item.boxId ? true : false
     item.hasAssociatedMove = item?.box.moveId ? true : false
     Neat way to turn number into a boolean
    */
-   item.hasAssociatedBox = !!item.boxId
+  item.hasAssociatedBox = !!item.boxId
    item.hasAssociatedMove = !!item?.box?.moveId
   })
 
     const handleControlledInputDropdownChange = ( event ) => {
     /*
-      boxid - boxid, not option value.
+    boxid - boxid, not option value.
+    boxes[0] - if user does not make a selection, select first box by default since
+    items can only be created when there is at least one box made.
     */    
-    const selectedIndex = parseInt(event.target.options.selectedIndex)
+    const selectedIndex = parseInt(event.target.options.selectedIndex) || boxes[0]
     const optionId = event.target.options[selectedIndex].getAttribute('boxid')
-    const updateItem = { ...newItem}
-    updateItem.type.boxId = parseInt(optionId)
-    // console.log("debug here")
-    // console.table(updateItem)
-    // debugger
-    setNewItem(updateItem)
+    const updatedItem = { ...newItem}
+
+    updatedItem.type.boxId = parseInt(optionId)
+    setNewItem(updatedItem)
+    setSelectionMade(true)
+    
   } // handleControlledInputDropdownChange
+
+
+  if(!isLoaded) return null
 
 
    return (<>
@@ -101,9 +101,9 @@ export const ItemList = () => {
         {
           itemsData.map((item, i) => <ItemSummary key={i} item={item} />)
         }
-        <label className="usersBoxesLabel" htmlFor="usersBoxes">Put into Box for </label>
+        <label className="usersBoxesLabel" htmlFor="usersBoxes">Box Selection</label>
 
-      <select value={boxes[0]?.id} id="usersBoxes" className="form-control" onChange={handleControlledInputDropdownChange}>
+      <select value={boxes[0]?.id} id="usersBoxes" className="form-control" onChange={handleControlledInputDropdownChange} required>
         <option value="0">Select a box</option>
         {
           boxes.map(box => (
@@ -111,7 +111,6 @@ export const ItemList = () => {
           ))
         }
       </select>
-
         <Counter objType={newItem}/>
       </div> 
     </>
@@ -119,11 +118,3 @@ export const ItemList = () => {
    }
   </>)
 }
-
-    // <div className="itemSummaryList">
-    //   <h1 className="itemSummaryList__header">{ loggedInUserName }'s Items</h1>
-    //   {
-    //     itemsData.map((item, i) => <ItemSummary key={i} item={item} />)
-    //   }
-    //   <Counter objType={newItem}/>
-    // </div>
