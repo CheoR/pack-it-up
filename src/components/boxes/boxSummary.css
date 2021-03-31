@@ -1,18 +1,4 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
-  overflow-wrap: break-word;
-
-  border: 1px solid green;
-}
-
-.boxSummary {
+/* .boxSummary {
   border: 2px solid blue;
   background: lightsalmon;
   text-align: center;
@@ -101,4 +87,4 @@
 .box__linkBtn--delete {
   margin-left: 1em;
   background: salmon;
-}
+} */

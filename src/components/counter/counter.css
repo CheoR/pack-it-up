@@ -1,29 +1,4 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
-  overflow-wrap: break-word;
-
-  border: 1px solid orangered;
-}
-
-/*
-  <section className="counter">
-   <div className="counter__count">
-    <button className="counter__decrement" onClick={decrementNum}>-</button>
-    <div className="counter__num" value={num}>{ num }</div>
-    <button className="counter__increment" onClick={incrementNum}>+</button>
-   </div>
-   <div className="btn__container" ><button id="btn--add" className="counter__add" onClick={callAdd}>add</button></div>
-  </section>
-*/
-
-.counter {
+/* .counter {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(2, 1fr);
@@ -58,4 +33,4 @@
   display: block;
   width: 25%;
   text-align: center;
-}
+} */

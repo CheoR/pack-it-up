@@ -1,18 +1,4 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
-  overflow-wrap: break-word;
-
-  /* border: 1px solid blue; */
-}
-
-.itemSummaryList {
+/* .itemSummaryList {
   padding: 0.5em;
 }
 
@@ -26,4 +12,4 @@
   padding: 1em;
   width: 100%;
   display: block;
-}
+} */

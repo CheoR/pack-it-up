@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Link, useHistory, useParams } from "react-router-dom"
+import { Link, NavLink, useHistory, useParams } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
 import { BoxContext } from "../boxes/BoxProvider"
@@ -61,7 +61,6 @@ export const ItemDetail = () => {
 
 
  const handleDelete = () => deleteItem(item?.id).then(() => history.push("/items"))
-//  const handleControlledInputChange = ( event ) => console.log("selection made")
  
    const handleControlledInputChange = ( event ) => {
     const newformField = { ...formField }
@@ -108,64 +107,60 @@ const submitUpdate = (event) => {
       TODO: change this into a form so user can update form fields and use useState
       */
       isLoaded
-      ? <form action="" className="itemDetail__form">
-          <img className="boxDetail__image" src="https://source.unsplash.com/featured/?item" alt="user item" />
-          <div className="itemDetail__description">
-            <div>Description</div>
-            <div className="itemDetail__description--text">{ item?.description?.substring(0, 20) + " . ." }</div>
-          </div>
-          <fieldset className="form-group">
-            <label className="descriptionLabel" htmlFor="location">Description: </label>
-            <input 
-            type="text" 
-            id="description" 
-            name="description"
-            className="form-control" 
-            placeholder="Add Item Description ..."
-            value={formField.description}
-            onChange={(e) => {handleControlledInputChange(e)}}
-            autoFocus />
+      ? <section className="container">
+          <img className="boxDetail__image" src={`https://source.unsplash.com/featured/?${item.description}`} alt="user item" />
+          <form action="" className="itemDetail__form">
+            <fieldset className="form-group">
 
-          <label className="valueLabel" htmlFor="location">Value: </label>
-          <input 
-          type="text" 
-          id="value" 
-          name="value"
-          className="form-control" 
-          placeholder="Add Item value ..."
-          value={formField.value}
-          onChange={(e) => {handleControlledInputChange(e)}}
-          autoFocus />
-        </fieldset>
-        <label htmlFor="usersBoxes">Current Box Assignment</label>
-          <select value={item.boxId} id="usersBoxes" className="form-control" onChange={handleControlledDropDownChange}>
-            {boxes.map(box => (
-              <option boxid={box.id} key={box.id} value={box.location}>
-              {box.location}
-            </option>
-            ))}
-          </select>
+              <label className="descriptionLabel" htmlFor="location">Description: </label>
+              <input 
+                type="text" 
+                id="description" 
+                name="description"
+                className="form-control" 
+                placeholder="Add Item Description ..."
+                value={formField.description}
+                onChange={(e) => {handleControlledInputChange(e)}}
+                autoFocus />
 
-            <Link to={`/boxes/${item.boxId}`}>
-              <button id={`btn--edit-${item.boxId}`} className="item__linkBtn--viewBox">View Box Assgined</button>
-            </Link>
+              <label className="valueLabel" htmlFor="location">Value: </label>
+              <input 
+                type="text" 
+                id="value" 
+                name="value"
+                className="form-control" 
+                placeholder="Add Item value ..."
+                value={formField.value}
+                onChange={(e) => {handleControlledInputChange(e)}}
+              autoFocus />
 
+              <label className="userBoxesLabel" htmlFor="usersBoxes">Current Box Assignment</label>
+              <select value={item.boxId} id="usersBoxes" className="form-control" onChange={handleControlledDropDownChange}>
+                {boxes.map(box => (
+                  <option boxid={box.id} key={box.id} value={box.location}>
+                    {box.location}
+                  </option>
+                ))}
+              </select>
+
+              <NavLink to={`/boxes/${item.boxId}`} className="item__linkBtn--viewBox">
+                <button id={`btn--edit-${item.boxId}`} className="item__linkBtn--viewBoxBtn">View Box Assgined</button>
+              </NavLink>
+
+            </fieldset>
             <div className="lowerRow">
-
-            {/* <div className="fragileBlock">
-            <p>Fragile</p>
-            <div className="checkBox">{ item.isFragile ? "X" : ""}</div>
-            </div> */}
-            <fieldset className="fragile__checkbox">
+              <fieldset className="fragile__checkbox">
                 <label className="fragie__checkboxLabel" htmlFor="isFragile">Fragile</label>
                 <input type="checkbox" id="isFragile" onChange={handleCheckboxChange} checked={formField.isFragile}  className="form-control" />
-            </fieldset>
-
-              <button id="camera" className="item__linkBtn--camera">Camera</button>
-              <button className="btn--submit-boxes" type="submit" onClick={submitUpdate}>Update</button>
-              <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={handleDelete}>Delete</button>
+              </fieldset>
+              <div className="buttons">
+                <button id="camera" className="item__linkBtn--camera">Camera</button>
+                <button className="btn--submit-boxes" type="submit" onClick={submitUpdate}>Update</button>
+                <button id={`btn--delete-${item.id}`} className="item__linkBtn--delete" onClick={handleDelete}>Delete</button>
+              </div>
             </div>
-      </form>
+          </form>
+      </section> 
       : <>Loading .. </>
     }
   </>)

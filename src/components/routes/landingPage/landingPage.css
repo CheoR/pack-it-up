@@ -1,18 +1,4 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
-  overflow-wrap: break-word;
-
-  /* border: 1px solid red; */
-}
-
-.landingPage {
+/* .landingPage {
   width: 100vw;
   height: 100vh;
   background: lightblue;
@@ -38,4 +24,4 @@
 .landingPage__btn--login {
   width: 200px;
   padding: 0.5em;
-}
+} */

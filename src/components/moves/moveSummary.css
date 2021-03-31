@@ -1,18 +1,4 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
-  overflow-wrap: break-word;
-
-  border: 1px solid red;
-}
-
-.moveSummary {
+/* .moveSummary {
   border: 2px solid green;
   background: lightsalmon;
   text-align: center;
@@ -43,12 +29,6 @@
   justify-content: space-evenly;
   align-items: center;
 }
-
-/* .lowerRow {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-} */
 
 .fragile {
   display: flx;
@@ -87,4 +67,4 @@
 .move__linkBtn--delete {
   margin-left: 1em;
   background: salmon;
-}
+} */

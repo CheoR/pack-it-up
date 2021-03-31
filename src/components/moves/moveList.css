@@ -1,18 +1,4 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
-  overflow-wrap: break-word;
-
-  border: 1px solid black;
-}
-
-.moveSummaryList {
+/* .moveSummaryList {
   padding: 0.5em;
 }
 
@@ -30,6 +16,5 @@
   padding: 1em;
   width: 90%;
   margin: 0 auto;
-  /* background: red; */
   display: flex;
-}
+} */
