@@ -10,13 +10,12 @@ import { getSum3 } from "../helpers/helpers"
 import styles from "./boxDetail.module.css"
 
 
-
 export const BoxDetail = () => {
 
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
-  const { moves, getMoves } = useContext(MoveContext)
+  const { moves, setMoves, getMoves } = useContext(MoveContext)
   const { boxes, getBoxes, updateBox, deleteBox } = useContext(BoxContext)
-  const { items, getItems } = useContext(ItemContext)
+  const { items, setItems, getItems } = useContext(ItemContext)
   const [ formField, setFormField ] = useState({
     "userId": loggedInUserId,
     "moveId": 0,
@@ -26,7 +25,7 @@ export const BoxDetail = () => {
 
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ hasSaved, setHasSaved ] = useState(false)
-  // const [ newBox, setNewBox ] = useState({})
+  const [ box, setBox ] = useState({})
   const { boxId } = useParams()
 
  useEffect(() => {
@@ -39,12 +38,15 @@ export const BoxDetail = () => {
  
  useEffect(() => {
   if(isLoaded && boxes) {
-    const box = boxes.find(box => box.id === parseInt(boxId))
+    const box = boxes.find(box => box?.id === parseInt(boxId))
+    setBox(box)
+    setMoves(moves.filter(move => move?.userId === loggedInUserId))
+    setItems(items.filter(item => item?.boxId === box?.id))
     setFormField({
-        "id": box.id,
+        "id": box?.id,
         "userId": loggedInUserId,
-        "moveId": box.moveId,
-        "location": "Change Box Location",
+        "moveId": box?.moveId,
+        "location": box?.location,
         "qrCode": ""
       })
   } // if
@@ -52,20 +54,20 @@ export const BoxDetail = () => {
   if(hasSaved) {
     window.alert("Updated")
   }
- }, [isLoaded])
+ }, [boxes, isLoaded])
 
- const box = boxes.find(box => box?.id === parseInt(boxId))
- const userMoves = moves.filter(move => move?.userId === loggedInUserId)
- const userItems = items.filter(item => item?.boxId === box?.id)
 
  if(box){
-   box.totalItems = userItems?.length
-   box.totalValue = getSum3(userItems.map(item => item?.value ? item?.value : 0))
+   box.totalItems = items?.length
+   box.totalValue = getSum3(items.map(item => item?.value ? item?.value : 0))
    box.isFragile = items.some(item => item?.isFragile)
  }
 
  const history = useHistory()
- const handleDelete = () => deleteBox(box?.id).then(() => history.push("/boxes"))
+ const handleDelete = ( event ) => {
+   event.preventDefault()
+   deleteBox(box?.id).then(() => history.push("/boxes"))
+ }
 
  const handleControlledDropDownChange = ( event ) => {
   const newformField = { ...formField }
@@ -96,15 +98,16 @@ const submitUpdate = (event) => {
   */
   delete newformField.usersMoves
   updateBox(newformField)
-    setHasSaved(true)
+  setHasSaved(true)
 } // updateMove
+
 
  return (<>
    {
      isLoaded
      ? 
      <section className={styles.container}>
-       <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${box.location}`} alt={`${box.location}`} />
+       <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${box?.location}`} alt={`${box?.location}`} />
        <form action="" className={styles.container__form}>
          <fieldset className={styles.container__formGroup}>
           <label className={styles.locationLable} htmlFor="location">Location: </label>
@@ -118,12 +121,12 @@ const submitUpdate = (event) => {
           onChange={(e) => {handleControlledInputChange(e)}}
           autoFocus />
           <div className={styles.container__value}>Value</div>
-          <div className={styles.container__value__value}>${ box.totalValue ? box.totalValue : "0.00" }</div>
+          <div className={styles.container__value__value}>${ box?.totalValue ? box?.totalValue : "0.00" }</div>
 
           <label className={styles.container__dropdownLabel} htmlFor="usersMoves">Current Move Assignment</label>
-          <select value={userMoves[0]?.id} id="usersMoves" className={styles.formControl} onChange={handleControlledDropDownChange}>
+          <select value={moves[0]?.id} id="usersMoves" className={styles.formControl} onChange={handleControlledDropDownChange}>
             <option value="0">Select a location</option>
-              {userMoves.map(move => (
+              {moves.map(move => (
             <option boxid={move.id} key={move.id} value={move.moveName}>
               {move.moveName}
             </option>
@@ -144,35 +147,22 @@ const submitUpdate = (event) => {
           }} className={styles.container__navlink}>
           <button id={`btn--edit-items`} className={styles.container__navlinkBtn}>add/update items</button>
         </NavLink>
-         <NavLink to={`/moves/${box?.moveId}`} className={styles.container__navlink__view}>
+        <NavLink to={`/moves/${box?.moveId}`} className={styles.container__navlink__view}>
           <button id={`btn--viewMove`} className={styles.container__navlinkBtn__view}>view move</button>
         </NavLink>
 
         <fieldset className={styles.fragile__checkbox}>
           <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile</label>
-          <input type="checkbox" id="isFragile" checked={box?.isFragile}  className={styles.formControl} />
+          <input type="checkbox" id="isFragile" checked={box?.isFragile}  className={styles.formControl} readOnly />
         </fieldset>
 
         <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>
         <button id={`btn--delete-${box?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
 
-       </form>
-     </section>
-     : <> Loading ... </>
+      </form>
+    </section>
+    : <> Loading ... </>
   }
 
  </>)
 }
-
-{/* <form action="" className="boxDetail__form">
-
-       
-    <div className="lowerRow">
-      <div className="fragile">
-        <div>Fragile</div>
-        <div className="checkBox">{ box?.isFragile ? "X" : ""}</div>
-      </div>
-      <button className="btn__submit" type="submit" onClick={submitUpdate}>Update</button>
-      <button id={`btn--delete-${box?.id}`} className="box__linkBtn__delete" onClick={handleDelete}>Delete</button>
-    </div>
-     </form> */}

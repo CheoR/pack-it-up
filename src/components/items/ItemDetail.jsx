@@ -45,13 +45,13 @@ export const ItemDetail = () => {
     setBoxes(boxes.filter(box => box.userId === loggedInUserId))
     setItem(items.find(item => item.id === parseInt(itemId)))
     setFormField({
-        "id": item.id,
+        "id": item?.id,
         "userId": loggedInUserId,
-        "boxId": item.boxId,
-        "description": item.description,
-        "value": item.value,
-        "isFragile": item.isFragile,
-        "imagePath": item.imagePath
+        "boxId": item?.boxId,
+        "description": item?.description,
+        "value": item?.value,
+        "isFragile": item?.isFragile,
+        "imagePath": item?.imagePath
       })
   } // if
     if(hasSaved) {
@@ -60,7 +60,10 @@ export const ItemDetail = () => {
  }, [items, isLoaded])
 
 
- const handleDelete = () => deleteItem(item?.id).then(() => history.push("/items"))
+ const handleDelete = ( event ) => {
+   event.preventDefault()
+   deleteItem(item?.id).then(() => history.push("/items"))
+ }
  
    const handleControlledInputChange = ( event ) => {
     const newformField = { ...formField }
