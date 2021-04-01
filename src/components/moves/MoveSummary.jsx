@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { MoveContext } from "./MoveProvider"
 
-import "./moveSummary.css"
+import styles from "./moveSummary.module.css"
 
 
 export const MoveSummary = ({ move } ) => {

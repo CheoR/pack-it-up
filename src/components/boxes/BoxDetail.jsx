@@ -136,7 +136,7 @@ const submitUpdate = (event) => {
 
         <div className={styles.container__itemCount}>
           <div className={styles.container__itemCount__count}>{ box?.totalItems }</div>
-          <div>Items</div>
+          <div className={styles.container__itemCount__item}>Items</div>
         </div> {/* container__itemCount */}
         <NavLink to={
           {
@@ -159,9 +159,15 @@ const submitUpdate = (event) => {
         <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>
         <button id={`btn--delete-${box?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
 
+<<<<<<< HEAD
       </form>
     </section>
     : <> Loading ... </>
+=======
+       </form>
+     </main>
+     : <> Loading ... </>
+>>>>>>> main
   }
 
  </>)
