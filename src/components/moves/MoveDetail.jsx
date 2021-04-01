@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Link, useHistory, useParams } from "react-router-dom"
+import { Link, NavLink, useHistory, useParams } from "react-router-dom"
 
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "./MoveProvider"
 import { BoxContext } from "../boxes/BoxProvider"
-import "./moveDetail.css"
+import styles from "./moveDetail.module.css"
 
 
 const _getSum = ( valueList ) => {
@@ -102,49 +102,46 @@ const submitUpdate = (event) => {
    {
      isLoaded
      ? 
-      <form action="" className="moveDetailForm">
-        <fieldset className="form-group">
-          <label className="moveNameLabel" htmlFor="moveName">Move Name: </label>
+     <main className={styles.container}>
+       <form action="" className={styles.container__form}>
+         <fieldset className={styles.container__formGroup}>
+          <label className={styles.moveNameLabel} htmlFor="moveName">Move Name: </label>
           <input 
-          type="text" 
-          id="moveName" 
-          name="moveName"
-          className="form-control" 
-          placeholder="Add Move Name..."
-          value={formField.moveName}
-          onChange={(e) => {handleControlledInputChange(e)}}
+            type="text" 
+            id="moveName" 
+            name="moveName"
+            className={styles.formControl} 
+            placeholder="Add Move Name..."
+            value={formField.moveName}
+            onChange={(e) => {handleControlledInputChange(e)}}
           autoFocus />
-        </fieldset>
-        <div className="moveDetail__value">
-          <div>Value</div>
-          <div className="moveDetail__value--value">${ formField.totalValue ? formField.totalValue : "0.00" }</div>
-        </div> {/* moveDetail__value */}
-        <div className="moveDetail__boxSummary">
-          <div className="moveDetail__boxCount">
-            <div className="moveDetail__boxCount__count">{ formField.totalBoxes ? formField.totalBoxes : "0"}</div>
-            <div>Boxes</div>
-          </div>
-            <Link to={
-              {
-                pathname: "/boxes",
-                state: {
-                  move: parseInt(moveId)
-                }
-              }
-            }>
-            <button id={`btn--edit-boxes`} className="moveDetail__linkBtn--edit">add/update boxes</button>
-          </Link>
-        </div>{/** moveDetail__boxSummary */}
+          <div className={styles.container__value}>Value</div>
+          <div className={styles.container__value__value}>${ formField.totalValue ? formField.totalValue : "0.00" }</div>
+         </fieldset>
+        <div className={styles.container__boxCount}>
+          <div className={styles.container__boxCount__count}>{ formField.totalBoxes ? formField.totalBoxes : "0" }</div>
+          <div className={styles.container__boxCount__box}>Boxes</div>
+        </div> {/* container__boxCount */}
+        <NavLink to={
+          {
+            pathname: "/boxes",
+            state: {
+              move: parseInt(moveId)
+            }
+          }} className={styles.container__navlink}>
+          <button id={`btn--edit-boxes`} className={styles.container__navlinkBtn}>add/update boxes</button>
+        </NavLink>
 
-        <div className="lowerRow">
-          <div className="fragile">
-            <p>Fragile</p>
-            <div className="checkBox">{ formField.isFragile ? "X" : ""}</div>
-          </div>
-          <button className="btn--submit-moves" type="submit" onClick={submitUpdate}>Update</button>
-          <button id={`btn--delete-${move?.id}`} className="move__linkBtn--delete" onClick={handleDelete} >Delete</button>
-        </div> {/* lowerRow */}
-      </form>
+        <fieldset className={styles.fragile__checkbox}>
+          <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile</label>
+          <input type="checkbox" id="isFragile" checked={formField?.isFragile}  className={styles.formControl} />
+        </fieldset>
+
+        <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>
+        <button id={`btn--delete-${move?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
+
+       </form>
+     </main>
      : <> loading. . </>
    }
  </>)

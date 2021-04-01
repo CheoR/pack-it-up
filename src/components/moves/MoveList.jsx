@@ -7,7 +7,7 @@ import { MoveContext } from "./MoveProvider"
 import { MoveSummary } from "./MoveSummary"
 import { getSum2 } from "../helpers/helpers"
 import { Counter } from "../counter/Counter"
-import "./moveList.css"
+import styles from "./moveList.module.css"
 
 
 export const MoveList = () => {
