@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router"
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "../moves/MoveProvider"
 import { BoxContext } from "./BoxProvider"
 import { getSum3 } from "../helpers/helpers"
-import "./boxDetail.css"
+import styles from "./boxDetail.module.css"
 
 
 
@@ -86,6 +86,7 @@ export const BoxDetail = () => {
     setHasSaved(false)
 } // handleControlledInputChange
 
+
 const submitUpdate = (event) => {
   event.preventDefault()
   const newformField = { ...formField }
@@ -101,63 +102,77 @@ const submitUpdate = (event) => {
  return (<>
    {
      isLoaded
-     ?<form action="" className="boxDetail__form">
-       <img className="boxDetail__image" src="https://source.unsplash.com/featured/?item" alt="user item" />
-       <fieldset className="form-group">
-          <label className="locationLable" htmlFor="location">Location: </label>
+     ? 
+     <section className={styles.container}>
+       <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${box.location}`} alt={`${box.location}`} />
+       <form action="" className={styles.container__form}>
+         <fieldset className={styles.container__formGroup}>
+          <label className={styles.locationLable} htmlFor="location">Location: </label>
           <input 
           type="text" 
           id="location" 
           name="location"
-          className="form-control" 
+          className={styles.formControl} 
           placeholder="Add Box Location ..."
           value={formField.location}
           onChange={(e) => {handleControlledInputChange(e)}}
           autoFocus />
-        </fieldset>
-        <div className="boxDetail__value">
-          <div>Value</div>
-          <div className="boxDetail__value--value">${ box.totalValue ? box.totalValue : "0.00" }</div>
-        </div> {/* boxDetail__value */}
-        <div className="boxDetail__summary">
-          <div className="boxDetail__itemCount">
-            <div className="boxDetail__itemCount__count">{ box?.totalItems }</div>
-            <div>Items</div>
-          </div>
-          <Link to={
-            {
-              pathname: "/items",
-              state: {
-                box: parseInt(boxId)
-              }
-            }
-          }>
-            <button id={`btn--edit-items`} className="boxDetail__linkBtn--edit">add/update items</button>
-          </Link>
-        </div> {/* boxDetail__itemSummary */}
-        <label htmlFor="usersMoves">Update Move Assignment</label>
-      <select value={userMoves[0]?.id} id="usersMoves" className="form-control" onChange={handleControlledDropDownChange}>
-        <option value="0">Select a location</option>
-            {userMoves.map(move => (
+          <div className={styles.container__value}>Value</div>
+          <div className={styles.container__value__value}>${ box.totalValue ? box.totalValue : "0.00" }</div>
+
+          <label className={styles.container__dropdownLabel} htmlFor="usersMoves">Current Move Assignment</label>
+          <select value={userMoves[0]?.id} id="usersMoves" className={styles.formControl} onChange={handleControlledDropDownChange}>
+            <option value="0">Select a location</option>
+              {userMoves.map(move => (
             <option boxid={move.id} key={move.id} value={move.moveName}>
               {move.moveName}
             </option>
             ))}
-        </select>
-        <Link to={`/moves/${box?.moveId}`}>
-          <button id={`btn--viewMove`} className="boxDetail__linkBtn--viewMove">view move</button>
-        </Link>
-    <div className="lowerRow">
-      <div className="fragile">
-        <p>Fragile</p>
-        <div className="checkBox">{ box?.isFragile ? "X" : ""}</div>
-      </div>
-      <button className="btn--submit-boxes" type="submit" onClick={submitUpdate}>Update</button>
-      <button id={`btn--delete-${box?.id}`} className="box__linkBtn--delete" onClick={handleDelete}>Delete</button>
-    </div> {/* lowerRow */}
-     </form>
+          </select>
+        </fieldset>
+
+        <div className={styles.container__itemCount}>
+          <div className={styles.container__itemCount__count}>{ box?.totalItems }</div>
+          <div>Items</div>
+        </div> {/* container__itemCount */}
+        <NavLink to={
+          {
+          pathname: "/items",
+            state: {
+              box: parseInt(boxId)
+            }
+          }} className={styles.container__navlink}>
+          <button id={`btn--edit-items`} className={styles.container__navlinkBtn}>add/update items</button>
+        </NavLink>
+         <NavLink to={`/moves/${box?.moveId}`} className={styles.container__navlink__view}>
+          <button id={`btn--viewMove`} className={styles.container__navlinkBtn__view}>view move</button>
+        </NavLink>
+
+        <fieldset className={styles.fragile__checkbox}>
+          <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile</label>
+          <input type="checkbox" id="isFragile" checked={box?.isFragile}  className={styles.formControl} />
+        </fieldset>
+
+        <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>
+        <button id={`btn--delete-${box?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
+
+       </form>
+     </section>
      : <> Loading ... </>
   }
 
  </>)
 }
+
+{/* <form action="" className="boxDetail__form">
+
+       
+    <div className="lowerRow">
+      <div className="fragile">
+        <div>Fragile</div>
+        <div className="checkBox">{ box?.isFragile ? "X" : ""}</div>
+      </div>
+      <button className="btn__submit" type="submit" onClick={submitUpdate}>Update</button>
+      <button id={`btn--delete-${box?.id}`} className="box__linkBtn__delete" onClick={handleDelete}>Delete</button>
+    </div>
+     </form> */}
