@@ -1,0 +1,99 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  background: lightblue;
+}
+
+.container__image {
+  display: block;
+  width: 90%;
+  margin-bottom: 10px;
+}
+
+.container__form {
+  width: 90%;
+  margin-bottom: 10px;
+
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 1fr 50px;
+}
+
+.container__formGroup {
+  margin-bottom: 10px;
+
+  grid-column-start: 1;
+  grid-column-end: 13;
+
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.descriptionLabel,
+.valueLabel,
+.container__dropdownLabel {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  display: block;
+  display: flex;
+  align-items: center;
+}
+
+.formControl {
+  grid-column-start: 3;
+  grid-column-end: 6;
+  text-align: right;
+}
+
+.container__navlink {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  background: blue;
+  display: block;
+}
+
+.container__navlinkBtn {
+  background: green;
+  display: block;
+  width: 100%;
+  padding: 1em;
+}
+
+.container__btn__camera,
+.container__btn__submit,
+.container__btn__delete,
+.fragile__checkbox {
+  border-radius: 10px;
+  padding: 0.2em;
+}
+
+.fragile__checkbox {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container__btn__camera {
+  grid-column-start: 5;
+  grid-column-end: 7;
+}
+
+.container__btn__submit {
+  grid-column-start: 8;
+  grid-column-end: 10;
+  background: lightgreen;
+}
+
+.container__btn__delete {
+  grid-column-start: 11;
+  grid-column-end: 13;
+  background: salmon;
+}
