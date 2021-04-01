@@ -103,7 +103,7 @@ const submitUpdate = (event) => {
    {
      isLoaded
      ? 
-     <section className={styles.container}>
+     <main className={styles.container}>
        <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${box.location}`} alt={`${box.location}`} />
        <form action="" className={styles.container__form}>
          <fieldset className={styles.container__formGroup}>
@@ -133,7 +133,7 @@ const submitUpdate = (event) => {
 
         <div className={styles.container__itemCount}>
           <div className={styles.container__itemCount__count}>{ box?.totalItems }</div>
-          <div>Items</div>
+          <div className={styles.container__itemCount__item}>Items</div>
         </div> {/* container__itemCount */}
         <NavLink to={
           {
@@ -157,22 +157,9 @@ const submitUpdate = (event) => {
         <button id={`btn--delete-${box?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
 
        </form>
-     </section>
+     </main>
      : <> Loading ... </>
   }
 
  </>)
 }
-
-{/* <form action="" className="boxDetail__form">
-
-       
-    <div className="lowerRow">
-      <div className="fragile">
-        <div>Fragile</div>
-        <div className="checkBox">{ box?.isFragile ? "X" : ""}</div>
-      </div>
-      <button className="btn__submit" type="submit" onClick={submitUpdate}>Update</button>
-      <button id={`btn--delete-${box?.id}`} className="box__linkBtn__delete" onClick={handleDelete}>Delete</button>
-    </div>
-     </form> */}
