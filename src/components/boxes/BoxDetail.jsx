@@ -106,7 +106,7 @@ const submitUpdate = (event) => {
    {
      isLoaded
      ? 
-     <section className={styles.container}>
+     <main className={styles.container}>
        <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${box?.location}`} alt={`${box?.location}`} />
        <form action="" className={styles.container__form}>
          <fieldset className={styles.container__formGroup}>
@@ -159,15 +159,9 @@ const submitUpdate = (event) => {
         <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>
         <button id={`btn--delete-${box?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
 
-<<<<<<< HEAD
-      </form>
-    </section>
-    : <> Loading ... </>
-=======
        </form>
      </main>
      : <> Loading ... </>
->>>>>>> main
   }
 
  </>)

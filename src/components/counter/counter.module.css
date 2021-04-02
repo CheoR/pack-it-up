@@ -1,0 +1,41 @@
+.counter {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  padding: 0.2em;
+  grid-gap: 10px;
+  background: pink;
+}
+
+.counter__btn__decrement,
+.counter__btn__increment,
+.counter__numDisplay,
+.counter__btn__add {
+  padding: 0.2em;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.counter__btn__decrement {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  background: red;
+}
+
+.counter__btn__increment {
+  grid-column-start: 5;
+  grid-column-end: 7;
+}
+
+.counter__numDisplay {
+  grid-column-start: 8;
+  grid-column-end: 10;
+  background: green;
+}
+
+.counter__btn__add {
+  grid-column-start: 1;
+  grid-column-end: 11;
+  background: lightblue;
+}

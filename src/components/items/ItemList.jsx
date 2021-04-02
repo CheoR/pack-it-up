@@ -6,7 +6,7 @@ import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "./ItemProvider"
 import { ItemSummary } from "./ItemSummary"
 import { Counter } from "../counter/Counter"
-import "./itemList.css"
+import styles from "./itemList.module.css"
 
 export const ItemList = () => {
 
@@ -95,24 +95,28 @@ export const ItemList = () => {
 
    return (<>
    { isLoaded
-    ? <>
-      <div className="itemSummaryList">
-        <h1 className="itemSummaryList__header">{ loggedInUserName }'s Items</h1>
+    ? 
+    <>
+      <main className={styles.summary}>
+        <h1 className={styles.summary__header}>{ loggedInUserName }'s Items</h1>
         {
           itemsData.map((item, i) => <ItemSummary key={i} item={item} />)
         }
-        <label className="usersBoxesLabel" htmlFor="usersBoxes">Box Selection</label>
+        <fieldset className={styles.container__formGroup}>
+          <label className={styles.usersBoxesLabel} htmlFor="usersBoxes">Box Selection</label>
+          <select value={boxes[0]?.id} id="usersBoxes" className={styles.formControl} onChange={handleControlledInputDropdownChange} required>
+            <option value="0">Select a box</option>
+            {
+              boxes.map(box => (
+                <option boxid={box.id} key={box.id} value={box.location}>{box.location}</option>
+              ))
+            }
+          </select>
+        </fieldset>
+  
 
-      <select value={boxes[0]?.id} id="usersBoxes" className="form-control" onChange={handleControlledInputDropdownChange} required>
-        <option value="0">Select a box</option>
-        {
-          boxes.map(box => (
-            <option boxid={box.id} key={box.id} value={box.location}>{box.location}</option>
-          ))
-        }
-      </select>
         <Counter objType={newItem}/>
-      </div> 
+      </main> 
     </>
     : <> Loading  .. . </>
    }

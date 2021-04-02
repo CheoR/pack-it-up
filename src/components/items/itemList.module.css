@@ -8,16 +8,7 @@
   text-align: center;
 }
 
-.summary__form {
-  background: blue;
-  width: 100%;
-}
-
-.summary__formGroup {
-  display: flex;
-}
-
-.moveNameLabel {
+.usersBoxesLabel {
   background: orange;
   padding: 0.5em;
   display: block;
@@ -28,4 +19,9 @@
   padding: 0.5em;
   display: block;
   flex: 25%;
+}
+
+.container__formGroup {
+  display: flex;
+  justify-content: space-between;
 }

@@ -4,8 +4,8 @@ import { MoveContext } from "../moves/MoveProvider"
 import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { Summary } from "./Summary"
-import "./summaryList.css"
 import { Instructions } from "../helpers/instructions/Instructions"
+import styles from "./summaryList.module.css"
 
 
 export const SummaryList = () => {
@@ -45,12 +45,10 @@ const loggedInUser = sessionStorage.getItem("app_user_username")
   const dataToRender = [usersMoves, usersBoxes, usersItems]
 
   return (
-    <div className="summaryList">
-      <h1 className="summaryList__header">{ loggedInUser }'s Summary</h1>
+    <div className={styles.summaryList}>
+      <h1 className={styles.summaryList__header}>{ loggedInUser }'s Summary</h1>
       <Instructions />
-      {
-        dataToRender.map((data, i) => <Summary key={i} listType={{ data }} />)
-      }
+      <Summary listOfTypes={dataToRender} />
     </div>
   )
 }

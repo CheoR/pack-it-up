@@ -22,7 +22,8 @@
 .registration__btn__submit {
   padding: 2em;
   border-radius: 10px;
-  color: red;
+  border: 1px solid blue;
+  display: block;
 }
 
 .registration__fieldset {
@@ -36,7 +37,7 @@
   padding: 0.8em;
 }
 
-.registration__fieldset .formControl {
+.registration__fieldset .form-control {
   padding: 1em;
 }
 

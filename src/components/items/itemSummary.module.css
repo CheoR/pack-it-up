@@ -8,27 +8,56 @@
   border-bottom: 5px dashed black;
 }
 
-.summary__boxCount,
-.summary__itemCount {
+.summary__image {
   grid-column-start: 1;
   grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  background: red;
+  border: 2px solid black;
+}
 
+.move__checkbox,
+.box__checkbox,
+.fragile__checkbox {
+  background: orange;
+  grid-column-start: 4;
+  grid-column-end: 7;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.summary__boxCount {
+/* .move__checkboxLabel,
+.box__checkboxLabel,
+.fragile__checkboxLabel {
+  margin-left: 5px;
+}
+
+.formControl {
+  margin-right: 5px;
+} */
+
+.move__checkbox,
+.summary__description,
+.summary__description__description {
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.box_checkbox,
+.summary__value,
+.summary__value__value {
   grid-row-start: 2;
   grid-row-end: 2;
 }
 
-.summary__itemCount {
+.fragile__checkbox {
   grid-row-start: 3;
   grid-row-end: 3;
 }
 
-.summary__move,
+.summary__description,
 .summary__value {
   background: pink;
   grid-column-start: 7;
@@ -37,7 +66,7 @@
   align-items: center;
 }
 
-.summary__move__move,
+.summary__description__description,
 .summary__value__value {
   grid-column-start: 10;
   grid-column-end: 13;
@@ -46,19 +75,8 @@
   justify-content: flex-end;
 }
 
-.fragile__checkbox {
-  background: orange;
-  grid-column-start: 4;
-  grid-column-end: 7;
-  grid-row-start: 3;
-  grid-row-end: 3;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.summary__navlinkBtn__edit,
-.summary__btn__delete {
+.container__navlinkBtn__edit,
+.container__btn__delete {
   border-radius: 10px;
   padding: 0.2em;
 
@@ -66,13 +84,13 @@
   grid-row-end: 3;
 }
 
-.summary__btn__delete {
+.container__btn__delete {
   grid-column-start: 10;
   grid-column-end: 12;
   background: salmon;
 }
 
-.summary__navlink__edit {
+.container__navlink__edit {
   grid-column-start: 7;
   grid-column-end: 9;
   display: block;
@@ -80,7 +98,7 @@
   grid-row-end: 3;
 }
 
-.summary__navlinkBtn__edit {
+.container__navlinkBtn__edit {
   background: lightgreen;
   display: block;
   width: 100%;
@@ -89,10 +107,11 @@
   text-align: center;
 }
 
-/* .moveSummary {
-  border: 2px solid green;
+/* .itemSummary {
+  border: 2px solid blue;
   background: lightsalmon;
   text-align: center;
+  justify-content: space-between;
   margin-top: 10px;
 
   display: grid;
@@ -100,62 +119,77 @@
   grid-template-rows: repeat(3, 1fr);
 }
 
-.moveName,
-.moveValue,
-.lowerRow {
+.itemSummary__image {
+  border: 1px solid green;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+
+.description,
+.value,
+.summary__btns {
   grid-column-start: 3;
   grid-column-end: 6;
+}
+
+.move,
+.box,
+.fragile {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.5em;
-}
-
-.boxCount,
-.itemCount {
-  grid-column-start: 1;
+  grid-column-start: 2;
   grid-column-end: 3;
-  background: lightgreen;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
 }
 
 .fragile {
-  display: flx;
-  align-items: center;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 4;
+  grid-row-end: 5;
+}
+
+.description,
+.value {
+  display: flex;
   justify-content: space-between;
   padding: 0.5em;
-  grid-column-start: 3;
-  grid-column-end: 4;
+  text-align: left;
 }
 
-.boxCount__count,
-.itemCount__count {
-  height: 20px;
-  width: 20px;
+.description__text,
+.description__value {
+  flex-basis: 60%;
+}
+
+.checkBox {
+  height: 10px;
+  width: 10px;
   background: white;
   padding: 0.2em;
 }
 
-.count__items {
-  background: white;
-  height: 20px;
-  width: 20px;
-  padding: 2px;
+.summary__btns {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid red;
 }
 
-.move__linkBtn--edit,
-.move__linkBtn--delete {
+.summary__linkBtn--edit,
+.summary__linkBtn--delete {
   padding: 0.2em;
-  width: 70px;
+  width: 80px;
 }
 
-.move__linkBtn--edit {
+.summary__linkBtn--edit {
   background: lightgreen;
 }
 
-.move__linkBtn--delete {
+.summary__linkBtn--delete {
   margin-left: 1em;
   background: salmon;
 } */

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useHistory, useLocation } from "react-router-dom"
 
-import "./counter.css"
+import styles from "./counter.module.css"
 
 
 export const Counter = ({ objType }) => {
@@ -55,15 +55,11 @@ export const Counter = ({ objType }) => {
 
 
  return (
-  <section className="counter">
-   <div className="counter__count">
-    <button className="counter__decrement" onClick={decrementNum}>-</button>
-    <div className="counter__num" value={num}>{ num }</div>
-    <button className="counter__increment" onClick={incrementNum}>+</button>
-   </div>
-   <div className="btn__container" >
-     <button id="btn--add" className="counter__add" onClick={callAdd}>add</button>
-    </div>
+  <section className={styles.counter}>
+    <button className={styles.counter__btn__decrement} onClick={decrementNum}>-</button>
+    <div className={styles.counter__btn__increment} value={num}>{ num }</div>
+    <button className={styles.counter__numDisplay} onClick={incrementNum}>+</button>
+    <button id="btn--add" className={styles.counter__btn__add} onClick={callAdd}>add</button>
   </section>
  )
 }

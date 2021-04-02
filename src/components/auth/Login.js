@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Link, useHistory } from "react-router-dom";
 import { authApi, userStorageKey } from "./authSettings"
 
-import "./Login.css"
+import styles from "./Login.module.css"
 
 
 export const Login = () => {
@@ -39,33 +39,33 @@ export const Login = () => {
     }
 
     return (
-        <main className="container--login">
-            <dialog className="dialog dialog--auth" open={existDialog}>
-                <div className="dialog__message">User does not exist</div>
-                <button className="button--close" onClick={e => setExistDialog(false)}>Close</button>
+        <main className={styles.container__login}>
+            <dialog className={`${styles.dialog} ${styles.dialog__auth}`} open={existDialog}>
+                <div className={styles.dialog__message}>User does not exist</div>
+                <button className={styles.button__close} onClick={e => setExistDialog(false)}>Close</button>
             </dialog>
             <section>
-                <form className="containerform--login" onSubmit={handleLogin}>
-                    <h1 className="containerForm__header">PackItUp</h1>
-                    <fieldset className="container__fieldset">
-                        <label htmlFor="email"> Email address </label>
+                <form className={styles.containerform__login} onSubmit={handleLogin}>
+                    <h1 className={styles.containerForm__header}>PackItUp</h1>
+                    <fieldset className={styles.container__fieldset}>
+                        <label className={styles.emailLable} htmlFor="email"> Email address </label>
                         <input type="email"
                             id="email"
-                            className="form-control"
+                            className={styles.formControl}
                             placeholder="Email address"
                             required autoFocus
                             value={loginUser.email}
                             onChange={handleInputChange} />
                     </fieldset>
-                    <fieldset className="container__fieldset--btn">
-                        <button className="container__btn--submit" type="submit">
+                    <fieldset className={styles.container__fieldset__btn}>
+                        <button className={styles.container__btn__submit} type="submit">
                             Sign in
                         </button>
                     </fieldset>
                 </form>
             </section>
-            <section className="link--register">
-                <Link className="container__register--link" to="/register">Register for an account</Link>
+            <section className={styles.link__register}>
+                <Link className={styles.container__register__link} to="/register">Register for an account</Link>
             </section>
         </main>
     )
