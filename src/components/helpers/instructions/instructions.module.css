@@ -1,0 +1,14 @@
+.instructions {
+  background: blue;
+  padding: 1em;
+}
+
+.instructions__header {
+  text-align: center;
+  background: red;
+  margin-bottom: 10px;
+}
+
+.instructions__text {
+  margin-bottom: 10px;
+}

@@ -1,7 +1,8 @@
-/* .summaryList {
+.summaryList {
   border: 2px solid green;
   padding: 1em;
   width: 90%;
+  background: lightgray;
 }
 
 .summaryList__header {
@@ -9,4 +10,5 @@
   color: green;
   margin-bottom: 20px;
   border: 1px solid red;
-} */
+  background: lightblue;
+}
