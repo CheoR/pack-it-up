@@ -8,7 +8,7 @@ import { ItemContext } from "../items/ItemProvider"
 import { BoxSummary } from "./BoxSummary"
 import { Counter } from "../counter/Counter"
 import { getSum1 } from "../helpers/helpers"
-import "./boxList.css"
+import styles from "./boxList.module.css"
 
 
 export const BoxList = () => {
@@ -92,25 +92,30 @@ export const BoxList = () => {
 
 
    return (<>
-     { isLoaded
-      ? <div className="boxSummaryList">
-      <h1 className="boxSummaryList__header">{ loggedInUserName }'s Boxes</h1>
-      {
-        boxes.map((box, i) => <BoxSummary key={i} box={ box } />)
-      }
-      <label htmlFor="usersMoves">Assign To Move</label>
-
-      <select value={moves[0]?.id} id="usersMoves" className="form-control" onChange={handleControlledInputChange}>
-        <option value="0">Select a location</option>
+     {
+      isLoaded
+      ?
+      <main className={styles.summary}>
+        <h1 className={styles.summary__header}>{ loggedInUserName }'s Boxes</h1>
         {
-          moves.map(move => (
-            <option moveid={move.id} key={move.id} value={move.moveName}>{move.moveName}</option>
-          ))
+          boxes.map((box, i) => <BoxSummary key={i} box={ box } />)
         }
-      </select>
 
-      <Counter objType={newBox} />
-    </div>
+        <fieldset className={styles.container__formGroup}>
+          <label className={styles.usersMovesLabel} htmlFor="usersMoves">Assign To Move</label>
+          <select value={moves[0]?.id} id="usersMoves" className={styles.formControl} onChange={handleControlledInputChange} required>
+            <option value="0">Select a location</option>
+            {
+              moves.map(move => (
+                <option moveid={move.id} key={move.id} value={move.moveName}>{move.moveName}</option>
+              ))
+            }
+          </select>
+        </fieldset>
+
+
+        <Counter objType={newBox} />
+      </main>
       : <>Loading . . </>
      }
 

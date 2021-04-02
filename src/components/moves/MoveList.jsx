@@ -92,19 +92,19 @@ export const MoveList = () => {
      {
        isLoaded
        ?
-       <div className="moveSummaryList">
-      <h1 className="moveSummaryList__header">{loggedInUserName}'s Moves</h1>
+      <main className={styles.summary}>
+      <h1 className={styles.summary__header}>{loggedInUserName}'s Moves</h1>
       {
         moves.map((move, i) => <MoveSummary key={i} move={ move } />)
       }
-      <form action="" className="moveSummaryList__form">
-        <fieldset className="form-group">
-          <label htmlFor="moveName">Move Name: </label>
+      <form action="" className="summary__form">
+        <fieldset className={styles.summary__formGroup}>
+          <label className={styles.moveNameLabel} htmlFor="moveName">Move Name: </label>
           <input 
           type="text" 
           id="moveName" 
           name="moveName"
-          className="form-control" 
+          className={styles.formControl}
           placeholder="Add Move Name..."
           value={formField.type.moveName}
           onChange={(e) => {handleControlledInputChange(e)}}
@@ -112,7 +112,7 @@ export const MoveList = () => {
         </fieldset>
       </form>
       <Counter objType={formField} />
-    </div>
+    </main>
        : <>Loading</>
      }
   </>)
