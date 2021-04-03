@@ -1,3 +1,5 @@
+<img src="./images/PackItUpLogo.png" alt="Pack It Up Logo" />
+
 # Introduction
 
 Hi, my name's Cheo.
@@ -6,92 +8,107 @@ This is my front-end capstone project.
 
 ## What is PackItUp
 
-PackItUp is a moving app to help users keep track of what items went into what box for moving/storage.
+PackItUp is a moving/storage CRUD app created with React, HTML, CSS, Fetch API and json-server to help users keep track of what items they pack into boxes for moving/storage.
 
-Boxes have assoicated QR codes so users/movers can keep track of when an a box leave the original destination and when it arrives.
+Initial design made with Figma and the entity relational diagram made with diagramdb.io.
+
+Issue tickets follow [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development#Behavioral_specifications), Behavior-Driven Development and use Github Project board to track issue lifecyles.
 
 ## Capabilities
 
-[ ] User should be able to add/remove/update item(s).
+- [x] User should be able to add/remove/update item(s).
 
-[ ] User should be able to add/remove/update boxe(s).
+- [x] User should be able to add/remove/update boxe(s).
 
-[ ] User should be able to add/remove/update QR codes.
+- [x] User should be able to add/remove/update move(s).
 
-[ ] User should be able to link/delink QR code from a box.
+- [x] User should be able to link/delink items from boxes.
 
-[ ] User should be able to link/delink items from boxes.
+- [x] User should not be able to modifiy other user's information.
 
-[ ] User should not be able to see other user's QR codes, boxes, items.
+- [x] User should be able to save their moves, boxes, items.
 
-[ ] User should not be able to modifiy other user's information.
+- [x] User should be able to authenticate.
 
-[ ] User should be able to save their QR codes, boxes, items.
-
-[ ] User should be able to authenticate.
-
-[ ] User should only be able to add/remove/edit QR codes, boxes, items if they are logged in.
+- [x] User should only be able to add/remove/edit boxes, items if they are logged in.
 
 ## Endpoints
 
 GET, POST, PUT, DELETE supported for the following routes
 
 - /users
-- /users/1
-- /users/edit/1
+- /users/${id}
 - /boxes
-- /boxes/1
-- /boxes/edit/1
+- /boxes/${id}
 - /items
-- /items/1
-- /items/edit/1
+- /items/${id}
+
+## Roadmap
+
+- [ ] Encode item/box/move data as a QR code that can be printed out as a label for shipping.
+- [ ] Add a complentary QR decoding, so user can scan QR on a box and get information about its contents (if user has authorization). User can limit what data 3rd parties (movers, storage management, ect) can see.
+
+## Tech Stack
+
+1. React
+2. HTML
+3. CSS
+4. json-server
 
 ## ERD
 
-Intial entity relationship diagram below.
+Entity relationship diagram can be viewd at [diagram](https://dbdiagram.io/d/603cf260fcdcb6230b21ffe2) or latest screen capture below.
 
-<img src="./images/PackItUp.png" alt="entity relationship diagram for pack it up" />
+<details>
+  <img src="./images/PackItUp.png" alt="entity relationship diagram for pack it up" />
+</details>
 
 ## Layout
 
-Initial layout
+Most up to day layout can be viewd at [my figma layout](https://www.figma.com/file/FVTItU8oORU8Mrihcd60Jj/PackItUp?node-id=39%3A0) or you can view latest screen capture below:
 
-<img src="./images/Layout.png" alt="layout for pack it up" />
+<details>
+ <img src="./images/Layout.png" alt="layout for pack it up" />
+</details>
 
-# REQUIREMENTS
+## Cloning
 
-### Technical Requirements:
+```bash
+git clone git@github.com:CheoR/pack-it-up.git
+npm install
+```
 
-- React Application, this means there should be no direct querying of the DOM (i.e., no `document.querySelector()`, `document.getElementById()`, `document.getElementsByClassName()`, etc.)
-- Single Page Application, this means no page refreshes (i.e., no `window.reload()` or `document.reload()` ).
-- CRUD using JS Fetch API
-- Login: Users must be able to authenticate
-- Users and User dependent data: When users authenticate, they use data that only relates to them.
-- Persistent data storage (i.e., json-server)
-- **Your database must look like the ERD your mentor approved!!!**
-- All primary keys and foreign keys in your database need to be integers
-- The console in your developer tools should not have any errors, warnings are ok.
-- Your application should be data driven. This means no hard-coded values for dynamic routes, drop-downs, etc. These should always be fetched from the database.
-- It is NOT required to use an external API.
-- Minimal Styling (Your app should be visually appealing to the eye and have a logical, simple interface for the user. Styling should be your last priority and worked on only when your mentor approves.)
+## Testing Instructions
 
-### Planning:
+After forking the repo.
 
-- Use dbdiagram.io, Lucidchart, etc. to build your ERD.
-- Create wireframes (using moqups, lucidchart, photoshop, adobe XD, Figma, etc.)
-- Issue tickets on Github must be written following [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development#Behavioral_specifications), like the issue tickets for Nutshell.
-- If you are using an external API, gather all sample data and be prepared to demo your api at your one on one (via Postman) before committing to use the API.
-- If you want to use to use something we haven’t covered in class, you have to prove that you’ve implemented the code before your proposal will be accepted. If it is accepted, you will be given lower priority if you need help on that technology.
-- Make sure you have a project board set up in github and migrate your issue tickets.
-- Once your ERD is approved, **NO CHANGES SHOULD BE MADE TO IT without your capstone mentorss approval.**
-- **You should not start writing any code until you have had your one on one with your capstone mentor and they have approved your full proposal. If you have not fleshed out your planning enough, your capstone mentor will not let you code.**
+```bash
 
-### Project NoNos:
+git fetch --all
+git checkout <branch-name>
+npm install
+npm start
 
-- No MVP can include a calendar. Do not try to integrate with Google Calendar (or anything else).
-- No Web Sockets. Yeah, we know it’s cool. It’s also a tremendous obstacle and provides absolutely zero value to solving your problem.
-- No games
+```
 
-### Factors for a Successful capstone
+In another tab, cd into `api` and run
 
-Here are some additional things to consider that will help you plan and build [a successful capstone](https://docs.google.com/presentation/d/1yND0ZBCrKyz5PnDujtE1IL74MQ5D_xNNzwtzpOAmOLo/edit?usp=sharing).
+`json-server -p 8088 database.json`
+
+Please note, as of right now, running the above command including `-w` would cause json-serve to crash if user chooses to create 4 or more objects at once through the `ADD` button.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+Please fill out the template for pulll request and label them appropriately.
+
+## Acknowledgements
+
+Thanks to NSS and everybody in my cohert that has helped me figure out problems when I was overthinking it.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
