@@ -1,4 +1,4 @@
-/* .landingPage {
+.landingPage {
   width: 100vw;
   height: 100vh;
   background: lightblue;
@@ -10,18 +10,24 @@
 
 .landingPage__banner,
 .landingPage__banner figure,
-.landingPage__banner img {
+.landingPage__banner img,
+.landingPage__header {
   width: 100%;
 }
 
 .landingPage__banner img,
 .landingPage__banner figcaption,
-.landingPage__banner p {
+.landingPage__banner p,
+.landingPage__header {
   padding: 0.8em;
 }
 
-.landingPage__btn--register,
-.landingPage__btn--login {
+.landingPage__btn__register,
+.landingPage__btn__login {
   width: 200px;
   padding: 0.5em;
-} */
+}
+
+.landingPage__header {
+  text-align: center;
+}

@@ -1,8 +1,8 @@
 import React, { useContext } from "react"
-import { Link, useHistory } from "react-router-dom"
+import { Link, NavLink, useHistory } from "react-router-dom"
 
 import { BoxContext } from "./BoxProvider"
-import "./boxSummary.css"
+import styles from "./boxSummary.module.css"
 
 
 export const BoxSummary = ({ box } ) => {
@@ -12,40 +12,38 @@ export const BoxSummary = ({ box } ) => {
   const handleDelete = () => deleteBox(box.id).then(() => history.push("/boxes"))
 
  return (
-  <section className="boxSummary">
-   <img className="boxSummary__image" src="https://images.unsplash.com/photo-1595079676601-f1adf5be5dee?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80" alt="QR code place holder" />
-
-   <div className="boxMove">
-     <p>Move</p>
-     <div className="boxMoveName">{ box.moveName }</div>
-  </div>
-  <div className="location">
-     <p>Location</p>
-     <div className="location__text">{ box.location }</div>
-  </div>
-
-    <div className="boxValue">
-     <p>Value</p>
-     <div className="box__value">${ box.totalValue }</div>
+  <section className={styles.summary}>
+    <div className={styles.summary__figure}>
+      <img className={styles.summary__image} src="https://images.unsplash.com/photo-1595079676601-f1adf5be5dee?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80" alt="QR code place holder" />
     </div>
 
-    <div className="count">
-     <div className="count__items">{ box.totalCount }</div>
-     <div>Items</div>
-    </div>
-  
-    <div className="lowerRow">
+    <div className={styles.container__itemCount}>
+      <div className={styles.container__itemCount__count}>{ box?.totalCount }</div>
+      <div className={styles.container__itemCount__item}>Items</div>
+    </div> {/* container__itemCount */}
+    
+    <fieldset className={styles.move__checkbox}>
+      <label className={styles.move__checkboxLabel} htmlFor="summaryBox">Move</label>
+      <input type="checkbox" id="summaryBox" checked={box.moveId}  className={styles.formControl} readOnly />
+    </fieldset>
+    <fieldset className={styles.fragile__checkbox}>
+      <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">Fragile</label>
+      <input type="checkbox" id="summaryFragile" checked={box.isFragile}  className={styles.formControl} readOnly />
+    </fieldset>
 
-    <div className="fragile">
-     <p>Fragile</p>
-     <div className="checkBox">{ box.isFragile ? "X" : ""}</div>
-    </div>
-     <Link to={`/boxes/${box.id}`}>
-      <button id={`btn--edit-${box.id}`} className="box__linkBtn--edit">Edit</button>
-     </Link>
 
-    <button id={`btn--delete-${box.id}`} className="box__linkBtn--delete" onClick={handleDelete}>Delete</button>
-    </div> 
+    <div className={styles.summary__location}>Location</div>
+    <div className={styles.summary__location__location}>{ box.location.substring(0, 9) + " . ." }</div>
+
+    <div className={styles.summary__value}>Value</div>
+    <div className={styles.summary__value__value}>${ box.totalValue ? box.totalValue : "0.00" }</div>
+
+    <NavLink to={`/boxes/${box.id}`} className={styles.container__navlink__edit}>
+      <button id={`btn--edit-${box.id}`} className={styles.container__navlinkBtn__edit}>Edit</button>
+    </NavLink>
+
+    <button id={`btn--delete-${box.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
+
   </section>
  )
 }

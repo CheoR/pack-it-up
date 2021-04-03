@@ -1,22 +1,52 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
-import "./summary.css"
+import styles from "./summary.module.css"
 
 
-export const Summary = ({ listType }) => {
+const _Card = ({ typeObj }) => {
+  return (
+
+    <li className={styles.summary__li}>
+      <h2 className={styles.summary__dataType}>{ typeObj.data.type }</h2>
+      <div className={styles.summary__dataLength}>{ typeObj.data.collection.length }</div>
+
+      <NavLink to={`/${typeObj.data.type}`} className={styles.summary__navlink__view}>
+        <button className={styles.summary__navlinkBtn__view} disabled={typeObj.data.canUse}>
+          Add/View
+        </button>
+      </NavLink>
+    </li>
+  )
+}
+
+export const Summary = ({ listOfTypes }) => {
 
  return (
-  <section className="summary">
-   <h2 className="summary__dataType">{ listType.data.type }</h2>
-   <div className="summary__dataLength">{ listType.data.collection.length }</div>
-   <div className="summary__btnContainer">
-    <Link to={`/${listType.data.type}`}>
-      <button className="summary__btn--view" disabled={listType.data.canUse}>
-        Add/View
-      </button>
-    </Link>
-   </div>
-  </section>
+   <ul className={styles.summary__ul}>
+     {
+      listOfTypes.map((data, i) => <_Card key={i} typeObj={{ data }} />)
+     }
+   </ul>
  )
 }
+
+/*
+
+
+
+  </section>
+
+
+      <ul>
+        {
+          dataToRender.map((data, i) => <Summary key={i} listType={{ data }} />)
+        }
+      </ul>
+
+
+  <NavLink to={`/moves/${box?.moveId}`} className={styles.container__navlink__view}>
+    <button id={`btn--viewMove`} className={styles.container__navlinkBtn__view}>view move</button>
+  </NavLink>
+
+*/
