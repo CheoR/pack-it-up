@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Link, NavLink, useHistory, useParams } from "react-router-dom"
+import { NavLink, useHistory, useParams } from "react-router-dom"
 
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "./MoveProvider"
@@ -21,7 +21,7 @@ export const MoveDetail = () => {
 
   const { moves, getMoves, updateMove, deleteMove } = useContext(MoveContext)
   const { boxes, getBoxes } = useContext(BoxContext)
-  const { items, getItems } = useContext(ItemContext)
+  const { items, getItems, deleteItem } = useContext(ItemContext)
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ hasSaved, setHasSaved ] = useState(false)
   const [ move, setMove ] = useState({})
@@ -34,7 +34,48 @@ export const MoveDetail = () => {
   })
 
 
-  const handleDelete = () => deleteMove(move?.id).then(() => history.push("/moves"))
+  const handleDelete = ( event ) => {
+    event.preventDefault()
+    /*
+      json-server only deletes boxes linked to current move and not thier associated items.
+      So delete associated items first (if any) before delete move and boxes.
+    */
+    // deleteMove(move?.id).then(() => history.push("/moves"))
+
+    const linkedBoxesIds = boxes.filter(box => box.moveId === move.id).map(box => box.id)
+    const linkedItemsIds = items.filter(item => linkedBoxesIds.includes(item.boxId)).map(item => item.id)
+
+    console.log(`Move Id: ${move.id}`)
+    console.log(`\tLinked BoxesIds: ${linkedBoxesIds}`)
+    console.log(`\t\tLinkedItemsIds: ${linkedItemsIds}`)
+
+    if(linkedItemsIds.length) {
+      console.log(" there are iems to delte")
+      const addFuncs = []
+
+      for(let i=0; i <  linkedItemsIds.length; i ++) {
+        addFuncs.push(deleteItem)
+      }
+
+      /*
+        Delete items before deleing given move.
+      */
+      Promise.all(addFuncs.map((callback, idx) => callback(linkedItemsIds[idx])))
+        .then((res)=> { 
+          deleteMove(move?.id).then(() => history.push("/moves"))
+          console.log("items delete")
+        })
+        .catch(err => {
+          console.log(`Error: ${err}`)
+        })
+
+    } else {
+      deleteMove(move?.id).then(() => history.push("/moves"))
+      console.log("no items to delete and move delete")
+    }
+
+  } // handleDelete
+  
   const { moveId } = useParams()
   const history = useHistory()
 
@@ -63,6 +104,7 @@ export const MoveDetail = () => {
       move.totalBoxes = userBoxes.length
       move.totalValue = _getSum(userItems.map(item => item.value ? item.value : 0))
       move.isFragile = userItems.some(item => item.isFragile)
+      setMove(move)
       setFormField(move)
     } // if
 
@@ -134,7 +176,7 @@ const submitUpdate = (event) => {
 
         <fieldset className={styles.fragile__checkbox}>
           <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile</label>
-          <input type="checkbox" id="isFragile" checked={formField?.isFragile}  className={styles.formControl} />
+          <input type="checkbox" id="isFragile" checked={formField?.isFragile}  className={styles.formControl} readOnly />
         </fieldset>
 
         <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>

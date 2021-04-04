@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router"
-import { Link, NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
 import { ItemContext } from "../items/ItemProvider"

@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom"
 import styles from "./summary.module.css"
 
 
-const _Card = ({ typeObj }) => {
+const SummaryCard = ({ typeObj }) => {
   return (
 
     <li className={styles.summary__li}>
@@ -25,7 +25,7 @@ export const Summary = ({ listOfTypes }) => {
  return (
    <ul className={styles.summary__ul}>
      {
-      listOfTypes.map((data, i) => <_Card key={i} typeObj={{ data }} />)
+      listOfTypes.map((data, i) => <SummaryCard key={i} typeObj={{ data }} />)
      }
    </ul>
  )

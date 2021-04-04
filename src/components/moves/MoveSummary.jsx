@@ -1,6 +1,8 @@
 import React, { useContext } from "react"
-import { Link, NavLink, useHistory } from "react-router-dom"
+import { NavLink, useHistory } from "react-router-dom"
 import { MoveContext } from "./MoveProvider"
+import { ItemContext } from "../items/ItemProvider"
+import { BoxContext } from "../boxes/BoxProvider"
 
 import styles from "./moveSummary.module.css"
 
@@ -8,8 +10,47 @@ import styles from "./moveSummary.module.css"
 export const MoveSummary = ({ move } ) => {
 
   const { deleteMove } = useContext(MoveContext)
+  const { boxes, getBoxes } = useContext(BoxContext)
+  const { items, getItems, deleteItem } = useContext(ItemContext)
+
   const history = useHistory()
-  const handleDelete = () => deleteMove(move.id).then(() => history.push("/moves"))
+  // const handleDelete = () => deleteMove(move.id).then(() => history.push("/moves"))
+  const handleDelete = ( event ) => {
+        event.preventDefault()
+
+    /*
+      json-server only deletes boxes linked to current move and not thier associated items.
+      So delete associated items first (if any) before delete move and boxes.
+    */
+    // deleteMove(move?.id).then(() => history.push("/moves"))
+
+      const linkedBoxesIds = boxes.filter(box => box.moveId === move.id).map(box => box.id)
+      const linkedItemsIds = items.filter(item => linkedBoxesIds.includes(item.boxId)).map(item => item.id)
+  
+      if(linkedItemsIds.length) {
+
+        const addFuncs = []
+  
+        for(let i=0; i <  linkedItemsIds.length; i ++) {
+          addFuncs.push(deleteItem)
+        }
+  
+        /*
+          Delete items before deleing given move.
+        */
+        Promise.all(addFuncs.map((callback, idx) => callback(linkedItemsIds[idx])))
+          .then((res)=> { 
+            deleteMove(move?.id).then(() => history.push("/moves"))
+          })
+          .catch(err => {
+            console.log(`Error: ${err}`)
+          })
+  
+      } else {
+        deleteMove(move?.id).then(() => history.push("/moves"))
+      }
+
+  } // handleDelete
 
  return (
   <section className={styles.summary}>
