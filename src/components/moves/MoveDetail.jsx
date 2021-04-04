@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Link, NavLink, useHistory, useParams } from "react-router-dom"
+import { NavLink, useHistory, useParams } from "react-router-dom"
 
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "./MoveProvider"

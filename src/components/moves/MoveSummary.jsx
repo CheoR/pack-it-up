@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { Link, NavLink, useHistory } from "react-router-dom"
+import { NavLink, useHistory } from "react-router-dom"
 import { MoveContext } from "./MoveProvider"
 
 import styles from "./moveSummary.module.css"

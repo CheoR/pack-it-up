@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Link, NavLink, useHistory, useParams } from "react-router-dom"
+import { NavLink, useHistory, useParams } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
 import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "./ItemProvider"
 import styles from "./itemDetail.module.css"
+import { Delete } from "../helpers/buttons/Buttons"
 
 
 export const ItemDetail = () => {
