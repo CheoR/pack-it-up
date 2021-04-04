@@ -12,3 +12,18 @@
   border: 1px solid red;
   background: lightblue;
 }
+
+.summaryList__headerbox {
+  display: flex;
+  border: 2px solid green;
+  justify-content: center;
+  align-items: center;
+}
+
+.summaryList__logo {
+  width: 25%;
+}
+
+/* .summaryList__header {
+  width: 50%;
+} */

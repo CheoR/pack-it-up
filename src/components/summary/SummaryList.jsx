@@ -5,6 +5,7 @@ import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { Summary } from "./Summary"
 import { Instructions } from "../helpers/instructions/Instructions"
+import logo from "../../assets/images/PackItUpLogo.png"
 import styles from "./summaryList.module.css"
 
 
@@ -46,7 +47,13 @@ const loggedInUser = sessionStorage.getItem("app_user_username")
 
   return (
     <div className={styles.summaryList}>
-      <h1 className={styles.summaryList__header}>{ loggedInUser }'s Summary</h1>
+      {/* <img src={logo} className={styles.summaryList__logo} alt="Pack It Up Logo"/>
+        <h1 className={styles.summaryList__header}>{ loggedInUser }'s Summary</h1> */}
+
+       <div className={styles.summaryList__headerbox}>
+        <img src={logo} className={styles.summaryList__logo} alt="Pack It Up Logo"/>
+        <h1 className={styles.summaryList__header}>{ loggedInUser }'s Summary</h1>
+      </div>
       <Instructions />
       <Summary listOfTypes={dataToRender} />
     </div>
