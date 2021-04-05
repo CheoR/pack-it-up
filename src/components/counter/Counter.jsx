@@ -25,13 +25,21 @@ export const Counter = ({ objType }) => {
  const history = useHistory()
  const location = useLocation()
  
- const decrementNum = () => num ? setNum(num - 1) : setNum(1) 
- const incrementNum = () => setNum(num + 1)
+ const decrementNum = ( event ) => {
+   event.preventDefault()
+   num ? setNum(num - 1) : setNum(1)
+ } // decrement
+
+ const incrementNum = ( event ) => {
+   event.preventDefault()
+   setNum(num + 1)
+ } // increment
 
  /* User should not be able to create <= 0 objects */
  if(!num) setNum(1)
  
- const callAdd = () => {
+ const callAdd = ( event ) => {
+   event.preventDefault()
 
   const addFuncs = []
 

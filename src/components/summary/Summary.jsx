@@ -30,23 +30,3 @@ export const Summary = ({ listOfTypes }) => {
    </ul>
  )
 }
-
-/*
-
-
-
-  </section>
-
-
-      <ul>
-        {
-          dataToRender.map((data, i) => <Summary key={i} listType={{ data }} />)
-        }
-      </ul>
-
-
-  <NavLink to={`/moves/${box?.moveId}`} className={styles.container__navlink__view}>
-    <button id={`btn--viewMove`} className={styles.container__navlinkBtn__view}>view move</button>
-  </NavLink>
-
-*/

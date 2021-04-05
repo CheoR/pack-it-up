@@ -73,13 +73,14 @@ export const ItemList = () => {
    item.hasAssociatedMove = !!item?.box?.moveId
   })
 
-    const handleControlledInputDropdownChange = ( event ) => {
+    const handleControlledDropDownChange = ( event ) => {
     /*
     boxid - boxid, not option value.
-    boxes[0] - if user does not make a selection, select first box by default since
+    if user does not make a selection, select first box by default since
     items can only be created when there is at least one box made.
-    */    
-    const selectedIndex = parseInt(event.target.options.selectedIndex) || boxes[0]
+    */
+   
+    const selectedIndex = parseInt(event.target.options.selectedIndex) || 1
     const optionId = event.target.options[selectedIndex].getAttribute('boxid')
     const updatedItem = { ...newItem}
 
@@ -87,7 +88,7 @@ export const ItemList = () => {
     setNewItem(updatedItem)
     setSelectionMade(true)
     
-  } // handleControlledInputDropdownChange
+  } // handleControlledDropDownChange
 
 
   if(!isLoaded) return null
@@ -104,7 +105,10 @@ export const ItemList = () => {
         }
         <fieldset className={styles.container__formGroup}>
           <label className={styles.usersBoxesLabel} htmlFor="usersBoxes">Box Selection</label>
-          <select value={boxes[0]?.id} id="usersBoxes" className={styles.formControl} onChange={handleControlledInputDropdownChange} required>
+          {/*
+            Adding value={boxes[0]?.id} always renders with the default value. 
+          */}
+          <select id="usersBoxes" className={styles.formControl} onChange={handleControlledDropDownChange} required>
             <option value="0">Select a box</option>
             {
               boxes.map(box => (

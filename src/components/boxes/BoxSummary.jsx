@@ -9,7 +9,11 @@ export const BoxSummary = ({ box } ) => {
 
   const { deleteBox } = useContext(BoxContext)
   const history = useHistory()
-  const handleDelete = () => deleteBox(box.id).then(() => history.push("/boxes"))
+  const handleDelete = ( event ) => {
+    event.preventDefault()
+    deleteBox(box.id).then(() => history.push("/boxes"))
+  } // handleDelete
+
 
  return (
   <section className={styles.summary}>

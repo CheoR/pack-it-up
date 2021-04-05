@@ -22,6 +22,8 @@ export const BoxList = () => {
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ newBox, setNewBox ] = useState({})
   const location = useLocation()
+  const [ selected, setSelected ] = useState(0)
+  const [ move, setMove ] = useState({})
 
 
   /*
@@ -46,7 +48,7 @@ export const BoxList = () => {
     setItems(itemsData)
  
      /*
-       If user comes from box detail page, assign new items to that box.
+       If user comes from move detail page, assign new items to that box.
      */
  
      const defaultMoveId = location.state && location.state.move 
@@ -79,16 +81,22 @@ export const BoxList = () => {
   }) // boxes.forEach
 
 
-  const handleControlledInputChange = ( event ) => {
+  const handleControlledDropDownChange = ( event ) => {
     /*
       moveid - moveId, not option value.
     */    
     const selectedIndex = parseInt(event.target.options.selectedIndex)
     const optionId = event.target.options[selectedIndex].getAttribute('moveid')
     const updateBox = { ...newBox}
-    updateBox.type.moveId = parseInt(optionId)
+
+    /*
+      Default 1st move if no selection made.
+      No select results in praseInt(optionId) is null. 
+    */
+    setSelected(parseInt(optionId))
+    updateBox.type.moveId = parseInt(optionId) || newBox.defaultMoveId
     setNewBox(updateBox)
-  } // handleControlledInputChange
+  } // handleControlledDropDownChange
 
 
    return (<>
@@ -103,8 +111,8 @@ export const BoxList = () => {
 
         <fieldset className={styles.container__formGroup}>
           <label className={styles.usersMovesLabel} htmlFor="usersMoves">Assign To Move</label>
-          <select value={moves[0]?.id} id="usersMoves" className={styles.formControl} onChange={handleControlledInputChange} required>
-            <option value="0">Select a location</option>
+          <select id="usersMoves" className={styles.formControl} onChange={handleControlledDropDownChange} required>
+            <option value="0">Select Move</option>
             {
               moves.map(move => (
                 <option moveid={move.id} key={move.id} value={move.moveName}>{move.moveName}</option>
