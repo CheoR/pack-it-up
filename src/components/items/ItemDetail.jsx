@@ -74,7 +74,7 @@ export const ItemDetail = () => {
     setHasSaved(false)
 } // handleControlledInputChange
 
-const submitUpdate = (event) => {
+const submitUpdate = ( event ) => {
   event.preventDefault()
   const newformField = { ...formField }
 

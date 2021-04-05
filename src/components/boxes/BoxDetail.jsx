@@ -89,7 +89,7 @@ export const BoxDetail = () => {
 } // handleControlledInputChange
 
 
-const submitUpdate = (event) => {
+const submitUpdate = ( event ) => {
   event.preventDefault()
   const newformField = { ...formField }
 
