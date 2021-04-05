@@ -28,6 +28,7 @@ export const ItemDetail = () => {
 
   const history = useHistory()
   const { itemId } = useParams()
+  const [ selected, setSelected ] = useState("")
 
 
  useEffect(() => {
@@ -42,9 +43,12 @@ export const ItemDetail = () => {
     To display boxes/items assoicated with user.
    */
   if(isLoaded && boxes) {
-    const item = items.find(item => item.id === parseInt(itemId))
     setBoxes(boxes.filter(box => box.userId === loggedInUserId))
     setItem(items.find(item => item.id === parseInt(itemId)))
+    const item = items.find(item => item.id === parseInt(itemId))
+    const box = boxes.find(box => item.boxId === box.id)
+
+    setSelected(box.location)
     setFormField({
         "id": item?.id,
         "userId": loggedInUserId,
@@ -74,7 +78,7 @@ export const ItemDetail = () => {
     setHasSaved(false)
 } // handleControlledInputChange
 
-const submitUpdate = (event) => {
+const submitUpdate = ( event ) => {
   event.preventDefault()
   const newformField = { ...formField }
 
@@ -91,10 +95,17 @@ const submitUpdate = (event) => {
   const newformField = { ...formField }
   newformField[event.target.id] = event.target.value
 
+  setSelected(event.target.value)
+  
   const selectedIndex = parseInt(event.target.options.selectedIndex)
   const optionId = event.target.options[selectedIndex].getAttribute('boxid')
+  
+  newformField.boxId = parseInt(optionId)
 
-  newformField.moveId = parseInt(optionId)
+  /*
+    Remove attributes not matching ERD.
+  */
+  delete newformField["container__dropdown"]
   setFormField(newformField)
   setHasSaved(false)
  }
@@ -140,7 +151,8 @@ const submitUpdate = (event) => {
             autoFocus />
 
             <label className={styles.container__dropdownLabel} htmlFor="container__dropdown">Current Box Assignment</label>
-            <select value={item.boxId} id="container__dropdown" className={styles.formControl} onChange={handleControlledDropDownChange}>
+            <select value={selected} id="container__dropdown" className={styles.formControl} onChange={handleControlledDropDownChange}>
+              <option value="0">Select Move</option>
               {boxes.map(box => (
                 <option boxid={box.id} key={box.id} value={box.location}>
                   {box.location}

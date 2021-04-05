@@ -34,7 +34,9 @@ const history = useHistory()
  }, [isLoggedIn]) // useEffect
 
 
- const handleLogout = () => {
+ const handleLogout = ( event ) => {
+   event.preventDefault()
+
   sessionStorage.removeItem("app_user_id")
   sessionStorage.removeItem("app_user_username")
   setIsLoggedIn(false)

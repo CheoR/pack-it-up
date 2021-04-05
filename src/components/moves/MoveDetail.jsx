@@ -122,7 +122,7 @@ export const MoveDetail = () => {
 } // handleControlledInputChange
 
 
-const submitUpdate = (event) => {
+const submitUpdate = ( event ) => {
   event.preventDefault()
   const newformField = { ...formField }
 

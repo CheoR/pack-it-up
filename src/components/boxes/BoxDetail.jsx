@@ -25,6 +25,7 @@ export const BoxDetail = () => {
 
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ hasSaved, setHasSaved ] = useState(false)
+  const [ selected, setSelected ] = useState("")
   const [ box, setBox ] = useState({})
   const { boxId } = useParams()
 
@@ -42,6 +43,8 @@ export const BoxDetail = () => {
     setBox(box)
     setMoves(moves.filter(move => move?.userId === loggedInUserId))
     setItems(items.filter(item => item?.boxId === box?.id))
+
+    setSelected(box.move.moveName)
     setFormField({
         "id": box?.id,
         "userId": loggedInUserId,
@@ -76,7 +79,12 @@ export const BoxDetail = () => {
   const selectedIndex = parseInt(event.target.options.selectedIndex)
   const optionId = event.target.options[selectedIndex].getAttribute('boxid')
 
-  newformField.moveId = parseInt(optionId)
+      /*
+      Default 1st move if no selection made.
+      No select results in praseInt(optionId) is null. 
+    */
+  setSelected(event.target.value)
+  newformField.moveId = parseInt(optionId) || moves[0].id
   setFormField(newformField)
   setHasSaved(false)
 } // handleControlledInputChange
@@ -89,7 +97,7 @@ export const BoxDetail = () => {
 } // handleControlledInputChange
 
 
-const submitUpdate = (event) => {
+const submitUpdate = ( event ) => {
   event.preventDefault()
   const newformField = { ...formField }
 
@@ -124,10 +132,11 @@ const submitUpdate = (event) => {
           <div className={styles.container__value__value}>${ box?.totalValue ? box?.totalValue : "0.00" }</div>
 
           <label className={styles.container__dropdownLabel} htmlFor="usersMoves">Current Move Assignment</label>
-          <select value={moves[0]?.id} id="usersMoves" className={styles.formControl} onChange={handleControlledDropDownChange}>
-            <option value="0">Select a location</option>
+          {/* excluding value={selected} shows selected move, including it always shows default */}
+          <select id="usersMoves" value={selected} className={styles.formControl} onChange={handleControlledDropDownChange}>
+            <option value="0">Move</option>
               {moves.map(move => (
-            <option boxid={move.id} key={move.id} value={move.moveName}>
+                <option boxid={move.id} key={move.id} value={move.moveName}>
               {move.moveName}
             </option>
             ))}
