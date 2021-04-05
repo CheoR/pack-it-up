@@ -48,6 +48,10 @@ GET, POST, PUT, DELETE supported for the following routes
 - [ ] Encode item/box/move data as a QR code that can be printed out as a label for shipping.
 - [ ] Add a complentary QR decoding, so user can scan QR on a box and get information about its contents (if user has authorization). User can limit what data 3rd parties (movers, storage management, ect) can see.
 
+## Demo
+
+<img src="./src/assets/screen-recording.gif" alt="Pack It Up App Demo">
+
 ## Tech Stack
 
 1. React
@@ -75,6 +79,7 @@ Most up to day layout can be viewd at [my figma layout](https://www.figma.com/fi
 
 ```bash
 git clone git@github.com:CheoR/pack-it-up.git
+cd pack-it-up
 npm install
 ```
 
