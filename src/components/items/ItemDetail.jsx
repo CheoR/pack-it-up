@@ -124,7 +124,9 @@ const submitUpdate = ( event ) => {
       isLoaded
       ? 
       <main className={styles.container}>
-        <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${item.description}`} alt={`${item.description}`} />
+        <div className={styles.container__image_container}>
+          <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${item.description}`} alt={`${item.description}`} />
+        </div>
         <form action="" className={styles.container__form}>
           <fieldset className={styles.container__formGroup}>
 

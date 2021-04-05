@@ -5,21 +5,20 @@
 }
 
 .summary {
-  /* padding: 0.5em;
-  background: yellow; */
   padding: 0.2em;
   background: var(--primary-color);
-  height: calc(100vh - 40px);
-  position: relative;
+  height: 94vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .summary__header {
-  background: red;
   text-align: center;
 }
 
 .summary__form {
-  background: blue;
   width: 100%;
 }
 
@@ -28,13 +27,14 @@
 }
 
 .moveNameLabel {
-  background: orange;
+  background: var(--tricery-color);
   padding: 0.5em;
   display: block;
 }
 
 .formControl {
-  background: rgb(150, 155, 155);
+  /* background: rgb(150, 155, 155); */
+  background: var(--secondary-color);
   padding: 0.5em;
   display: block;
   flex: 25%;

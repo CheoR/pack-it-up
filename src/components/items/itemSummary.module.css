@@ -1,10 +1,10 @@
 .summary {
-  background: lightblue;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(3, 1fr);
   grid-gap: 10px;
   padding: 0.2em;
+  border-top: 5px dashed black;
   border-bottom: 5px dashed black;
 }
 
@@ -13,14 +13,13 @@
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 3;
-  background: red;
+  /* background: red; */
   border: 2px solid black;
 }
 
 .move__checkbox,
 .box__checkbox,
 .fragile__checkbox {
-  background: orange;
   grid-column-start: 4;
   grid-column-end: 7;
   display: flex;
@@ -59,7 +58,6 @@
 
 .summary__description,
 .summary__value {
-  background: pink;
   grid-column-start: 7;
   grid-column-end: 10;
   display: flex;

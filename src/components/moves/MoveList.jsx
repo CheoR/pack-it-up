@@ -93,24 +93,24 @@ export const MoveList = () => {
        isLoaded
        ?
       <main className={styles.summary}>
-      <h1 className={styles.summary__header}>{loggedInUserName}'s Moves</h1>
-      {
-        moves.map((move, i) => <MoveSummary key={i} move={ move } />)
-      }
-      <form action="" className="summary__form">
-        <fieldset className={styles.summary__formGroup}>
-          <label className={styles.moveNameLabel} htmlFor="moveName">Move Name: </label>
-          <input 
-          type="text" 
-          id="moveName" 
-          name="moveName"
-          className={styles.formControl}
-          placeholder="Add Move Name..."
-          value={formField.type.moveName}
-          onChange={(e) => {handleControlledInputChange(e)}}
-          autoFocus />
-        </fieldset>
-      </form>
+        <h1 className={styles.summary__header}>{loggedInUserName}'s Moves</h1>
+        {
+          moves.map((move, i) => <MoveSummary key={i} move={ move } />)
+        }
+        <form action="" className="summary__form">
+          <fieldset className={styles.summary__formGroup}>
+            <label className={styles.moveNameLabel} htmlFor="moveName">Move Name: </label>
+            <input 
+            type="text" 
+            id="moveName" 
+            name="moveName"
+            className={styles.formControl}
+            placeholder="Add Move Name..."
+            value={formField.type.moveName}
+            onChange={(e) => {handleControlledInputChange(e)}}
+            autoFocus />
+          </fieldset>
+        </form>
       <Counter objType={formField} />
     </main>
        : <>Loading</>
