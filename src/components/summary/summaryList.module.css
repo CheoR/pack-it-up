@@ -1,29 +1,33 @@
-.summaryList {
-  border: 2px solid green;
-  padding: 1em;
-  width: 90%;
-  background: lightgray;
+:root {
+  --primary-color: #f7f7ff;
+  --secondary-color: #f2d0a4;
+  --tricery-color: #3f826d;
 }
 
-.summaryList__header {
-  text-align: center;
-  color: green;
-  margin-bottom: 20px;
-  border: 1px solid red;
-  background: lightblue;
+.summaryList {
+  padding: 0.2em;
+  background: var(--primary-color);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .summaryList__headerbox {
   display: flex;
-  border: 2px solid green;
-  justify-content: center;
   align-items: center;
+}
+
+.summaryList__header {
+  text-align: center;
 }
 
 .summaryList__logo {
   width: 25%;
 }
 
-/* .summaryList__header {
-  width: 50%;
-} */
+/*
+--primary-color: #F7F7FF;
+--secondary-color: #F2D0A4;
+--tricery-color: #3F826D;
+*/

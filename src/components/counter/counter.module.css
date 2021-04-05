@@ -5,6 +5,9 @@
   padding: 0.2em;
   grid-gap: 10px;
   background: pink;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 .counter__btn__decrement,

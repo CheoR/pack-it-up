@@ -1,12 +1,13 @@
 .instructions {
-  background: blue;
+  height: 40%;
   padding: 1em;
 }
 
 .instructions__header {
   text-align: center;
-  background: red;
-  margin-bottom: 10px;
+  margin-bottom: 2em;
+  padding: 1em;
+  border-bottom: 5px dashed black;
 }
 
 .instructions__text {
