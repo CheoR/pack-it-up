@@ -6,9 +6,7 @@ export const UserPage = () => {
 
  return (
   <main className={styles.userPage}>
-   {/* <h1 className={styles.userPage__header}>PackItUp</h1> */}
-   <SummaryList />
-   
+   <SummaryList />   
   </main>
  )
 }

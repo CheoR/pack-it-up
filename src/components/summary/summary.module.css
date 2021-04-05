@@ -1,13 +1,21 @@
+:root {
+  --primary-color: #f7f7ff;
+  --secondary-color: #f2d0a4;
+  --tricery-color: #3f826d;
+}
+
 .summary__ul {
   border: 2px solid black;
 }
 
 .summary__li {
-  border: 2px solid blue;
+  border: 2px solid black;
 
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(2, 1fr);
+  grid-gap: 5px;
+  background: black;
 }
 
 .summary__dataType {
@@ -16,9 +24,8 @@
   grid-row-start: 1;
   grid-row-end: 1;
 
-  border: 1px solid green;
   text-align: center;
-  background: orange;
+  background: var(--secondary-color);
   padding: 0.2em;
 }
 
@@ -28,8 +35,7 @@
   grid-row-start: 1;
   grid-row-end: 3;
 
-  border: 2px solid green;
-  background: lightgreen;
+  background: var(--primary-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,11 +47,10 @@
   grid-row-start: 2;
   grid-row-end: 2;
   display: block;
-  background: red;
 }
 
 .summary__navlinkBtn__view {
-  background: green;
+  background: var(--tricery-color);
   display: block;
   height: 100%;
   width: 100%;

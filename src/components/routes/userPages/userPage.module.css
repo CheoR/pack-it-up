@@ -1,20 +1,6 @@
 .userPage {
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
-  border: 1px solid blue;
-  background: pink;
-}
-
-.userPage,
-.userPage__header {
-  padding: 1em;
-}
-
-.userPage__header {
-  text-align: center;
-  border: 1px solid red;
-  background: lightblue;
+  height: 95vh;
 }
