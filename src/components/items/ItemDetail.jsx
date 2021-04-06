@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { NavLink, useHistory, useParams } from "react-router-dom"
 
 import { userStorageKey } from "../auth/authSettings"
@@ -29,7 +29,11 @@ export const ItemDetail = () => {
   const history = useHistory()
   const { itemId } = useParams()
   const [ selected, setSelected ] = useState("")
-
+  const imgInputFile = useRef(null) 
+  const [ imgState, setImgState ] = useState({
+    imageUrl: null,
+    imageAlt: null,
+  })
 
  useEffect(() => {
   getBoxes()
@@ -116,17 +120,55 @@ const submitUpdate = ( event ) => {
     setFormField(newformField)   
   }
 
+  const handleImageUpload = ( event ) => {
+    event.preventDefault()
+    imgInputFile.current.click()
+    
+  } // handleImageUpload
+  
+  const imageInputChange = ( event ) => {
+    event.stopPropagation()
+    event.preventDefault()
+
+    const file = event.target.files[0];
+
+
+    const formData = new FormData();
+    formData.append('file', file) // files[0]);
+    formData.append('upload_preset', 'packItUp__upload');
+
+    const options = {
+      method: 'POST',
+      body: formData,
+    };
+
+    return fetch('https://api.Cloudinary.com/v1_1/cheor/image/upload', options)
+    .then(res => res.json())
+    .then(res => {
+      setImgState({
+        imageUrl: res.secure_url,
+        imageAlt: res.original_filename,
+      })
+      const newformField = { ...formField }
+
+      newformField.imagePath = res.secure_url
+      setFormField(newformField)
+    })
+    .catch(err => console.log(err));
+  } // imageInputChange
+
+
  return (<>
     {
-      /*
-      TODO: change this into a form so user can update form fields and use useState
-      */
       isLoaded
       ? 
       <main className={styles.container}>
         <div className={styles.container__image_container}>
-          <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${item.description}`} alt={`${item.description}`} />
+          { item?.imagePath && (
+            <img className={styles.container__image} src={item?.imagePath} alt={`Picture of ${item.description}`}  />
+          )}
         </div>
+        
         <form action="" className={styles.container__form}>
           <fieldset className={styles.container__formGroup}>
 
@@ -173,9 +215,15 @@ const submitUpdate = ( event ) => {
             <input type="checkbox" id="isFragile" onChange={handleCheckboxChange} checked={formField.isFragile}  className={styles.formControl} />
           </fieldset>
 
-          <button id="camera" className={styles.container__btn__camera}>Camera</button>
-          <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>
-          <button id={`btn--delete-${item.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
+            {/* <div className="form-group">
+              accept="image/*;capture=environment" 
+              <input id={`imageForItemId--${item.id}`} className={styles.imgInputFile} type="file" ref={imgInputFile} onChange={imageInputChange} />
+            </div> */}
+          <input className={styles.imgInputFile} id={`imageForItemId--${item.id}`} type="file" ref={imgInputFile} onChange={imageInputChange} />
+
+          <button className={styles.container__btn__camera} type="button" id="camera" onClick={handleImageUpload} >Camera</button>
+          <button className={styles.container__btn__submit} type="submit" id={`btn--update-${item.id}`} onClick={submitUpdate}>Update</button>
+          <button className={styles.container__btn__delete} type="button" id={`btn--delete-${item.id}`} onClick={handleDelete}>Delete</button>
 
         </form>
       </main> 
