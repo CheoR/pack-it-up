@@ -16,12 +16,15 @@
 .container__image_container {
   height: 40%;
   width: 90%;
+  margin: 0 auto;
   margin-bottom: 10px;
+  background: var(--tricery-color);
 }
 
 .container__image {
   display: block;
   height: 100%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -81,7 +84,8 @@
 .container__btn__camera,
 .container__btn__submit,
 .container__btn__delete,
-.fragile__checkbox {
+.fragile__checkbox,
+.cameraLabel {
   border-radius: 10px;
   padding: 0.2em;
 }
@@ -94,7 +98,8 @@
   justify-content: space-between;
 }
 
-.container__btn__camera {
+.container__btn__camera,
+.cameraLabel {
   grid-column-start: 5;
   grid-column-end: 7;
 }
@@ -109,4 +114,26 @@
   grid-column-start: 11;
   grid-column-end: 13;
   background: salmon;
+}
+
+/*
+  Make the input look like a button and hide "select file" dialog box.
+*/
+/* .cameraLabel {
+  background: var(--secondary-color);
+  display: block;
+  display: flex;
+  align-items: center;
+} */
+
+/* .container__btn__camera {
+  display: none;
+} */
+
+.imgInputFile {
+  display: none;
+}
+
+.container__btn__camera {
+  border: 1px solid var(--tricery-color);
 }

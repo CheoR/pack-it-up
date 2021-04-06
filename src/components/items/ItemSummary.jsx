@@ -19,7 +19,11 @@ export const ItemSummary = ({ item } ) => {
 
  return (
   <section className={styles.summary}>
-    <img className={styles.summary__image} src="https://unsplash.com/photos/nP9WOiM41WE" alt="QR code place holder" />
+    <div className={styles.summary__image_summary}>
+      { item.imagePath && (
+        <img className={styles.summary__image} src={item.imagePath} alt="User-defined image" />
+      )}
+    </div>
 
     <fieldset className={styles.move__checkbox}>
       <label className={styles.move__checkboxLabel} htmlFor="summaryMove">Move</label>
