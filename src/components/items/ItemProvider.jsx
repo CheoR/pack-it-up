@@ -9,10 +9,12 @@ export const ItemProvider = ( props ) => {
 
  const [items, setItems] = useState([])
 
+
  const getItems = () => {
   return fetch(`${baseURL}/items?_expand=box`)
    .then(res => res.json())
    .then(setItems)
+  //  .then(() => true)
  } // getItems
 
 
@@ -48,6 +50,17 @@ export const ItemProvider = ( props ) => {
  } // deleteItem
 
 
+ const uploadItemImage = ( formData ) => {
+    return fetch('https://api.Cloudinary.com/v1_1/cheor/image/upload', {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(res => res)
+
+ } // postImage
+
+
  return (
   <ItemContext.Provider value={{
    items,
@@ -55,7 +68,8 @@ export const ItemProvider = ( props ) => {
    setItems,
    addItem,
    updateItem,
-   deleteItem
+   deleteItem,
+   uploadItemImage
   }}>
    { props.children }
   </ItemContext.Provider>

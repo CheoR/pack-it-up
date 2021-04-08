@@ -13,6 +13,7 @@ export const BoxProvider = ( props ) => {
   return fetch(`${baseURL}/boxes?_expand=move`)
    .then(res => res.json())
    .then(setBoxes)
+  //  .then(() => true)
  } // getBoxes
 
 
