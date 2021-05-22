@@ -13,6 +13,9 @@ import styles from "./moveList.module.css"
 export const MoveList = () => {
   /*
     Todo: refactor code below.
+
+    BUG: When user creates new move, all moves show up on moves page, regardless who owns them.
+    UseEffects do not run after move is updated/deleted and may need to have isLoaded update somewhere.
   */
 
  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
@@ -22,9 +25,11 @@ export const MoveList = () => {
  const { items, setItems, getItems } = useContext(ItemContext)
  const [ formField, setFormField ] = useState({})
  const [ isLoaded, setIsLoaded ] = useState(false)
+ const [ isRefreshed, setIsRefreshed ] = useState(false)
 
 
  useEffect(() => {
+   console.log("calling first use effect - fetting boxes, items, moves")
   getMoves()
     .then(getBoxes)
     .then(getItems)
@@ -33,22 +38,52 @@ export const MoveList = () => {
 
 
  useEffect(() => {
-
+  console.log("calling second use effect - setting form feild")
   setFormField({
     type: {
       "userId": loggedInUserId,
       "moveName": "New Move"
     },
-    addObj: addMove
+    addObj: addMove,
+    refresh: setIsRefreshed
   }) // setFormField
 
 
-  const [movesData, boxesData, itemsData] = [moves, boxes, items].map(type => type.filter(obj => obj.userId === loggedInUserId))
+  // const [movesData, boxesData, itemsData] = [moves, boxes, items].map(type => {
+  //   console.log(`moveType: ${type}`)
+  //   console.log(`userId logged in: ${loggedInUserId} - ${loggedInUserName}`)
+  //   console.log(`They down ${type.filter(obj => obj.userId === loggedInUserId)}`)
+  //   return type.filter(obj => obj.userId === loggedInUserId)
+  // })
+
+  // const movesData = moves.filter(move => move.userId === loggedInUserId)
+  // const boxesData = boxes.filter(box => box.userId === loggedInUserId)
+  // const itemsData = items.filter(item => item.userId === loggedInUserId)
+
+
+  // console.log("moves data")
+  // console.table(moves)
+  // setMoves(movesData)
+  // setBoxes(boxesData)
+  // setItems(itemsData)
+
+  const movesData = moves.filter(move => {
+    console.log(`move.userId: ${move.userId}\tloggedInUserId: ${loggedInUserId} ${move.userId === loggedInUserId}`)
+    return move.userId === loggedInUserId
+  })
+  const boxesData = boxes.filter(box => box.userId === loggedInUserId)
+  const itemsData = items.filter(item => item.userId === loggedInUserId)
+ 
+ 
+  console.log("moves data")
   setMoves(movesData)
+  console.table(moves)
   setBoxes(boxesData)
   setItems(itemsData)
+  // setIsLoaded(prevState => !prevState)
+ }, [ isRefreshed ]) // useEffect
 
- }, [isLoaded]) // useEffect
+
 
 
   const handleControlledInputChange = ( event ) =>  {

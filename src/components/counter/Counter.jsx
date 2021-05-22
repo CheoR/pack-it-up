@@ -54,7 +54,12 @@ export const Counter = ({ objType }) => {
      reload/direct to current url since component does not know which component
      url it is being used for.
     */
-     history.push(location.pathname)
+     return true
+    })
+    .then(() => {
+      console.log(`curretn url: ${location.pathname}`)
+      objType.refresh(prevState => !prevState)
+      history.push(location.pathname) // '/users' location.pathname
     })
    .catch(err => {
     console.log(`Error: ${err}`)

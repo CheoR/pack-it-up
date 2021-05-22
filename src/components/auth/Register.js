@@ -25,7 +25,7 @@ export const Register = () => {
         
         return fetch(`${authApi.localApiBaseUrl}/${authApi.endpoint}?email=${registerUser.email}`)
             .then(res => res.json())
-            .then(user => !!user.length) /// turn length boolean
+            .then(user => !!user.length) /// turn length into boolean
     }
 
     const handleRegister = (e) => {
