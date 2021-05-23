@@ -18,6 +18,13 @@ export const ItemProvider = ( props ) => {
  } // getItems
 
 
+ const getItemsByUserId = ( userId ) => {
+  return fetch(`${baseURL}/items?userId=${ userId }`)
+   .then(res => res.json())
+   .then(setItems)
+ } // getItems
+
+
  const addItem = ( item ) => {
    return fetch(`${baseURL}/items`, {
      method: "POST",
@@ -65,6 +72,7 @@ export const ItemProvider = ( props ) => {
   <ItemContext.Provider value={{
    items,
    getItems,
+   getItemsByUserId,
    setItems,
    addItem,
    updateItem,

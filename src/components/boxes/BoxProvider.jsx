@@ -17,6 +17,13 @@ export const BoxProvider = ( props ) => {
  } // getBoxes
 
 
+  const getBoxesByUserId = ( userId ) => {
+  return fetch(`${baseURL}/boxes?userId=${ userId }`)
+   .then(res => res.json())
+   .then(setBoxes)
+ } // getBoxes
+
+
   const addBox = ( box ) => {
    return fetch(`${baseURL}/boxes`, {
      method: "POST",
@@ -56,6 +63,7 @@ export const BoxProvider = ( props ) => {
    addBox,
    updateBox,
    getBoxes,
+   getBoxesByUserId,
    setBoxes,
    deleteBox,
   }}>

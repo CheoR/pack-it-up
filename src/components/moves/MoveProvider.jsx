@@ -16,6 +16,13 @@ export const MoveProvider = ( props ) => {
  } // getMoves
 
 
+ const getMovesByUserId = ( userId ) => {
+  return fetch(`${baseURL}/moves?userId=${ userId }`)
+   .then(res => res.json())
+   .then(setMoves)
+ } // getMoves
+
+
    const addMove = ( move ) => {
     return fetch(`${baseURL}/moves`, {
       method: "POST",
@@ -52,6 +59,7 @@ export const MoveProvider = ( props ) => {
   <MoveContext.Provider value={{
    moves,
    getMoves,
+   getMovesByUserId,
    setMoves,
    addMove,
    updateMove,
