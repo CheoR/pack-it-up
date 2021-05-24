@@ -1,16 +1,26 @@
 import React, { createContext, useState } from "react"
 
+import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 
 const baseURL = `http://localhost:8088`
 
 export const ItemContext = createContext()
 
 export const ItemProvider = ( props ) => {
+  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
- const [items, setItems] = useState([])
+ const [ items, setItems ] = useState([])
+
 
  const getItems = () => {
   return fetch(`${baseURL}/items?_expand=box`)
+   .then(res => res.json())
+   .then(setItems)
+ } // getItems
+
+
+ const getItemsByUserId = () => {
+  return fetch(`${baseURL}/items?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setItems)
  } // getItems
@@ -24,38 +34,51 @@ export const ItemProvider = ( props ) => {
      },
      body: JSON.stringify(item)
    })
-   .then(getItems)
+   .then(getItemsByUserId)
  } // addItem
 
 
    const updateItem = ( item ) => {
-     return fetch(`${baseURL}/items/${item.id}`, {
+     return fetch(`${baseURL}/items/${ item.id }`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(item)
     })
-     .then(getItems)
+     .then(getItemsByUserId)
   } // updateItem
 
 
  const deleteItem = ( id ) => {
-   return fetch(`${baseURL}/items/${id}`, {
+   return fetch(`${baseURL}/items/${ id }`, {
      method: "DELETE"
    })
-   .then(getItems)
+   .then(getItemsByUserId)
  } // deleteItem
+
+
+ const uploadItemImage = ( formData ) => {
+    return fetch('https://api.Cloudinary.com/v1_1/cheor/image/upload', {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(res => res)
+
+ } // postImage
 
 
  return (
   <ItemContext.Provider value={{
    items,
    getItems,
+   getItemsByUserId,
    setItems,
    addItem,
    updateItem,
-   deleteItem
+   deleteItem,
+   uploadItemImage
   }}>
    { props.children }
   </ItemContext.Provider>

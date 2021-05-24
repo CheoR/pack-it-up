@@ -21,7 +21,7 @@ export const MoveDetail = () => {
 
   const { moves, getMoves, updateMove, deleteMove } = useContext(MoveContext)
   const { boxes, getBoxes } = useContext(BoxContext)
-  const { items, getItems, deleteItem } = useContext(ItemContext)
+  const { items, getItemsByUserId, deleteItem } = useContext(ItemContext)
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ hasSaved, setHasSaved ] = useState(false)
   const [ move, setMove ] = useState({})
@@ -84,7 +84,7 @@ export const MoveDetail = () => {
     const getData = async () => {
       const userMoves = await getMoves()
       const userBoxes = await getBoxes()
-      const userItems = await getItems()
+      const userItems = await getItemsByUserId()
       setIsLoaded(true)
     }
     getData()

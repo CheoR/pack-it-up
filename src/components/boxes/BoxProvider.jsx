@@ -1,16 +1,26 @@
 import React, { createContext, useState } from "react"
 
+import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 
 const baseURL = `http://localhost:8088`
 
 export const BoxContext = createContext()
 
 export const BoxProvider = ( props ) => {
+  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
- const [boxes, setBoxes] = useState([])
+ const [ boxes, setBoxes ] = useState([])
+ 
 
  const getBoxes = () => {
   return fetch(`${baseURL}/boxes?_expand=move`)
+   .then(res => res.json())
+   .then(setBoxes)
+ } // getBoxes
+
+
+  const getBoxesByUserId = () => {
+  return fetch(`${baseURL}/boxes?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setBoxes)
  } // getBoxes
@@ -24,27 +34,27 @@ export const BoxProvider = ( props ) => {
      },
      body: JSON.stringify(box)
    })
-   .then(getBoxes)
+   .then(getBoxesByUserId)
  } // addItem
 
 
    const updateBox = ( box ) => {
-     return fetch(`${baseURL}/boxes/${box.id}`, {
+     return fetch(`${baseURL}/boxes/${ box.id }`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(box)
     })
-     .then(getBoxes)
+     .then(getBoxesByUserId)
   } // updateBox
 
 
  const deleteBox = ( id ) => {
-   return fetch(`${baseURL}/boxes/${id}`, {
+   return fetch(`${baseURL}/boxes/${ id }`, {
      method: "DELETE"
    })
-   .then(getBoxes)
+   .then(getBoxesByUserId)
  } // deleteBox
 
  
@@ -55,6 +65,7 @@ export const BoxProvider = ( props ) => {
    addBox,
    updateBox,
    getBoxes,
+   getBoxesByUserId,
    setBoxes,
    deleteBox,
   }}>

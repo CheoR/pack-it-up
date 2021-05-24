@@ -54,7 +54,19 @@ export const Counter = ({ objType }) => {
      reload/direct to current url since component does not know which component
      url it is being used for.
     */
-     history.push(location.pathname)
+     return true
+    })
+    .then(() => {
+      // reset 
+      try {
+        // only used to name moves
+        const { resetInputRef } = objType
+        resetInputRef.current.value = ""
+      } catch {
+        console.log('You cannot name boxes/items this way.')
+      } finally {
+        history.push(location.pathname)
+      }
     })
    .catch(err => {
     console.log(`Error: ${err}`)
