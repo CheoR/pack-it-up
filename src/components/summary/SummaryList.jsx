@@ -11,24 +11,24 @@ import styles from "./summaryList.module.css"
 
 export const SummaryList = () => {
 
- const { moves, getMoves } = useContext(MoveContext)
- const { boxes, getBoxes } = useContext(BoxContext)
- const { items, getItems } = useContext(ItemContext)
+ const { moves, getMovesByUserId } = useContext(MoveContext)
+ const { boxes, getBoxesByUserId } = useContext(BoxContext)
+ const { items, getItemsByUserId } = useContext(ItemContext)
 
 const loggedInUserId = parseInt(sessionStorage.getItem("app_user_id"))
-const loggedInUser = sessionStorage.getItem("app_user_username")
+const loggedInUsername = sessionStorage.getItem("app_user_username")
 
  useEffect(() => {
-  getMoves()
-    .then(getBoxes)
-    .then(getItems)
+  getMovesByUserId()
+    .then(getBoxesByUserId)
+    .then(getItemsByUserId)
  }, []) // useEffect
 
  
   const usersMoves = {
     type: "moves",
     canUse: false,
-    collection: moves.filter(move => move.userId === loggedInUserId)
+    collection: moves
   }
 
   const usersBoxes = {
@@ -48,11 +48,11 @@ const loggedInUser = sessionStorage.getItem("app_user_username")
   return (
     <div className={styles.summaryList}>
       {/* <img src={logo} className={styles.summaryList__logo} alt="Pack It Up Logo"/>
-        <h1 className={styles.summaryList__header}>{ loggedInUser }'s Summary</h1> */}
+        <h1 className={styles.summaryList__header}>{ loggedInUsername }'s Summary</h1> */}
 
        <div className={styles.summaryList__headerbox}>
         <img src={logo} className={styles.summaryList__logo} alt="Pack It Up Logo"/>
-        <h1 className={styles.summaryList__header}>{ loggedInUser }'s Summary</h1>
+        <h1 className={styles.summaryList__header}>{ loggedInUsername }'s Summary</h1>
       </div>
       <Instructions />
       <Summary listOfTypes={dataToRender} />

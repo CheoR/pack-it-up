@@ -20,7 +20,6 @@ export const MoveProvider = ( props ) => {
 
 
  const getMovesByUserId = () => {
-   console.log(` currently logged in user ${loggedInUserId}`)
   return fetch(`${baseURL}/moves?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setMoves)
@@ -28,7 +27,6 @@ export const MoveProvider = ( props ) => {
 
 
    const addMove = ( move ) => {
-     console.log(" ADDING NEW MOVE ")
     return fetch(`${baseURL}/moves`, {
       method: "POST",
       headers: {

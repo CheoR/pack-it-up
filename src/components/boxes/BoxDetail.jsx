@@ -14,8 +14,8 @@ export const BoxDetail = () => {
 
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
   const { moves, setMoves, getMoves } = useContext(MoveContext)
-  const { boxes, getBoxes, updateBox, deleteBox } = useContext(BoxContext)
-  const { items, setItems, getItems } = useContext(ItemContext)
+  const { boxes, getBoxesByUserId, updateBox, deleteBox } = useContext(BoxContext)
+  const { items, setItems, getItemsByUserId } = useContext(ItemContext)
   const [ formField, setFormField ] = useState({
     "userId": loggedInUserId,
     "moveId": 0,
@@ -31,8 +31,8 @@ export const BoxDetail = () => {
 
  useEffect(() => {
   getMoves()
-   .then(getBoxes)
-   .then(getItems)
+   .then(getBoxesByUserId)
+   .then(getItemsByUserId)
    .then(() => setIsLoaded(true))
  }, []) // useEffect
 

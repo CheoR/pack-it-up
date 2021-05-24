@@ -25,8 +25,8 @@ export const ItemDetail = () => {
 
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
-  const { items, getItems, updateItem, deleteItem, uploadItemImage } = useContext(ItemContext)
-  const { boxes, getBoxes, setBoxes } = useContext(BoxContext)
+  const { items, getItemsByUserId, updateItem, deleteItem, uploadItemImage } = useContext(ItemContext)
+  const { boxes, getBoxesByUserId, setBoxes } = useContext(BoxContext)
   
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ hasSaved, setHasSaved ] = useState(false)
@@ -42,8 +42,8 @@ export const ItemDetail = () => {
 
 
   useEffect(() => {
-    getBoxes()
-    .then(getItems)
+    getBoxesByUserId()
+    .then(getItemsByUserId)
     .then(() => {
       
       // console.log(`ItemId: ${itemId}`)
@@ -71,8 +71,8 @@ export const ItemDetail = () => {
  }, []) // useEffect
 
   // useEffect(async () => {
-//     const boxesLoaded = await getBoxes()
-//     const itemsLoaded = await getItems()
+//     const boxesLoaded = await getBoxesByUserId()
+//     const itemsLoaded = await getItemsByUserId()
 
       
 //       console.log(`ItemId: ${itemId}`)

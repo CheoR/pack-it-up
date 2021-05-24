@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 
 import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 import { useFilteredData } from "../helpers/useFilterdData"
@@ -21,12 +21,15 @@ export const MoveList = () => {
     loggedInUserId: 0,
     loggedInUserName: ""
   })
+
+  const inputRef = useRef()
   
-    console.log(" print location 1 ")
-    console.table(moves)
-    console.log(Array.isArray(moves))
+    // console.log(" print location 1 ")
+    // console.table(moves)
+    // console.log(Array.isArray(moves))
 
     useEffect(() => {
+      // console.log(" euseeffect 1 i only only logg once")
       const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
       const loggedInUserName = sessionStorage.getItem(userStorageUserName)
     
@@ -40,48 +43,50 @@ export const MoveList = () => {
           "userId": loggedInUserId,
           "moveName": "New Move"
         },
-        addObj: addMove
+        addObj: addMove,
+        resetInputRef: inputRef
       })
     }, [ ]) // useEffect
   
   useEffect(() => {
-    
+          // console.log(" euseeffect 2 i only only logg once")
+
     getMovesByUserId()
-    console.log("===================")
-    console.log(" ipre location in use effect")
-    console.table(moves)
-    console.log(Array.isArray(moves))
-    console.log("===================")
+    // console.log("===================")
+    // console.log(" ipre location in use effect")
+    // console.table(moves)
+    // console.log(Array.isArray(moves))
+    // console.log("===================")
     
-    console.log(`vlue is ${userInfo.loggedInUserName}`)
+    // console.log(`vlue is ${userInfo.loggedInUserName}`)
     setIsLoading(false)
   }, [ ]) // useEffect
   
 
-    console.log(" print location 2 ")
-    console.table(moves)
-    console.log(Array.isArray(moves))
+    // console.log(" print location 2 ")
+    // console.table(moves)
+    // console.log(Array.isArray(moves))
 
   const handleControlledInputChange = ( event ) =>  {
     /*
       TODO: Form needs to clear aroud after submission.
     */
     const newformField = { ...formField }
-    newformField.type[event.target.id] = event.target.value
+    newformField.type[event.target.id] = inputRef.current.value // event.target.value
 
-    console.log("current formfield")
-    console.table(newformField)
+    // console.log("current formfield")
+    // console.table(newformField)
     setFormField(newformField)
   } // handleControlledInputChange
 
   if(isLoading) return <div>Loading</div>
-   console.log(`renderCount: ${renderCount}`)
+  //  console.log(`renderCount: ${renderCount}`)
    renderCount = renderCount + 1
   
   
-    console.log(" print location 3 ")
-    console.table(moves)
-    console.log(Array.isArray(moves))
+    // console.log(" print location 3 ")
+    // console.table(moves)
+    // console.log(Array.isArray(moves))
 
    return (<>
      {
@@ -99,9 +104,10 @@ export const MoveList = () => {
             type="text" 
             id="moveName" 
             name="moveName"
+            ref={inputRef}
             className={styles.formControl}
             placeholder="Add Move Name..."
-            value={formField.type.moveName}
+            // value={formField.type.moveName}
             onChange={(e) => {handleControlledInputChange(e)}}
             autoFocus />
           </fieldset>

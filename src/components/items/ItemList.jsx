@@ -12,8 +12,8 @@ export const ItemList = () => {
 
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
   const loggedInUserName = sessionStorage.getItem(userStorageUserName)
-  const { items, getItems, addItem } = useContext(ItemContext)
-  const { boxes, setBoxes, getBoxes } = useContext(BoxContext)
+  const { items, getItemsByUserId, addItem } = useContext(ItemContext)
+  const { boxes, setBoxes, getBoxesByUserId } = useContext(BoxContext)
   const [ isLoaded, setIsLoaded ] = useState(false)
   const [ selectionMade, setSelectionMade ] = useState(false)
   const [ newItem, setNewItem ] = useState({})
@@ -21,8 +21,8 @@ export const ItemList = () => {
 
 
  useEffect(() => {
-   getBoxes()
-    .then(getItems)
+   getBoxesByUserId()
+    .then(getItemsByUserId)
     .then(() => setIsLoaded(true))
     .then(() => setSelectionMade(false))
  }, []) // useEffect

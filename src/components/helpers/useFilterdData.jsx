@@ -8,9 +8,14 @@ import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "../moves/MoveProvider"
 
-export const useFilteredData = ( userId ) => {
+export const useFilteredData = ( ) => {
  // custom hook
  // const [ value, setValue ] = useState(null)
+
+ let userFilterRendercount = 1
+
+ console.log(`\tuserFilterRendercount: ${userFilterRendercount}`)
+ userFilterRendercount = userFilterRendercount + 1
 
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
@@ -20,11 +25,11 @@ export const useFilteredData = ( userId ) => {
 
  
   useEffect(() => {
-   getMovesByUserId(userId)
-    .then(getBoxesByUserId(userId))
-    .then(getItemsByUserId(userId))
+   getMovesByUserId()
+    .then(getBoxesByUserId)
+    .then(getItemsByUserId)
     .then(aggregateMoveInfo)
-  }, [ userId ] ) // useEffect
+  }, [ ] ) // useEffect
  
   const aggregateMoveInfo = () => {
    moves.forEach(move => {

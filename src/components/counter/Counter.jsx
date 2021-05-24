@@ -57,9 +57,16 @@ export const Counter = ({ objType }) => {
      return true
     })
     .then(() => {
-      console.log(`curretn url: ${location.pathname}`)
-      objType.refresh(prevState => !prevState)
-      history.push(location.pathname) // '/users' location.pathname
+      // reset 
+      try {
+        // only used to name moves
+        const { resetInputRef } = objType
+        resetInputRef.current.value = ""
+      } catch {
+        console.log('You cannot name boxes/items this way.')
+      } finally {
+        history.push(location.pathname)
+      }
     })
    .catch(err => {
     console.log(`Error: ${err}`)
