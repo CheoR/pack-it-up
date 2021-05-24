@@ -1,13 +1,16 @@
 import React, { createContext, useState } from "react"
 
+import { userStorageKey, userStorageUserName } from "../auth/authSettings"
+
 
 const baseURL = `http://localhost:8088`
 
 export const MoveContext = createContext()
 
 export const MoveProvider = ( props ) => {
+  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
  
- const [moves, setMoves] = useState([])
+ const [ moves, setMoves ] = useState([])
 
  const getMoves = () => {
   return fetch(`${baseURL}/moves?_expand=user`)
@@ -16,8 +19,8 @@ export const MoveProvider = ( props ) => {
  } // getMoves
 
 
- const getMovesByUserId = ( userId ) => {
-  return fetch(`${baseURL}/moves?userId=${ userId }`)
+ const getMovesByUserId = () => {
+  return fetch(`${baseURL}/moves?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setMoves)
  } // getMoves
@@ -31,27 +34,27 @@ export const MoveProvider = ( props ) => {
       },
       body: JSON.stringify(move)
     })
-    .then(getMoves)
+    .then(getMovesByUserId)
   } // addMove
 
 
    const updateMove = ( move ) => {
-     return fetch(`${baseURL}/moves/${move.id}`, {
+     return fetch(`${baseURL}/moves/${ move.id }`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(move)
     })
-     .then(getMoves)
+     .then(getMovesByUserId)
   } // sendMessage
 
 
  const deleteMove = ( id ) => {
-   return fetch(`${baseURL}/moves/${id}`, {
+   return fetch(`${baseURL}/moves/${ id }`, {
      method: "DELETE"
    })
-   .then(getMoves)
+   .then(getMovesByUserId)
  } // deleteItem
 
 
