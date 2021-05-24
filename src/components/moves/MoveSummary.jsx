@@ -10,8 +10,8 @@ import styles from "./moveSummary.module.css"
 export const MoveSummary = ({ move } ) => {
 
   const { deleteMove } = useContext(MoveContext)
-  const { boxes, getBoxes } = useContext(BoxContext)
-  const { items, getItems, deleteItem } = useContext(ItemContext)
+  const { boxes, getBoxesByUserId } = useContext(BoxContext)
+  const { items, getItemsByUserId, deleteItem } = useContext(ItemContext)
 
   const history = useHistory()
 

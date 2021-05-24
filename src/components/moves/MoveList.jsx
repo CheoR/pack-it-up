@@ -1,90 +1,66 @@
 import React, { useContext, useEffect, useState } from "react"
 
 import { userStorageKey, userStorageUserName } from "../auth/authSettings"
-import { BoxContext } from "../boxes/BoxProvider"
-import { ItemContext } from "../items/ItemProvider"
-import { MoveContext } from "./MoveProvider"
+import { useFilteredData } from "../helpers/useFilterdData"
 import { MoveSummary } from "./MoveSummary"
-import { getSum2 } from "../helpers/helpers"
+import { MoveContext } from "./MoveProvider"
 import { Counter } from "../counter/Counter"
+
 import styles from "./moveList.module.css"
 
+let renderCount = 1
 
 export const MoveList = () => {
-  /*
-    Todo: refactor code below.
 
-    BUG: When user creates new move, all moves show up on moves page, regardless who owns them.
-    UseEffects do not run after move is updated/deleted and may need to have isLoaded update somewhere.
-  */
-
- const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
- const loggedInUserName = sessionStorage.getItem(userStorageUserName)
- const { moves, setMoves, getMoves, addMove } = useContext(MoveContext)
- const { boxes, setBoxes, getBoxes } = useContext(BoxContext)
- const { items, setItems, getItems } = useContext(ItemContext)
- const [ formField, setFormField ] = useState({})
- const [ isLoaded, setIsLoaded ] = useState(false)
- const [ isRefreshed, setIsRefreshed ] = useState(false)
-
-
- useEffect(() => {
-   console.log("calling first use effect - fetting boxes, items, moves")
-  getMoves()
-    .then(getBoxes)
-    .then(getItems)
-    .then(() => setIsLoaded(true))
- }, []) // useEffect
-
-
- useEffect(() => {
-  console.log("calling second use effect - setting form feild")
-  setFormField({
-    type: {
-      "userId": loggedInUserId,
-      "moveName": "New Move"
-    },
-    addObj: addMove,
-    refresh: setIsRefreshed
-  }) // setFormField
-
-
-  // const [movesData, boxesData, itemsData] = [moves, boxes, items].map(type => {
-  //   console.log(`moveType: ${type}`)
-  //   console.log(`userId logged in: ${loggedInUserId} - ${loggedInUserName}`)
-  //   console.log(`They down ${type.filter(obj => obj.userId === loggedInUserId)}`)
-  //   return type.filter(obj => obj.userId === loggedInUserId)
-  // })
-
-  // const movesData = moves.filter(move => move.userId === loggedInUserId)
-  // const boxesData = boxes.filter(box => box.userId === loggedInUserId)
-  // const itemsData = items.filter(item => item.userId === loggedInUserId)
-
-
-  // console.log("moves data")
-  // console.table(moves)
-  // setMoves(movesData)
-  // setBoxes(boxesData)
-  // setItems(itemsData)
-
-  const movesData = moves.filter(move => {
-    console.log(`move.userId: ${move.userId}\tloggedInUserId: ${loggedInUserId} ${move.userId === loggedInUserId}`)
-    return move.userId === loggedInUserId
+  // const { moves, addMove } = useFilteredData()
+  const { moves, getMovesByUserId, addMove } = useContext(MoveContext)
+  
+  const [ isLoading, setIsLoading ] = useState(true)
+  const [ formField, setFormField ] = useState({})
+  const [ userInfo, setUserInfo ] = useState({
+    loggedInUserId: 0,
+    loggedInUserName: ""
   })
-  const boxesData = boxes.filter(box => box.userId === loggedInUserId)
-  const itemsData = items.filter(item => item.userId === loggedInUserId)
- 
- 
-  console.log("moves data")
-  setMoves(movesData)
-  console.table(moves)
-  setBoxes(boxesData)
-  setItems(itemsData)
-  // setIsLoaded(prevState => !prevState)
- }, [ isRefreshed ]) // useEffect
+  
+    console.log(" print location 1 ")
+    console.table(moves)
+    console.log(Array.isArray(moves))
 
+    useEffect(() => {
+      const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+      const loggedInUserName = sessionStorage.getItem(userStorageUserName)
+    
+      setUserInfo({
+        loggedInUserId: loggedInUserId, 
+        loggedInUserName: loggedInUserName
+      })
 
+      setFormField({
+        type: {
+          "userId": loggedInUserId,
+          "moveName": "New Move"
+        },
+        addObj: addMove
+      })
+    }, [ ]) // useEffect
+  
+  useEffect(() => {
+    
+    getMovesByUserId()
+    console.log("===================")
+    console.log(" ipre location in use effect")
+    console.table(moves)
+    console.log(Array.isArray(moves))
+    console.log("===================")
+    
+    console.log(`vlue is ${userInfo.loggedInUserName}`)
+    setIsLoading(false)
+  }, [ ]) // useEffect
+  
 
+    console.log(" print location 2 ")
+    console.table(moves)
+    console.log(Array.isArray(moves))
 
   const handleControlledInputChange = ( event ) =>  {
     /*
@@ -92,43 +68,27 @@ export const MoveList = () => {
     */
     const newformField = { ...formField }
     newformField.type[event.target.id] = event.target.value
+
+    console.log("current formfield")
+    console.table(newformField)
     setFormField(newformField)
   } // handleControlledInputChange
 
-
-   moves.forEach(move => {
-     /*
-      Aggregate box/item information per move.
-     */
-
-    const boxesForThisMove = boxes.filter(box => box.moveId === move.id)
-
-    move.totalBoxCount = boxesForThisMove.length
-    move.totalItemsCount = 0
-    move.totalItemsValue = 0
-
-    boxesForThisMove.forEach(box => {
-      const itemsInBox = items.filter(item => item.boxId === box.id)
-
-      move.totalItemsCount += itemsInBox.length
-      move.totalItemsValue += getSum2(itemsInBox.filter(item => item.value ? item.value : 0))
-      box.isFragile = itemsInBox.some(item => item.isFragile ? true : false)
-    }) // boxes.forEach
-
-    /*
-      Mark move fragile if any of its boxes are marked fragile.
-      Boxes are marked fragile if any of its items are marked fragile.
-    */
-    move.isFragile = boxesForThisMove.some(b => b.isFragile)
-  }) // moves.forEach
-
+  if(isLoading) return <div>Loading</div>
+   console.log(`renderCount: ${renderCount}`)
+   renderCount = renderCount + 1
+  
+  
+    console.log(" print location 3 ")
+    console.table(moves)
+    console.log(Array.isArray(moves))
 
    return (<>
      {
-       isLoaded
+       !isLoading && moves
        ?
       <main className={styles.summary}>
-        <h1 className={styles.summary__header}>{loggedInUserName}'s Moves</h1>
+        <h1 className={styles.summary__header}>{ userInfo.loggedInUserName === undefined ? "User" : userInfo.loggedInUserName }'s Moves</h1>
         {
           moves.map((move, i) => <MoveSummary key={i} move={ move } />)
         }
