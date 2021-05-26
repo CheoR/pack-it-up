@@ -20,9 +20,11 @@ export const MoveProvider = ( props ) => {
 
 
  const getMovesByUserId = () => {
+   console.log("\t\t\t1. getting moves")
   return fetch(`${baseURL}/moves?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setMoves)
+  //  .then(() => { return true })
  } // getMoves
 
 

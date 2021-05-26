@@ -20,9 +20,11 @@ export const BoxProvider = ( props ) => {
 
 
   const getBoxesByUserId = () => {
+    console.log("\t\t\t2. getting boxes")
   return fetch(`${baseURL}/boxes?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setBoxes)
+  //  .then(() => { return true })
  } // getBoxes
 
 

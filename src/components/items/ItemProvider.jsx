@@ -20,9 +20,11 @@ export const ItemProvider = ( props ) => {
 
 
  const getItemsByUserId = () => {
+   console.log("\t\t\t3. getting items")
   return fetch(`${baseURL}/items?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setItems)
+  //  .then(() => { return true })
  } // getItems
 
 
