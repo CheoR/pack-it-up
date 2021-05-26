@@ -43,8 +43,8 @@ export const Counter = ({ objType }) => {
 
   const addFuncs = []
 
-  for(let i=0; i <  num; i ++) {
-   addFuncs.push(objType.addObj)
+  for(let i=0; i <  num; i++) {
+   addFuncs.push(objType.create)
   }
 
   Promise.all(addFuncs.map(callback => callback(objType.type)))
@@ -62,8 +62,9 @@ export const Counter = ({ objType }) => {
         // only used to name moves
         const { resetInputRef } = objType
         resetInputRef.current.value = ""
+        objType.resetPending(prevState => !prevState)
       } catch {
-        console.log('You cannot name boxes/items this way.')
+        console.log('You cannot name boxes/items this way. ')
       } finally {
         history.push(location.pathname)
       }
@@ -72,7 +73,6 @@ export const Counter = ({ objType }) => {
     console.log(`Error: ${err}`)
    })
  }
-
 
  return (
   <section className={styles.counter}>

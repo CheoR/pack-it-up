@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from "react"
 
-import { userStorageKey, userStorageUserName } from "../auth/authSettings"
-import { getSum2 } from "./helpers"
+
+// import { userStorageKey, userStorageUserName } from "../auth/authSettings"
 
 import { BoxContext } from "../boxes/BoxProvider"
 import { ItemContext } from "../items/ItemProvider"
 import { MoveContext } from "../moves/MoveProvider"
 
-let renderCount = 1
+import { getSum2 } from "./helpers"
+
 
 export const useUserData = ( loggedInUserId ) => {
   
@@ -17,9 +18,8 @@ export const useUserData = ( loggedInUserId ) => {
   
   const [ pendingData, setPendingData ] = useState(false)
   const [ error, setError ] = useState(null)
-
-  console.log(`useUserdata - pendingData: ${pendingData} - renderCount: ${renderCount}`)
-  const [ data, setData ] = useState({
+  const [ data, setData ] = useState(
+   {
     type: {
       move: moves || [],
       box:  boxes || [],
@@ -27,15 +27,17 @@ export const useUserData = ( loggedInUserId ) => {
     },
     add: {
       move: addMove,
-      box: addBox,
+      box:  addBox,
       item: addItem
     }
   })
+
+
  useEffect(() => {
-  console.log(`useUserdata - useEffect: renderCount: ${renderCount}`)
   setPendingData(true)
 
   const _fetchData = async () => {
+
       const _moves = getMovesByUserId()
       const _boxes = getBoxesByUserId()
       const _items = getItemsByUserId()
@@ -45,6 +47,7 @@ export const useUserData = ( loggedInUserId ) => {
 
 
   const _aggregateMoveInfo = ( values ) => {
+    console.log("in _aggregateMoveInfo")
     let _moves = values[0]
     let _boxes = values[1]
     let _items = values[2]
@@ -98,6 +101,9 @@ export const useUserData = ( loggedInUserId ) => {
       .then(values => _aggregateMoveInfo)
       .then(values => _setData)
       .catch((error) => {
+        console.log("=============")
+        console.table(error)
+        console.log("=============")
         setError(error)
       })
       .finally(() => setPendingData(false))
@@ -105,10 +111,6 @@ export const useUserData = ( loggedInUserId ) => {
     }, []) // useEffect
 
 
-  renderCount += 1
  return [ data , pendingData, setPendingData, error ]
 
 } // useUserData
-
-
-

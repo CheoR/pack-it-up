@@ -12,19 +12,21 @@ export const useFilteredData = ( ) => {
  // custom hook
  // const [ value, setValue ] = useState(null)
 
- let userFilterRendercount = 1
+ // let userFilterRendercount = 1
 
- console.log(`\tuserFilterRendercount: ${userFilterRendercount}`)
- userFilterRendercount = userFilterRendercount + 1
+ // console.log(`\tuserFilterRendercount: ${userFilterRendercount}`)
+ // userFilterRendercount = userFilterRendercount + 1
 
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
 
-  const { moves, setMoves, addMove, getMovesByUserId } = useContext(MoveContext)
+  const { moves, setMoves, getMovesByUserId, addMove } = useContext(MoveContext)
   const { boxes, setBoxes, getBoxesByUserId } = useContext(BoxContext)
   const { items, setItems, getItemsByUserId } = useContext(ItemContext)
 
+  console.log(" I AM USER FILTER DATA FILE ")
  
   useEffect(() => {
+   console.log("NEVER GET CALLED calling getby userid in use effect")
    getMovesByUserId()
     .then(getBoxesByUserId)
     .then(getItemsByUserId)

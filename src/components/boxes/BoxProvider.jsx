@@ -24,7 +24,6 @@ export const BoxProvider = ( props ) => {
   return fetch(`${baseURL}/boxes?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setBoxes)
-  //  .then(() => { return true })
  } // getBoxes
 
 

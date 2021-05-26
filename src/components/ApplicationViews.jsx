@@ -12,6 +12,7 @@ import { MoveProvider } from "./moves/MoveProvider"
 import { MoveList } from "./moves/MoveList"
 import { MoveDetail } from "./moves/MoveDetail"
 import { UserProvider } from "./users/UserProvider"
+// import { DataProvider } from "./helpers/DataProvider"
 
 
 // import { Home } from "./Home"
@@ -19,6 +20,7 @@ import { UserProvider } from "./users/UserProvider"
 export const ApplicationViews = () => {
  return (
   <>
+
   <UserProvider><MoveProvider><BoxProvider><ItemProvider>
     <Route exact path="/users">
         <UserPage />

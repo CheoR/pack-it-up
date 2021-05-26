@@ -52,19 +52,6 @@ export const SuperProvider = (props) => {
     console.log("use effect after callign anything\n\n")
   }, []) // useEffect
 
-  // useEffect(() => {
-  //   console.log("in the second use effect")
-  //   console.log(`IsLoading: ${IsLoading}\n`)
-
-  //   if (!isLoading) {
-  //     const userMoves = moves.filter(m => m.userId === loggedInUserId)
-  //     const userBoxes = boxes.filter(b => b.userId === loggedInUserId)
-  //     const userItems = items.filter(i => i.userId === loggedInUserId)
-
-
-  //   }
-
-  // }, [ isLoading ])
 
 
   console.log("3. In Super Provider after use effect")

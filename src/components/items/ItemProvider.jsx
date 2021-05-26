@@ -24,7 +24,6 @@ export const ItemProvider = ( props ) => {
   return fetch(`${baseURL}/items?userId=${ loggedInUserId }`)
    .then(res => res.json())
    .then(setItems)
-  //  .then(() => { return true })
  } // getItems
 
 
