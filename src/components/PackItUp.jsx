@@ -41,3 +41,38 @@ export const PackItUp = () => (
     </Route>
   </>
 );
+
+// function PackItUp()(
+//   <>
+//     <Route render={() => {
+//       if (sessionStorage.getItem(userStorageKey)) {
+//         return (
+//           <>
+//             { /* Components that are rendered when the user is
+//             authenticated go inside this React fragment */}
+//             <UserProvider>
+//               <Navbar />
+//               <ApplicationViews />
+//             </UserProvider>
+//           </>
+//         );
+//       }
+//       // return <Redirect to="/login" />;
+//       return <Redirect to="/" />;
+//     }} /> {/* Route */}
+
+//     <Route exact path="/">
+//       <LandingPage />
+//     </Route>
+
+//     <Route path="/login">
+//       <Login />
+//     </Route>
+
+//     <Route path="/register">
+//       <Register />
+//     </Route>
+//   </>
+// );
+
+// export default PackItUp;
