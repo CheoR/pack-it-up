@@ -1,119 +1,70 @@
-<img src="./src/assets/images/PackItUpLogo.png" alt="Pack It Up Logo" />
+# Getting Started with Create React App
 
-# Introduction
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Hi, my name's Cheo.
+## Available Scripts
 
-This is my front-end capstone project.
+In the project directory, you can run:
 
-## What is PackItUp
+### `yarn start`
 
-PackItUp is a moving/storage CRUD app created with React, HTML, CSS, Fetch API and json-server to help users keep track of what items they pack into boxes for moving/storage.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Initial design made with Figma and the entity relational diagram made with diagramdb.io.
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-Issue tickets follow [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development#Behavioral_specifications), Behavior-Driven Development and use Github Project board to track issue lifecyles.
+### `yarn test`
 
-## Capabilities
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-- [x] User should be able to add/remove/update item(s).
+### `yarn build`
 
-- [x] User should be able to add/remove/update boxe(s).
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-- [x] User should be able to add/remove/update move(s).
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-- [x] User should be able to link/delink items from boxes.
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-- [x] User should not be able to modifiy other user's information.
+### `yarn eject`
 
-- [x] User should be able to save their moves, boxes, items.
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-- [x] User should be able to authenticate.
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-- [x] User should only be able to add/remove/edit boxes, items if they are logged in.
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-## Endpoints
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-GET, POST, PUT, DELETE supported for the following routes
+## Learn More
 
-- /users
-- /users/${id}
-- /boxes
-- /boxes/${id}
-- /items
-- /items/${id}
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-## Roadmap
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-- [ ] Encode item/box/move data as a QR code that can be printed out as a label for shipping.
-- [ ] Add a complentary QR decoding, so user can scan QR on a box and get information about its contents (if user has authorization). User can limit what data 3rd parties (movers, storage management, ect) can see.
+### Code Splitting
 
-## Demo
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-<img src="./src/assets/screen-recording.gif" alt="Pack It Up App Demo">
+### Analyzing the Bundle Size
 
-## Tech Stack
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-1. React
-2. HTML
-3. CSS
-4. json-server
+### Making a Progressive Web App
 
-## ERD
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-Entity relationship diagram can be viewd at [diagram](https://dbdiagram.io/d/603cf260fcdcb6230b21ffe2) or latest screen capture below.
+### Advanced Configuration
 
-<details>
-  <img src="./src/assets/images/PackItUp.png" alt="entity relationship diagram for pack it up" />
-</details>
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-## Layout
+### Deployment
 
-Most up to day layout can be viewd at [my figma layout](https://www.figma.com/file/FVTItU8oORU8Mrihcd60Jj/PackItUp?node-id=39%3A0) or you can view latest screen capture below:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-<details>
- <img src="./src/assets/images/Layout.png" alt="layout for pack it up" />
-</details>
+### `yarn build` fails to minify
 
-## Cloning
-
-```bash
-git clone git@github.com:CheoR/pack-it-up.git
-cd pack-it-up
-npm install
-```
-
-## Testing Instructions
-
-After forking the repo.
-
-```bash
-
-git fetch --all
-git checkout <branch-name>
-npm install
-npm start
-
-```
-
-In another tab, cd into `api` and run
-
-`json-server -p 8088 database.json`
-
-Please note, as of right now, running the above command including `-w` would cause json-serve to crash if user chooses to create 4 or more objects at once through the `ADD` button.
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-Please fill out the template for pulll request and label them appropriately.
-
-## Acknowledgements
-
-Thanks to NSS and everybody in my cohert that has helped me figure out problems when I was overthinking it.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
