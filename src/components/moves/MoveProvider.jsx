@@ -8,7 +8,6 @@ export const MoveContext = createContext();
 
 export const MoveProvider = (props) => {
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
-
   const [moves, setMoves] = useState([]);
 
   const getMoves = () => fetch(`${baseURL}/moves?_expand=user`)

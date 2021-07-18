@@ -25,6 +25,7 @@ export const BoxDetail = () => {
   const [selected, setSelected] = useState('');
   const [box, setBox] = useState({});
   const { boxId } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     getMoves()
@@ -37,6 +38,7 @@ export const BoxDetail = () => {
     if (isLoaded && boxes) {
       const _box = boxes.find((thisBox) => thisBox?.id === parseInt(boxId, 10));
       setBox(_box);
+      _box.move = moves.find((thisMove) => thisMove?.id === _box.moveId);
       setMoves(moves.filter((move) => move?.userId === loggedInUserId));
       setItems(items.filter((item) => item?.boxId === _box?.id));
 
@@ -61,7 +63,6 @@ export const BoxDetail = () => {
     box.isFragile = items.some((item) => item?.isFragile);
   }
 
-  const history = useHistory();
   const handleDelete = (event) => {
     event.preventDefault();
     deleteBox(box?.id).then(() => history.push('/boxes'));

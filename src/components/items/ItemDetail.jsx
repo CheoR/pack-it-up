@@ -182,7 +182,7 @@ export const ItemDetail = () => {
                   <select value={selected} id="container__dropdown" className={styles.formControl} onChange={handleControlledDropDownChange}>
                     <option value="0">Select Move</option>
                     {boxes.map((_box) => (
-                      <option boxId={_box.id} key={_box.id} value={_box.location}>
+                      <option boxid={_box.id} key={_box.id} value={_box.location}>
                         {_box.location}
                       </option>
                     ))}

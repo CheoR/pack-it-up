@@ -12,6 +12,7 @@ export const SummaryList = () => {
   const { moves, getMovesByUserId } = useContext(MoveContext);
   const { boxes, getBoxesByUserId } = useContext(BoxContext);
   const { items, getItemsByUserId } = useContext(ItemContext);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const loggedInUserId = parseInt(sessionStorage.getItem('app_user_id'), 10);

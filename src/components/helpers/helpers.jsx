@@ -32,8 +32,6 @@ export const getSum2 = (valueList) => {
 };
 
 export const getSum3 = (valueList) => {
-  console.log('getSum3');
-  console.table(valueList);
   /*
   Using .reduce on list of objects results with incorrect sum values.
   */
