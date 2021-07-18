@@ -1,17 +1,21 @@
-// import React, { useContext, useEffect, useRef, useState } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import { userStorageKey, userStorageUserName } from '../auth/authSettings';
 import { MoveSummary } from './MoveSummary';
-// import { MoveContext } from './MoveProvider';
+import { MoveContext } from './MoveProvider';
+import { BoxContext } from '../boxes/BoxProvider';
+import { ItemContext } from '../items/ItemProvider';
 import { Counter } from '../counter/Counter';
 
 import styles from './moveList.module.css';
-import { useFilteredData } from '../helpers/useFilterdData';
+import { getSum2 } from '../helpers/helpers';
 
 export const MoveList = () => {
-  // const { moves, getMovesByUserId, addMove } = useContext(MoveContext);
-  const { moves, addMove } = useFilteredData();
+  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
+  const loggedInUserName = sessionStorage.getItem(userStorageUserName);
+  const { moves, getMovesByUserId, setMoves, addMove } = useContext(MoveContext);
+  const { boxes, getBoxesByUserId } = useContext(BoxContext);
+  const { items, getItemsByUserId } = useContext(ItemContext);
 
   const [isLoading, setIsLoading] = useState(true);
   const [formField, setFormField] = useState({});
@@ -22,11 +26,34 @@ export const MoveList = () => {
 
   const inputRef = useRef();
 
+  const aggregateMoveInfo = () => {
+    moves.forEach((move) => {
+      /*
+      Aggregate box/item information per move.
+      */
+      const boxesForThisMove = boxes.filter((box) => box.moveId === move.id);
+      move.totalBoxCount = boxesForThisMove.length;
+      move.totalItemsCount = 0;
+      move.totalItemsValue = 0;
+
+      boxesForThisMove.forEach((box) => {
+        const itemsInBox = items.filter((item) => item.boxId === box.id);
+        move.totalItemsCount += itemsInBox.length;
+        move.totalItemsValue += getSum2(itemsInBox.filter((item) => item.value || 0));
+        box.isFragile = itemsInBox.some((item) => item.isFragile);
+      }); // boxesForThisMove.forEach
+
+      /*
+        Mark move fragile if any of its boxes are marked fragile.
+        Boxes are marked fragile if any of its items are marked fragile.
+      */
+      move.isFragile = boxesForThisMove.some((thisBox) => thisBox.isFragile);
+    }); // moves
+    setMoves(moves);
+  }; // aggregateMoveInfo
+
   useEffect(() => {
     setIsLoading(true);
-    const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
-    const loggedInUserName = sessionStorage.getItem(userStorageUserName);
-
     setUserInfo({
       loggedInUserId,
       loggedInUserName,
@@ -43,10 +70,16 @@ export const MoveList = () => {
     setIsLoading(false);
   }, []); // useEffect
 
-  // useEffect(() => {
-  //   getMovesByUserId();
-  //   setIsLoading(false);
-  // }, []); // useEffect
+  useEffect(() => {
+    setIsLoading(true);
+    const getAllInfo = async () => Promise.all([
+      getMovesByUserId(), getBoxesByUserId(), getItemsByUserId()
+    ]);
+
+    getAllInfo()
+      .then(aggregateMoveInfo)
+      .then(() => setIsLoading(false));
+  }, []); // useEffect
 
   const handleControlledInputChange = (event) => {
     /*

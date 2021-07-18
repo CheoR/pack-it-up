@@ -70,7 +70,7 @@ export const BoxList = () => {
     box.totalCount = itemsForThisBox.length;
     box.totalValue = getSum1(itemsForThisBox.map((thisItem) => thisItem.value || 0));
     box.isFragile = itemsForThisBox.some((thisItem) => thisItem.isFragile);
-    box.moveName = box?.move?.moveName;
+    // box.moveName = box?.move?.moveName;
   }); // boxes.forEach
 
   const handleControlledDropDownChange = (event) => {
