@@ -1,0 +1,95 @@
+:root {
+  --primary-color: #f7f7ff;
+  --secondary-color: #f2d0a4;
+  --tricery-color: #3f826d;
+}
+
+.summary {
+  /* background: var(--secondary-color); */
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-gap: 10px;
+  padding: 0.2em;
+  border-top: 5px dashed black;
+  border-bottom: 5px dashed black;
+}
+
+.summary__boxCount,
+.summary__itemCount {
+  grid-column-start: 1;
+  grid-column-end: 4;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary__boxCount {
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.summary__itemCount {
+  grid-row-start: 3;
+  grid-row-end: 3;
+}
+
+.summary__move,
+.summary__value {
+  grid-column-start: 7;
+  grid-column-end: 10;
+  display: flex;
+  align-items: center;
+}
+
+.summary__move__move,
+.summary__value__value {
+  grid-column-start: 10;
+  grid-column-end: 13;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.fragile__checkbox {
+  grid-column-start: 4;
+  grid-column-end: 7;
+  grid-row-start: 3;
+  grid-row-end: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary__navlinkBtn__edit,
+.summary__btn__delete {
+  border-radius: 10px;
+  padding: 0.2em;
+
+  grid-row-start: 3;
+  grid-row-end: 3;
+}
+
+.summary__btn__delete {
+  grid-column-start: 10;
+  grid-column-end: 12;
+  background: salmon;
+}
+
+.summary__navlink__edit {
+  grid-column-start: 7;
+  grid-column-end: 9;
+  display: block;
+  grid-row-start: 3;
+  grid-row-end: 3;
+}
+
+.summary__navlinkBtn__edit {
+  background: lightgreen;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 1em;
+  text-align: center;
+}
