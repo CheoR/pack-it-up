@@ -1,69 +1,54 @@
+import { useContext, useEffect } from 'react';
 
-import { useContext, useEffect, useState } from "react"
+// import { userStorageKey } from '../auth/authSettings';
+import { getSum2 } from './helpers';
 
-import { userStorageKey, userStorageUserName } from "../auth/authSettings"
-import { getSum2 } from "./helpers"
+import { BoxContext } from '../boxes/BoxProvider';
+import { ItemContext } from '../items/ItemProvider';
+import { MoveContext } from '../moves/MoveProvider';
 
-import { BoxContext } from "../boxes/BoxProvider"
-import { ItemContext } from "../items/ItemProvider"
-import { MoveContext } from "../moves/MoveProvider"
+export const useFilteredData = () => {
+  // const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
 
-export const useFilteredData = ( ) => {
- // custom hook
- // const [ value, setValue ] = useState(null)
+  const { moves, setMoves, addMove, getMovesByUserId } = useContext(MoveContext);
+  const { boxes, getBoxesByUserId } = useContext(BoxContext);
+  const { items, getItemsByUserId } = useContext(ItemContext);
 
- // let userFilterRendercount = 1
-
- // console.log(`\tuserFilterRendercount: ${userFilterRendercount}`)
- // userFilterRendercount = userFilterRendercount + 1
-
-  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
-
-  const { moves, setMoves, getMovesByUserId, addMove } = useContext(MoveContext)
-  const { boxes, setBoxes, getBoxesByUserId } = useContext(BoxContext)
-  const { items, setItems, getItemsByUserId } = useContext(ItemContext)
-
-  console.log(" I AM USER FILTER DATA FILE ")
- 
-  useEffect(() => {
-   console.log("NEVER GET CALLED calling getby userid in use effect")
-   getMovesByUserId()
-    .then(getBoxesByUserId)
-    .then(getItemsByUserId)
-    .then(aggregateMoveInfo)
-  }, [ ] ) // useEffect
- 
   const aggregateMoveInfo = () => {
-   moves.forEach(move => {
+    moves.forEach((thisMove) => {
     /*
-     Aggregate box/item information per move.
+    Aggregate box/item information per move.
     */
-    const boxesForThisMove = boxes.filter(box => box.moveId === move.id)
-  
-    move.totalBoxCount = boxesForThisMove.length
-    move.totalItemsCount = 0
-    move.totalItemsValue = 0
-  
-    boxesForThisMove.forEach(box => {
-      const itemsInBox = items.filter(item => item.boxId === box.id)
-  
-      move.totalItemsCount += itemsInBox.length
-      move.totalItemsValue += getSum2(itemsInBox.filter(item => item.value ? item.value : 0))
-      box.isFragile = itemsInBox.some(item => item.isFragile ? true : false)
-    }) // boxesForThisMove.forEach
-  
-    /*
+      const boxesForThisMove = boxes.filter((box) => box.moveId === thisMove.id);
+
+      thisMove.totalBoxCount = boxesForThisMove.length;
+      thisMove.totalItemsCount = 0;
+      thisMove.totalItemsValue = 0;
+
+      boxesForThisMove.forEach((box) => {
+        const itemsInBox = items.filter((item) => item.boxId === box.id);
+
+        thisMove.totalItemsCount += itemsInBox.length;
+        thisMove.totalItemsValue += getSum2(itemsInBox.filter((item) => item.value || 0));
+        box.isFragile = itemsInBox.some((item) => item.isFragile);
+      }); // boxesForThisMove.forEach
+
+      /*
       Mark move fragile if any of its boxes are marked fragile.
       Boxes are marked fragile if any of its items are marked fragile.
-    */
-    move.isFragile = boxesForThisMove.some(b => b.isFragile)
+      */
+      thisMove.isFragile = boxesForThisMove.some((thisBox) => thisBox.isFragile);
+    }); // moves
 
-   }) // moves
- 
-   setMoves(moves)
-  } // aggregateMoveInfo
- 
- 
- // return [ value, setValue ]
- return { moves, boxes, items, addMove }
-}
+    setMoves(moves);
+  }; // aggregateMoveInfo
+
+  useEffect(() => {
+    getMovesByUserId()
+      .then(getBoxesByUserId)
+      .then(getItemsByUserId)
+      .then(aggregateMoveInfo);
+  }, []); // useEffect
+
+  return { moves, boxes, items, addMove };
+};

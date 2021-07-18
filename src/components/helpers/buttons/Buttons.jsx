@@ -1,23 +1,21 @@
-import React from "react"
+import React from 'react';
 
+export const Delete = ({ id, action }) => <button type="button" id={id} onClick={action}>Delete Button</button>;
+// {
 
-export const Delete = ({ id, action }) => {
- /*
-  <Delete id={`btn--delete-${item.id}`} action={handleDelete}/>
- */
+//   <Delete id={`btn--delete-${item.id}`} action={handleDelete}/>
 
- const clickedBtn = ( event ) => {
-  event.preventDefault() 
-  console.log("Delete button clicked")
+//   const clickedBtn = (event) => {
+//     event.preventDefault();
+//     console.log('Delete button clicked');
 
-  console.log(" id ")
-  console.log(id)
-  console.log("action")
-  console.log(action)
- }
+//     console.log(' id ');
+//     console.log(id);
+//     console.log('action');
+//     console.log(action);
+//   };
 
- return (
-  <button id={id} onClick={action}>Delete Button</button>
- )
-}
- 
+//   return (
+//     <button type="button" id={id} onClick={action}>Delete Button</button>
+//   );
+// };
