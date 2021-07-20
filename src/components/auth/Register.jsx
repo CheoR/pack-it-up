@@ -64,7 +64,7 @@ export const Register = () => {
         </button>
       </dialog>
       <form className={styles.registration__form__login} onSubmit={handleRegister}>
-        <h1 className={styles.registration__header}>Please Register for PackItUp</h1>
+        <h1 className={styles.registration__header}>Register for PackItUp</h1>
         <fieldset className={styles.registration__fieldset}>
           <label htmlFor="username">Username
             <input type="text" name="username" id="username" className={styles.formControl} placeholder="Username" required value={registerUser.username} onChange={handleInputChange} />

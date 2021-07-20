@@ -1,13 +1,4 @@
-.landingPage {
-  width: 100vw;
-  height: 100vh;
-  background: lightblue;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-}
-
+.landingPage,
 .landingPage__banner,
 .landingPage__banner figure,
 .landingPage__banner img,
@@ -15,11 +6,13 @@
   width: 100%;
 }
 
-.landingPage__banner img,
-.landingPage__banner figcaption,
-.landingPage__banner p,
-.landingPage__header {
-  padding: 0.8em;
+.landingPage {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100vh;
 }
 
 .landingPage__btn__register,
