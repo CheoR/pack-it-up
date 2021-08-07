@@ -35,7 +35,7 @@ export const BoxSummary = ({ box }) => {
       </fieldset>
 
       <div className={styles.summary__location}>Location</div>
-      <div className={styles.summary__location__location}>{`${box.location.substring(0, 9)}} . .`}</div>
+      <div className={styles.summary__location__location}>{`${box.location.substring(0, 5)} . .`}</div>
 
       <div className={styles.summary__value}>Value</div>
       <div className={styles.summary__value__value}>${ box.totalValue ? box.totalValue : '0.00' }</div>

@@ -11,7 +11,7 @@
   padding: 0.2em;
   grid-gap: 10px;
   background: var(--primary-color);
-  border: 5px dashed black;
+  /* border: 5px dashed black; */
 }
 
 .counter__btn__decrement,
@@ -42,7 +42,7 @@
 }
 
 .counter__btn__add {
-  grid-column-start: 1;
-  grid-column-end: 11;
+  grid-column-start: 2;
+  grid-column-end: 10;
   background: var(--secondary-color);
 }
