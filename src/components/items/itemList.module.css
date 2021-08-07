@@ -19,9 +19,14 @@
 }
 
 .usersBoxesLabel {
-  background: var(--tricery-color);
   padding: 0.5em;
   display: block;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.usersBoxesLabel select {
+  width: 100%;
 }
 
 .formControl {

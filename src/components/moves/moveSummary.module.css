@@ -7,12 +7,11 @@
 .summary {
   /* background: var(--secondary-color); */
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(13, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   grid-gap: 10px;
-  padding: 0.2em;
-  border-top: 5px dashed black;
-  border-bottom: 5px dashed black;
+  padding: 0.5rem;
+  border-bottom: 2px solid black;
 }
 
 .summary__boxCount,
@@ -47,9 +46,14 @@
 .summary__value__value {
   grid-column-start: 10;
   grid-column-end: 13;
+}
+
+.fragile__checkboxLabel {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
 }
 
 .fragile__checkbox {
@@ -58,14 +62,14 @@
   grid-row-start: 3;
   grid-row-end: 3;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
 }
 
 .summary__navlinkBtn__edit,
 .summary__btn__delete {
   border-radius: 10px;
-  padding: 0.2em;
+  padding: 0.5rem;
 
   grid-row-start: 3;
   grid-row-end: 3;
@@ -73,13 +77,13 @@
 
 .summary__btn__delete {
   grid-column-start: 10;
-  grid-column-end: 12;
+  grid-column-end: 13;
   background: salmon;
 }
 
 .summary__navlink__edit {
   grid-column-start: 7;
-  grid-column-end: 9;
+  grid-column-end: 10;
   display: block;
   grid-row-start: 3;
   grid-row-end: 3;
@@ -90,6 +94,5 @@
   display: block;
   width: 100%;
   height: 100%;
-  padding: 1em;
   text-align: center;
 }

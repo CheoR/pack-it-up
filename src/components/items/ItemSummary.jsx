@@ -38,7 +38,7 @@ export const ItemSummary = ({ item }) => {
       </fieldset>
 
       <div className={styles.summary__description}>Description</div>
-      <div className={styles.summary__description__description}>{`${item.description.substring(0, 9)}. . ` }</div>
+      <div className={styles.summary__description__description}>{`${item.description.substring(0, 5)}. . ` }</div>
 
       <div className={styles.summary__value}>Value</div>
       <div className={styles.summary__value__value}>${ item?.value ? item?.value : '0.00' }</div>

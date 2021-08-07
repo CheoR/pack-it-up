@@ -6,134 +6,112 @@
 
 .container {
   height: 94vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  background: var(--primary-color);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  gap: 10px;
+  padding: 1rem;
+  background: lightblue;
 }
 
-.container__image_container {
-  height: 40%;
-  width: 90%;
-  margin: 0 auto;
-  margin-bottom: 10px;
-  background: var(--tricery-color);
+.imgContainer,
+.container__form {
+  grid-column-start: 1;
+  grid-column-end: 13;
+}
+.imgContainer {
+  grid-row-start: 1;
+  grid-row-end: 5;
 }
 
-.container__image {
-  display: block;
-  height: 100%;
+.img {
   width: 100%;
-  margin: 0 auto;
 }
 
 .container__form {
-  width: 90%;
-  margin-bottom: 10px;
+  grid-row-start: 6;
+  grid-row-end: 13;
 
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 1fr 50px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
 }
 
 .container__formGroup {
-  margin-bottom: 10px;
-
   grid-column-start: 1;
   grid-column-end: 13;
-
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(3, 1fr);
 }
 
 .descriptionLabel,
-.valueLabel,
-.container__dropdownLabel {
-  grid-column-start: 1;
-  grid-column-end: 3;
-  display: block;
+.valueLabel {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  background: var(--tricery-color);
 }
 
 .formControl {
-  grid-column-start: 3;
-  grid-column-end: 6;
   text-align: right;
-  background: var(--secondary-color);
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 10px;
+  background: white;
+}
+
+.container__dropdownLabel .formControl {
+  width: 40%;
+  margin-left: 1rem;
 }
 
 .container__navlink {
   grid-column-start: 1;
-  grid-column-end: 6;
-  background: blue;
-  display: block;
+  grid-column-end: 13;
 }
 
 .container__navlinkBtn {
-  display: block;
   width: 100%;
-  padding: 1em;
-  border: 5px dashed var(--tricery-color);
+  padding: 1rem;
+  border-radius: 10px;
+  background: white;
 }
 
-.container__btn__camera,
-.container__btn__submit,
-.container__btn__delete,
-.fragile__checkbox,
-.cameraLabel {
+.container__btn__camera {
+  grid-column-start: 4;
+  grid-column-end: 5;
   border-radius: 10px;
-  padding: 0.2em;
+  padding: 0.5rem;
+}
+
+.container__btn__submit {
+  grid-column-start: 5;
+  grid-column-end: 6;
+  border-radius: 10px;
+  background: lightgreen;
+  padding: 0.5rem;
+}
+
+.container__btn__delete {
+  grid-column-start: 6;
+  grid-column-end: 7;
+  border-radius: 10px;
+  background: salmon;
+  padding: 0.5rem;
 }
 
 .fragile__checkbox {
   grid-column-start: 1;
   grid-column-end: 4;
+}
+
+.fragie__checkboxLabel {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-}
-
-.container__btn__camera,
-.cameraLabel {
-  grid-column-start: 5;
-  grid-column-end: 7;
-}
-
-.container__btn__submit {
-  grid-column-start: 8;
-  grid-column-end: 10;
-  background: lightgreen;
-}
-
-.container__btn__delete {
-  grid-column-start: 11;
-  grid-column-end: 13;
-  background: salmon;
-}
-
-/*
-  Make the input look like a button and hide "select file" dialog box.
-*/
-/* .cameraLabel {
-  background: var(--secondary-color);
-  display: block;
-  display: flex;
   align-items: center;
-} */
-
-/* .container__btn__camera {
-  display: none;
-} */
+  width: 100%;
+  height: 100%;
+  padding-left: 4.5rem;
+  padding-right: 1rem;
+}
 
 .imgInputFile {
   display: none;
-}
-
-.container__btn__camera {
-  border: 1px solid var(--tricery-color);
 }

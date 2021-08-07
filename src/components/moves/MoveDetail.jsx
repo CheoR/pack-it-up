@@ -149,8 +149,19 @@ export const MoveDetail = () => {
                       value={formField.moveName}
                       onChange={(e) => { handleControlledInputChange(e); }} />
                   </label>
-                  <div className={styles.container__value}>Value</div>
-                  <div className={styles.container__value__value}>${ formField.totalValue ? formField.totalValue : '0.00' }</div>
+                  <label className={styles.moveNameLabel} htmlFor="moveName">Value:
+                    <input
+                      type="text"
+                      id="moveName"
+                      name="moveName"
+                      className={styles.formControl}
+                      placeholder="Add Move Name..."
+                      value={`$${formField.totalValue ? formField.totalValue : '0.00'}`}
+                      disabled />
+                  </label>
+                  {/* <div className={styles.container__value}>Value</div>
+                  <div className={styles.container__value__value}>${ formField.totalValue ?
+                   formField.totalValue : '0.00' }</div> */}
                 </fieldset>
                 <div className={styles.container__boxCount}>
                   <div className={styles.container__boxCount__count}>{ formField.totalBoxes ? formField.totalBoxes : '0' }</div>

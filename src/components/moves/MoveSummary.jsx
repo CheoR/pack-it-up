@@ -53,7 +53,7 @@ export const MoveSummary = ({ move }) => {
     <section className={styles.summary}>
 
       <div className={styles.summary__move}>Move</div>
-      <div className={styles.summary__move__move}>{ `${move.moveName.substring(0, 9)} . .` }</div>
+      <div className={styles.summary__move__move}>{ `${move.moveName.substring(0, 5)} . .` }</div>
 
       <div className={styles.summary__value}>Value</div>
       <div className={styles.summary__value__value}>${ move.totalItemsValue || '0.00' }</div>

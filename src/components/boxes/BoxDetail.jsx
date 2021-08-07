@@ -110,7 +110,9 @@ export const BoxDetail = () => {
         isLoaded
           ? (
             <main className={styles.container}>
-              <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${box?.location}`} alt={`${box?.location}`} />
+              <div className={styles.imgContainer}>
+                <img className={styles.img} src={`https://source.unsplash.com/featured/?${box?.location}`} alt={`${box?.location}`} />
+              </div>
               <form action="" className={styles.container__form}>
                 <fieldset className={styles.container__formGroup}>
                   <label className={styles.locationLable} htmlFor="location">Location:
@@ -124,8 +126,20 @@ export const BoxDetail = () => {
                       onChange={(e) => { handleControlledInputChange(e); }}
                     />
                   </label>
-                  <div className={styles.container__value}>Value</div>
-                  <div className={styles.container__value__value}>${ box?.totalValue || '0.00' }</div>
+                  <label className={styles.locationLable} htmlFor="value">Value
+                    <input
+                      type="text"
+                      id="value"
+                      name="value"
+                      className={styles.formControl}
+                      placeholder="Box Value"
+                      value={`$${box?.totalValue || '0.00'}`}
+                      disabled
+                    />
+                  </label>
+                  {/* <div className={styles.container__value}>Value</div>
+                  <div className={styles.container__value__value}>$
+                  { box?.totalValue || '0.00' }</div> */}
 
                   <label className={styles.container__dropdownLabel} htmlFor="usersMoves">Current Move Assignment
                     {/* excluding value={selected}
@@ -160,13 +174,13 @@ export const BoxDetail = () => {
                 </NavLink>
 
                 <fieldset className={styles.fragile__checkbox}>
-                  <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile
+                  <label className={styles.fragile__checkboxLabel} htmlFor="isFragile">Fragile
                     <input type="checkbox" id="isFragile" checked={box?.isFragile} className={styles.formControl} readOnly />
                   </label>
                 </fieldset>
 
-                <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>
-                <button type="button" id={`btn--delete-${box?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
+                <button type="submit" className={styles.container__btn__submit} onClick={submitUpdate}>Update</button>
+                <button type="button" className={styles.container__btn__delete} onClick={handleDelete} id={`btn--delete-${box?.id}`}>Delete</button>
               </form>
             </main>
           )

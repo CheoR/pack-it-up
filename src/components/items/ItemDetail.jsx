@@ -142,14 +142,17 @@ export const ItemDetail = () => {
     setHasSaved(true);
   }; // updateMove
 
+  if (!item.imagePath) {
+    item.path = 'https://unsplash.com/photos/YXWoEn5uOvg';
+  }
   return (
     <>
       { isLoaded
         ? (
           <main className={styles.container}>
-            <div className={styles.container__image_container}>
+            <div className={styles.imgContainer}>
               { item.imagePath && (
-                <img className={styles.container__image} src={item.imagePath} alt={`${item.description}`} />
+                <img className={styles.img} src={item.imagePath} alt={`${item.description}`} />
               )}
             </div>
             <form action="" className={styles.container__form}>
