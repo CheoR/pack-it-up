@@ -1,4 +1,8 @@
+/* eslint-disable */
 import React, { useContext, useEffect, useRef, useState } from 'react';
+
+import { Container, Grid, Box, Paper, Typography, FormControl, Input, FormHelperText, InputLabel} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { userStorageKey, userStorageUserName } from '../auth/authSettings';
 import { MoveSummary } from './MoveSummary';
@@ -7,10 +11,17 @@ import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from '../items/ItemProvider';
 import { Counter } from '../counter/Counter';
 
-import styles from './moveList.module.css';
+// import styles from './moveList.module.css';
 import { getSum2 } from '../helpers/helpers';
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    height: "400px",
+  },
+}));
+
 export const MoveList = () => {
+  const classes = useStyles()
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const loggedInUserName = sessionStorage.getItem(userStorageUserName);
   const { moves, getMovesByUserId, setMoves, addMove } = useContext(MoveContext);
@@ -85,45 +96,74 @@ export const MoveList = () => {
     /*
       TODO: Form needs to clear aroud after submission.
     */
+
     const newformField = { ...formField };
     newformField.type[event.target.id] = inputRef.current.value; // event.target.value
 
     setFormField(newformField);
   }; // handleControlledInputChange
-
+  
   if (isLoading) return <div>Loading</div>;
-
+  
   return (
     <>
       {
         !isLoading && moves
           ? (
-            <main className={styles.summary}>
-              <h1 className={styles.summary__header}>
-                {`${userInfo.loggedInUserName || 'User'}'s Moves`}
-              </h1>
-              {
-                moves.map((move) => <MoveSummary key={move.id} move={move} />)
-              }
-              <form action="" className="summary__form">
-                <fieldset className={styles.summary__formGroup}>
-                  <label className={styles.moveNameLabel} htmlFor="moveName">Move Name:
-                    <input
-                      type="text"
-                      id="moveName"
-                      name="moveName"
-                      ref={inputRef}
-                      className={styles.formControl}
-                      placeholder="Add Move Name..."
-                      // value={formField.type.moveName}
-                      onChange={(e) => { handleControlledInputChange(e); }} />
-                  </label>
-                </fieldset>
-              </form>
-              <Counter objType={formField} />
-            </main>
+            <Container>
+              <Box>
+                <Typography variant="h4" component="h1" align="center">
+                  {`${userInfo.loggedInUserName || 'User'}'s Moves`}
+                </Typography>                  
+                <form>
+                  <FormControl>
+                    <InputLabel htmlFor="moveName">Move Name</InputLabel>
+                    <Input id="moveName" aria-describedby="moveName" />
+                    {/* <FormHelperText id="moveName">Move Name</FormHelperText> */}
+                  </FormControl>
+                </form>
+                <Counter objType={formField} />
+              </Box>
+            </Container>
           )
-          : <>Loading</>
+          : (
+            <Container className={classes.root}>
+              <Box>
+                <Paper>
+                  <Typography>
+                    Loading . . .
+                  </Typography>
+                </Paper>
+              </Box>
+            </Container>
+          )
+          // ? (
+          //   <main className={styles.summary}>
+          //     <h1 className={styles.summary__header}>
+          //       {`${userInfo.loggedInUserName || 'User'}'s Moves`}
+          //     </h1>
+          //     {
+          //       moves.map((move) => <MoveSummary key={move.id} move={move} />)
+          //     }
+          //     <form action="" className="summary__form">
+          //       <fieldset className={styles.summary__formGroup}>
+          //         <label className={styles.moveNameLabel} htmlFor="moveName">Move Name:
+          //           <input
+          //             type="text"
+          //             id="moveName"
+          //             name="moveName"
+          //             ref={inputRef}
+          //             className={styles.formControl}
+          //             placeholder="Add Move Name..."
+          //             // value={formField.type.moveName}
+          //             onChange={(e) => { handleControlledInputChange(e); }} />
+          //         </label>
+          //       </fieldset>
+          //     </form>
+          //     <Counter objType={formField} />
+          //   </main>
+          // )
+          // : <>Loading</>
       }
     </>
   );
