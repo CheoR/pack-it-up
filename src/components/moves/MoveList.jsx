@@ -121,7 +121,11 @@ export const MoveList = () => {
                 <form>
                   <FormControl>
                     <InputLabel htmlFor="moveName">Move Name</InputLabel>
-                    <Input id="moveName" aria-describedby="moveName" />
+                    <Input
+                      id="moveName"
+                      aria-describedby="moveName"
+                      onChange={(e) => {handleControlledInputChange(e)}}
+                    />
                     {/* <FormHelperText id="moveName">Move Name</FormHelperText> */}
                   </FormControl>
                 </form>

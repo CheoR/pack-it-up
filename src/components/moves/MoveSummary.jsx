@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { useContext } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
@@ -9,9 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { MoveContext } from './MoveProvider';
 import { ItemContext } from '../items/ItemProvider';
 import { BoxContext } from '../boxes/BoxProvider';
-
-// import styles from './moveSummary.module.css';
-
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -23,19 +18,12 @@ const useStyles = makeStyles(() => ({
   delete: {
     background: 'salmon',
   },
-  topRow: {
-    background: 'lightblue',
-    display: 'flex',
-    flexDirection: 'row',
-    gap: '10px',
-    justifyContent: 'space-between',
-  },
   grid: {
-    padding: '10px',
+    padding: '5px',
+    gridRowGap: '20px',
   },
   formGroup: {
     textAlign: 'center',
-    // border: '1px solid black',
   },
 }));
 
@@ -85,11 +73,10 @@ export const MoveSummary = ({ move }) => {
   }; // handleDelete
 
   return (
-    <Box>
+    <Box component="section">
       <Paper className={classes.paper}>
-        <Grid container spacing={2} className={classes.grid}>
-          <Grid item xs={6}>
-          </Grid>
+        <Grid container className={classes.grid}>
+          <Grid item xs={6} />
           <Grid item xs={3}>
             <Typography>
               Move
@@ -112,10 +99,9 @@ export const MoveSummary = ({ move }) => {
           </Grid>
           <Grid item xs={3}>
             <Typography>
-              {`$${ move.totalItemsValue || '0.00' }`}
+              {`$${move.totalItemsValue || '0.00'}`}
             </Typography>
           </Grid>
-
           <Grid item xs={3}>
             <Typography>
               { move.totalItemsCount } Items
@@ -126,11 +112,13 @@ export const MoveSummary = ({ move }) => {
               <FormControlLabel
                 label="Fragile"
                 control={
-                  <Checkbox
-                  checked={move.isFragile}
-                  name="summaryFragile"
-                  color="default"
-                  />
+                  (
+                    <Checkbox
+                      checked={move.isFragile}
+                      name="summaryFragile"
+                      color="default"
+                    />
+                  )
                 }
               />
             </FormGroup>
@@ -160,39 +148,5 @@ export const MoveSummary = ({ move }) => {
 
       </Paper>
     </Box>
-    // <section className={styles.summary}>
-
-    //   <div className={styles.summary__move}>Move</div>
-    //   <div className={styles.summary__move__move}>{ `${move.moveName.substring(0, 5)} . .` }</div>
-
-    //   <div className={styles.summary__value}>Value</div>
-    //   <div className={styles.summary__value__value}>${ move.totalItemsValue || '0.00' }</div>
-
-    //   <div className={styles.summary__boxCount}>
-    //     <div className={styles.summary__boxCount__count}>{ move.totalBoxCount }</div>
-    //     <div className={styles.summary__boxCount__box}>Boxes</div>
-    //   </div> {/* summary__boxCount */}
-
-
-
-    //   <div className={styles.summary__itemCount}>
-    //     <div className={styles.summary__itemCount__count}>{ move.totalItemsCount }</div>
-    //     <div className={styles.summary__itemCount__item}>Items</div>
-    //   </div> {/* summary__itemCount */}
-
-    //   <fieldset className={styles.fragile__checkbox}>
-    //     <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">Fragile</label>
-    //     <input type="checkbox" name="summaryFragile" id="summaryFragile" checked={move.isFragile}
-    //      className={styles.formControl} readOnly />
-    //   </fieldset>
-
-    //   <fieldset className={styles.fragile__checkbox}>
-    //     <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">
-    //       Fragile
-    //       <input type="checkbox" name="summaryFragile" id="summaryFragile" checked={move.isFragile} className={styles.formControl} readOnly />
-    //     </label>
-    //   </fieldset>
-
-    // </section>
   );
 };
