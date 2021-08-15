@@ -114,7 +114,10 @@ export const MoveList = () => {
               <Box>
                 <Typography variant="h4" component="h1" align="center">
                   {`${userInfo.loggedInUserName || 'User'}'s Moves`}
-                </Typography>                  
+                </Typography>
+                {
+                  moves.map((move) => <MoveSummary key={move.id} move={move} />)
+                }             
                 <form>
                   <FormControl>
                     <InputLabel htmlFor="moveName">Move Name</InputLabel>
