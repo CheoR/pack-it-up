@@ -23,7 +23,7 @@ const _getSum = (valueList) => {
 
 const useStyles = makeStyles(() => ({
   paper: {
-    background: 'lightgray',
+    background: 'lightblue',
   },
   edit: {
     background: 'lightgreen',
@@ -34,14 +34,26 @@ const useStyles = makeStyles(() => ({
   grid: {
     padding: '5px',
     gridRowGap: '20px',
+    background: 'yellow',
+  },
+  gridItem: {
+    background: 'pink',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   formGroup: {
     textAlign: 'center',
   },
   formControl: {
     border: '1px solid black',
+    padding: '0px',
+    margin: '0px',
     display: 'flex',
-    flexDiretion: 'row',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));
 
@@ -171,11 +183,9 @@ export const MoveDetail = () => {
                   <Grid container className={classes.grid}>
                     <Grid item xs={4} />
                     <Grid item xs={8}>
-                      <FormControl className={classes.formControl}>
-                      <Typography>
-                        Move
-                      </Typography>
-                        <InputLabel htmlFor="moveName">
+                      <FormControl>
+                        <InputLabel htmlFor="moveValue" labelPlacement="start">
+                          Move
                         </InputLabel>
                         <Input
                           type="text"

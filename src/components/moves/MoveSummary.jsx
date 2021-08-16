@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
-import { Button, Box, Paper, Grid, Typography, FormControlLabel, FormGroup, Checkbox } from '@material-ui/core';
+import { Button, ButtonGroup, Box, Paper, Grid, Typography, FormControlLabel, FormGroup, Checkbox } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { MoveContext } from './MoveProvider';
@@ -14,13 +14,17 @@ const useStyles = makeStyles(() => ({
   },
   edit: {
     background: 'lightgreen',
+    paddingLeft: '23px',
+    paddingRight: '23px',
   },
   delete: {
     background: 'salmon',
   },
   grid: {
-    padding: '5px',
-    gridRowGap: '20px',
+    gridRowGap: '10px',
+    alignItems: 'center',
+    borderBottom: '1px solid black',
+    marginBottom: '5px',
   },
   formGroup: {
     textAlign: 'center',
@@ -102,15 +106,16 @@ export const MoveSummary = ({ move }) => {
               {`$${move.totalItemsValue || '0.00'}`}
             </Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item>
             <Typography>
               { move.totalItemsCount } Items
             </Typography>
           </Grid>
-          <Grid item xs={3}>
-            <FormGroup row className={classes.formGroup}>
+          <Grid item>
+            <FormGroup>
               <FormControlLabel
                 label="Fragile"
+                labelPlacement="start"
                 control={
                   (
                     <Checkbox
@@ -123,29 +128,32 @@ export const MoveSummary = ({ move }) => {
               />
             </FormGroup>
           </Grid>
-          <Grid xs={3}>
-            <Button
-              id={`btn--delete-${move.id}`}
-              type="button"
-              className={classes.delete}
-              onClick={handleDelete}
+          <Grid item>
+            <ButtonGroup
+              color="default"
+              aria-label="outlined secondary button group"
+              style={{ marginLeft: '15px' }}
             >
-              Delete
-            </Button>
-          </Grid>
-          <Grid xs={3}>
-            <Button
-              className={classes.edit}
-              type="button"
-              id={`btn--edit-${move.id}`}
-              component={NavLink}
-              to={`/moves/${move.id}`}
-            >
-              Edit
-            </Button>
+              <Button
+                id={`btn--delete-${move.id}`}
+                type="button"
+                className={classes.delete}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+              <Button
+                className={classes.edit}
+                type="button"
+                id={`btn--edit-${move.id}`}
+                component={NavLink}
+                to={`/moves/${move.id}`}
+              >
+                Edit
+              </Button>
+            </ButtonGroup>
           </Grid>
         </Grid>
-
       </Paper>
     </Box>
   );
