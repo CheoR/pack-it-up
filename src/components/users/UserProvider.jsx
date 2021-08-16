@@ -9,7 +9,12 @@ export const UserProvider = (props) => {
 
   const getUsers = () => fetch(`${baseURL}/users`)
     .then((res) => res.json())
-    .then(setUsers); // getUsers
+    .then(setUsers)
+    .then(() => {
+      console.log('---userprovider');
+      console.table(users);
+      console.log('---userprovider');
+    }); // getUsers
 
   return (
     <UserContext.Provider value={{

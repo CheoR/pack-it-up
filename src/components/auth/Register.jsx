@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -9,36 +7,32 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
 import { authApi, userStorageKey, userStorageUserName } from './authSettings';
-// import styles from './register.module.css';
-
 
 export const Register = () => {
   const useStyles = makeStyles((theme) => ({
     main: {
-      background: 'lightgreen',
+      height: '75vh',
+      marginBottom: theme.spacing(2),
     },
     paper: {
-      background: "brown",
-      position: "relative",
+      position: 'relative',
       marginTop: theme.spacing(2),
       padding: `${theme.spacing(2)}px ${theme.spacing(1)}px`,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      maxWidth: "80%",
-      margin: "0 auto",
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      maxWidth: '80%',
+      margin: '0 auto',
     },
     grid: {
-      background: "pink",
-      alignItems: "center",
-      justifyContent: "center",
-      margin: "0 auto",
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: '0 auto',
     },
     form: {
-      background: "lightblue",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
     },
   }));
 
@@ -48,7 +42,6 @@ export const Register = () => {
     password: '',
   });
 
-  const [conflictDialog, setConflictDialog] = useState(false);
   const history = useHistory();
 
   const handleInputChange = (event) => {
@@ -87,8 +80,6 @@ export const Register = () => {
                 history.push('/users');
               }
             });
-        } else {
-          setConflictDialog(true);
         }
       });
   };
@@ -106,21 +97,21 @@ export const Register = () => {
             <Grid item>
               <FormControl>
                 <InputLabel htmlFor="username">Username</InputLabel>
-                <Input id="username" aria-describedby="Create Username" />
+                <Input id="username" aria-describedby="Create Username" onChange={handleInputChange} />
                 <FormHelperText id="username">Create Username</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item>
               <FormControl>
                 <InputLabel htmlFor="userEmail">Email address</InputLabel>
-                <Input id="userEmail" aria-describedby="Your Email" />
+                <Input id="userEmail" aria-describedby="Your Email" onChange={handleInputChange} />
                 <FormHelperText id="userEmail">Email Address</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item>
               <FormControl>
                 <InputLabel htmlFor="userPassword">Password</InputLabel>
-                <Input id="userPassword" aria-describedby="Password" />
+                <Input id="userPassword" aria-describedby="Password" onChange={handleInputChange} />
                 <FormHelperText id="userPassword">Password</FormHelperText>
               </FormControl>
             </Grid>
@@ -134,7 +125,8 @@ export const Register = () => {
   //   <main className={styles.registration}>
   //     <dialog className={`${styles.dialog} ${styles.dialog__password}`} open={conflictDialog}>
   //       <div>Account with that email address already exists</div>
-  //       <button type="button" className={styles.button__close} onClick={() => setConflictDialog(false)}>
+  //       <button type="button" className={styles.button__close}
+  //  onClick={() => setConflictDialog(false)}>
   //         Close
   //       </button>
   //     </dialog>
@@ -142,17 +134,23 @@ export const Register = () => {
   //       <h1 className={styles.registration__header}>Register for PackItUp</h1>
   //       <fieldset className={styles.registration__fieldset}>
   //         <label htmlFor="username">Username
-  //           <input type="text" name="username" id="username" className={styles.formControl} placeholder="Username" required value={registerUser.username} onChange={handleInputChange} />
+  //           <input type="text" name="username" id="username"
+  //  className={styles.formControl} placeholder="Username" required
+  //  value={registerUser.username} onChange={handleInputChange} />
   //         </label>
   //       </fieldset>
   //       <fieldset className={styles.registration__fieldset}>
   //         <label htmlFor="inputEmail"> Email address
-  //           <input type="email" name="email" id="email" className={styles.formControl} placeholder="Email address" required value={registerUser.email} onChange={handleInputChange} />
+  //           <input type="email" name="email" id="email"
+  //  className={styles.formControl} placeholder="Email address" required
+  //  value={registerUser.email} onChange={handleInputChange} />
   //         </label>
   //       </fieldset>
   //       <fieldset className={styles.registration__fieldset}>
   //         <label htmlFor="password"> Password
-  //           <input type="password" name="password" id="password" className={styles.formControl} placeholder="Password" required value={registerUser.password} onChange={handleInputChange} />
+  //           <input type="password" name="password" id="password"
+  //  className={styles.formControl} placeholder="Password" required
+  //  value={registerUser.password} onChange={handleInputChange} />
   //         </label>
   //       </fieldset>
   //       <fieldset className={styles.registration__fieldset__btn}>

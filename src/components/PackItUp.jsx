@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import { AppBar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -70,7 +70,13 @@ export const PackItUp = () => {
             <div className={classes.imgBlock}>
               <img src={logo} className={classes.img} alt="Pack It Up Logo" />
             </div>
-            <Button color="inherit">Login</Button>
+            <Button
+              color="inherit"
+              component={Link}
+              to="/login"
+            >
+              Login
+            </Button>
           </Toolbar>
         </AppBar>
         { sessionStorage.getItem(userStorageKey) ? <Navbar /> : <></> }
