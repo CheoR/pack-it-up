@@ -9,12 +9,35 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
 import { authApi, userStorageKey, userStorageUserName } from './authSettings';
-// import styles from './register.module.css';
+import styles from './register.module.css';
 
 
 export const Register = () => {
   const useStyles = makeStyles((theme) => ({
     main: {
+      height: '75vh',
+      marginBottom: theme.spacing(2),
+    },
+    paper: {
+      position: 'relative',
+      marginTop: theme.spacing(2),
+      padding: `${theme.spacing(2)}px ${theme.spacing(1)}px`,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      maxWidth: '80%',
+      margin: '0 auto',
+      border: '1px solid black',
+    },
+    grid: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: '0 auto',
+    },
+    form: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
       background: 'lightgreen',
     },
     paper: {
@@ -48,7 +71,6 @@ export const Register = () => {
     password: '',
   });
 
-  const [conflictDialog, setConflictDialog] = useState(false);
   const history = useHistory();
 
   const handleInputChange = (event) => {
@@ -87,8 +109,6 @@ export const Register = () => {
                 history.push('/users');
               }
             });
-        } else {
-          setConflictDialog(true);
         }
       });
   };
