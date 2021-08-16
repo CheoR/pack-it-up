@@ -118,7 +118,7 @@ export const MoveList = () => {
                 {
                   moves.map((move) => <MoveSummary key={move.id} move={move} />)
                 }             
-                <form>
+                <form style={{ align: 'center', border: '1px solid red', alignItems: 'center' }}>
                   <FormControl style={{ width: '100%'}}>
                     <InputLabel htmlFor="moveName">Move Name</InputLabel>
                     <Input

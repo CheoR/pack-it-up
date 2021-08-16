@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useHistory, useParams } from 'react-router-dom';
 
-import { Button, Box, Container, Paper, Grid, Typography, FormControlLabel, FormGroup, Input, InputLabel, FormControl, Checkbox } from '@material-ui/core';
+import { Button, ButtonGroup, Box, Container, Paper, Grid, Typography, FormControlLabel, FormGroup, Input, InputLabel, FormControl, Checkbox } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { ItemContext } from '../items/ItemProvider';
@@ -23,37 +23,24 @@ const _getSum = (valueList) => {
 
 const useStyles = makeStyles(() => ({
   paper: {
-    background: 'lightblue',
+    background: 'lightgray',
   },
   edit: {
     background: 'lightgreen',
+    paddingLeft: '10px',
+    paddingRight: '10px',
   },
   delete: {
     background: 'salmon',
   },
   grid: {
-    padding: '5px',
-    gridRowGap: '20px',
-    background: 'yellow',
-  },
-  gridItem: {
-    background: 'pink',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    gridRowGap: '10px',
     alignItems: 'center',
+    borderBottom: '1px solid black',
+    marginBottom: '5px',
   },
   formGroup: {
     textAlign: 'center',
-  },
-  formControl: {
-    border: '1px solid black',
-    padding: '0px',
-    margin: '0px',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 }));
 
@@ -178,98 +165,127 @@ export const MoveDetail = () => {
       {
         isLoaded
           ? (
-              <Box component="section">
-                <Paper className={classes.paper}>
-                  <Grid container className={classes.grid}>
-                    <Grid item xs={4} />
-                    <Grid item xs={8}>
-                      <FormControl>
-                        <InputLabel htmlFor="moveValue" labelPlacement="start">
+              <Container>
+                <Box component="section">
+                  <Paper className={classes.paper}>
+                    <Grid container className={classes.grid}>
+                      <Grid item xs={6} />
+                      <Grid item xs={3}>
+                        <Typography>
                           Move
-                        </InputLabel>
-                        <Input
-                          type="text"
-                          id="moveName"
-                          name="moveName"
-                          aria-describedby="moveName"
-                          value={formField.moveName}
-                          onChange={(e) => {handleControlledInputChange(e)}}
-                        />
-                      </FormControl>
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <FormControl>
+                          {/* <InputLabel htmlFor="moveValue" labelPlacement="start">
+                            Move
+                          </InputLabel> */}
+                          <Input
+                            type="text"
+                            id="moveName"
+                            name="moveName"
+                            aria-describedby="moveName"
+                            value={formField.moveName}
+                            onChange={(e) => {handleControlledInputChange(e)}}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography>
+                          { move.totalBoxCount } Boxes
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Typography>
+                          Value
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <FormControl>
+                          {/* <InputLabel htmlFor="moveValue">
+                          </InputLabel> */}
+                          <Input
+                            type="text"
+                            id="moveValue"
+                            name="moveValue"
+                            aria-describedby="moveValue"
+                            value={`$${formField.totalValue ? formField.totalValue : '0.00'}`}
+                            disabled
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item>
+                        <Typography>
+                          { move.totalItemsCount } Items
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <FormGroup>
+                          <FormControlLabel
+                            labelPlacement="start"
+                            label="Fragile"
+                            control={
+                              (
+                                <Checkbox
+                                  checked={move.isFragile}
+                                  name="summaryFragile"
+                                  color="default"
+                                />
+                              )
+                            }
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item>
+                        <ButtonGroup
+                          color="default"
+                          aria-label="outlined secondary button group"
+                          style={{ marginLeft: '15px' }}
+                        >
+                          <Button
+                            id={`btn--delete-${move.id}`}
+                            type="button"
+                            className={classes.delete}
+                            onClick={handleDelete}
+                          >
+                            Delete
+                          </Button>
+                          <Button
+                            className={classes.edit}
+                            type="button"
+                            id={`btn--edit-${move.id}`}
+                            component={NavLink}
+                            to={`/moves/${move.id}`}
+                          >
+                            Update
+                          </Button>
+                        </ButtonGroup>
+                      </Grid>
+                      {/* <Grid xs={3}>
+                        <Button
+                          id={`btn--delete-${move.id}`}
+                          type="button"
+                          className={classes.delete}
+                          onClick={handleDelete}
+                        >
+                          Delete
+                        </Button>
+                      </Grid>
+                      <Grid xs={3}>
+                        <Button
+                          className={classes.edit}
+                          type="button"
+                          id={`btn--edit-${move.id}`}
+                          component={NavLink}
+                          to={`/moves/${move.id}`}
+                        >
+                          Edit
+                        </Button>
+                      </Grid> */}
                     </Grid>
-                    <Grid item xs={6} />
-                    <Grid item xs={2}>
-                      <Typography>
-                        Value
-                      </Typography>
-                      <FormControl>
-                        <InputLabel htmlFor="moveValue">
-                        </InputLabel>
-                        <Input
-                          type="text"
-                          id="moveValue"
-                          name="moveValue"
-                          aria-describedby="moveValue"
-                          value={`$${formField.totalValue ? formField.totalValue : '0.00'}`}
-                          disabled
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography>
-                        Value
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography>
-                        Replace
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography>
-                        Replace
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <FormGroup row className={classes.formGroup}>
-                        <FormControlLabel
-                          label="Fragile"
-                          control={
-                            (
-                              <Checkbox
-                                checked={move.isFragile}
-                                name="summaryFragile"
-                                color="default"
-                              />
-                            )
-                          }
-                        />
-                      </FormGroup>
-                    </Grid>
-                    <Grid xs={3}>
-                      <Button
-                        id={`btn--delete-${move.id}`}
-                        type="button"
-                        className={classes.delete}
-                        onClick={handleDelete}
-                      >
-                        Delete
-                      </Button>
-                    </Grid>
-                    <Grid xs={3}>
-                      <Button
-                        className={classes.edit}
-                        type="button"
-                        id={`btn--edit-${move.id}`}
-                        component={NavLink}
-                        to={`/moves/${move.id}`}
-                      >
-                        Edit
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </Box>
+                  </Paper>
+                </Box>
+              </Container>
           )
           : (
             <Container className={classes.root}>
