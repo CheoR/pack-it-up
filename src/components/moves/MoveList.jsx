@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import { Container, Box, Paper, Typography, FormControl, Input, InputLabel } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 import { userStorageKey, userStorageUserName } from '../auth/authSettings';
 import { MoveSummary } from './MoveSummary';
@@ -13,14 +12,7 @@ import { Counter } from '../counter/Counter';
 // import styles from './moveList.module.css';
 import { getSum2 } from '../helpers/helpers';
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    height: '400px',
-  },
-}));
-
 export const MoveList = () => {
-  const classes = useStyles();
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const loggedInUserName = sessionStorage.getItem(userStorageUserName);
   const { moves, getMovesByUserId, setMoves, addMove } = useContext(MoveContext);
@@ -117,7 +109,7 @@ export const MoveList = () => {
                 {
                   moves.map((move) => <MoveSummary key={move.id} move={move} />)
                 }
-                <form style={{ align: 'center', border: '1px solid red', alignItems: 'center' }}>
+                <form style={{ align: 'center', alignItems: 'center' }}>
                   <FormControl style={{ width: '100%' }}>
                     <InputLabel htmlFor="moveName">Move Name</InputLabel>
                     <Input
@@ -133,7 +125,7 @@ export const MoveList = () => {
             </Container>
           )
           : (
-            <Container className={classes.root}>
+            <Container>
               <Box>
                 <Paper>
                   <Typography>
