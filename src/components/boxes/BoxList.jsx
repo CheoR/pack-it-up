@@ -1,9 +1,7 @@
-/* eslint-disable */
-
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Container, Box, Paper, Typography, FormControl, Input, TextField, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Container, Box, Paper, Typography, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { userStorageKey, userStorageUserName } from '../auth/authSettings';
@@ -13,14 +11,13 @@ import { ItemContext } from '../items/ItemProvider';
 import { BoxSummary } from './BoxSummary';
 import { Counter } from '../counter/Counter';
 import { getSum1 } from '../helpers/helpers';
-// import styles from './boxList.module.css';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
     height: '400px',
   },
   select: {
-    background: 'lightgreen',
+    background: 'gray',
   },
 }));
 
@@ -95,7 +92,7 @@ export const BoxList = () => {
     */
     // const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
     // const optionId = event.target.options[selectedIndex].getAttribute('moveid');
-    const optionId = event.target.value
+    const optionId = event.target.value;
     const updateBox = { ...newBox };
 
     /*
@@ -121,7 +118,11 @@ export const BoxList = () => {
               }
               <FormControl fullWidth>
                 <InputLabel>Add Boxes To Move</InputLabel>
-                <Select className={classes.select} value={selected} onChange={handleControlledDropDownChange}>
+                <Select
+                  className={classes.select}
+                  value={selected}
+                  onChange={handleControlledDropDownChange}
+                >
                   <MenuItem value="" disabled>
                     Moves
                   </MenuItem>
@@ -148,33 +149,7 @@ export const BoxList = () => {
               </Paper>
             </Box>
           </Container>
-        )
-      }
+        )}
     </>
   ); // return
 };
-
-{/* <main className={styles.summary}>
-  <h1 className={styles.summary__header}>{`${loggedInUserName}'s Boxes`}</h1>
-  {
-    boxes.map((box) => <BoxSummary key={box.id} box={box} />)
-  }
-
-  <fieldset className={styles.container__formGroup}>
-    <label className={styles.usersMovesLabel} htmlFor="usersMoves">Assign To Move
-      <select id="usersMoves" className={styles.formControl} onChange={handleControlledDropDownChange} required>
-        <option value="0">Select Move</option>
-        {
-          moves.map((move) => (
-            <option moveid={move.id} key={move.id} value={move.moveName}>{
-              move.moveName
-              }
-            </option>
-          ))
-        }
-      </select>
-    </label>
-  </fieldset>
-
-  <Counter objType={newBox} />
-</main> */}

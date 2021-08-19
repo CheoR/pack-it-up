@@ -89,8 +89,8 @@ export const MoveList = () => {
     */
 
     const newformField = { ...formField };
-    newformField.type[event.target.id] = inputRef.current.value; // event.target.value
-
+    newformField.type[event.target.id] = event.target.value;
+    // newformField.type[event.target.id] = inputRef.current.value; // event.target.value
     setFormField(newformField);
   }; // handleControlledInputChange
 
@@ -115,6 +115,7 @@ export const MoveList = () => {
                     <Input
                       id="moveName"
                       aria-describedby="moveName"
+                      value={formField.type.moveName}
                       onChange={(e) => { handleControlledInputChange(e); }}
                     />
                     {/* <FormHelperText id="moveName">Move Name</FormHelperText> */}
