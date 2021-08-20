@@ -3,6 +3,7 @@ import { NavLink, useHistory } from 'react-router-dom';
 
 import { Button, ButtonGroup, Box, Paper, Grid, Typography, FormControlLabel, FormGroup, Checkbox } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
 import { BoxContext } from './BoxProvider';
 
 const useStyles = makeStyles(() => ({
