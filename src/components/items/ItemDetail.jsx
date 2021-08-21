@@ -1,11 +1,48 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+// useRef
 import { NavLink, useHistory, useLocation, useParams } from 'react-router-dom';
+
+import { Button, ButtonGroup, Container, Grid, Box, Paper, Typography, FormControl, Input, FormGroup, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+import Image from 'material-ui-image';
 
 import { userStorageKey } from '../auth/authSettings';
 import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from './ItemProvider';
 
-import styles from './itemDetail.module.css';
+const useStyles = makeStyles(() => ({
+  paper: {
+    background: 'lightgray',
+  },
+  update: {
+    background: 'lightgreen',
+    paddingLeft: '10px',
+    paddingRight: '10px',
+  },
+  delete: {
+    background: 'salmon',
+  },
+  grid: {
+    gridRowGap: '10px',
+    alignItems: 'center',
+    borderBottom: '1px solid black',
+    marginBottom: '5px',
+  },
+  formGroup: {
+    textAlign: 'center',
+  },
+  edit: {
+    minWidth: '100%',
+    margin: '25px 0',
+  },
+  view: {
+    minWidth: '100%',
+  },
+  imgInputFile: {
+    display: 'none',
+  },
+}));
 
 const defaultItem = {
   userId: 0,
@@ -21,9 +58,12 @@ const defaultItem = {
 };
 
 export const ItemDetail = () => {
+  const classes = useStyles();
+
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
 
-  const { items, getItemsByUserId, updateItem, deleteItem, uploadItemImage } = useContext(
+  // uploadItemImage
+  const { items, getItemsByUserId, updateItem, deleteItem } = useContext(
     ItemContext
   );
   const { boxes, getBoxesByUserId, setBoxes } = useContext(BoxContext);
@@ -32,7 +72,7 @@ export const ItemDetail = () => {
   const [item, setItem] = useState(defaultItem);
   const [selected, setSelected] = useState('');
 
-  const imgInputFile = useRef(null);
+  // const imgInputFile = useRef(null);
   let { itemId } = useParams();
   const location = useLocation();
   const history = useHistory();
@@ -70,10 +110,10 @@ export const ItemDetail = () => {
     deleteItem(item.id).then(() => history.push('/items'));
   }; // handleDelete
 
-  const handleImageUpload = (event) => {
-    event.preventDefault();
-    imgInputFile.current.click();
-  }; // handleImageUpload
+  // const handleImageUpload = (event) => {
+  //   event.preventDefault();
+  //   imgInputFile.current.click();
+  // }; // handleImageUpload
 
   const handleControlledInputChange = (event) => {
     const newItem = { ...item };
@@ -93,8 +133,9 @@ export const ItemDetail = () => {
   }; // handleCheckboxChange
 
   const handleControlledDropDownChange = (event) => {
-    const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
-    const updatedBoxId = event.target.options[selectedIndex].getAttribute('boxid');
+    // const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
+    // const updatedBoxId = event.target.options[selectedIndex].getAttribute('boxid');
+    const updatedBoxId = event.target.value;
     const newItem = { ...item };
 
     newItem[event.target.id] = event.target.value;
@@ -105,27 +146,27 @@ export const ItemDetail = () => {
     setHasSaved(false);
   }; // handleControlledDropDownChange
 
-  const imageInputChange = (event) => {
-    event.stopPropagation();
-    event.preventDefault();
+  // const imageInputChange = (event) => {
+  //   event.stopPropagation();
+  //   event.preventDefault();
 
-    const file = event.target.files[0];
-    const formData = new FormData();
+  //   const file = event.target.files[0];
+  //   const formData = new FormData();
 
-    formData.append('file', file); // files[0]);
-    formData.append('upload_preset', 'packItUp__upload');
+  //   formData.append('file', file); // files[0]);
+  //   formData.append('upload_preset', 'packItUp__upload');
 
-    uploadItemImage(formData)
-      .then((res) => {
-        const newItem = { ...item };
-        // res.original_filename,
-        newItem.imagePath = res.secure_url;
+  //   uploadItemImage(formData)
+  //     .then((res) => {
+  //       const newItem = { ...item };
+  //       // res.original_filename,
+  //       newItem.imagePath = res.secure_url;
 
-        setItem(newItem);
-        setHasSaved(false);
-      })
-      .catch((err) => console.log(err));
-  }; // imageInputChange
+  //       setItem(newItem);
+  //       setHasSaved(false);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }; // imageInputChange
 
   const submitUpdate = (event) => {
     event.preventDefault();
@@ -142,80 +183,190 @@ export const ItemDetail = () => {
     setHasSaved(true);
   }; // updateMove
 
-  if (!item.imagePath) {
-    item.path = 'https://unsplash.com/photos/YXWoEn5uOvg';
+  if (item && !item.imagePath) {
+    item.imagePath = 'https://unsplash.com/photos/YXWoEn5uOvg';
   }
   return (
     <>
       { isLoaded
         ? (
-          <main className={styles.container}>
-            <div className={styles.imgContainer}>
-              { item.imagePath && (
-                <img className={styles.img} src={item.imagePath} alt={`${item.description}`} />
-              )}
-            </div>
-            <form action="" className={styles.container__form}>
-              <fieldset className={styles.container__formGroup}>
-                <label className={styles.descriptionLabel} htmlFor="location">Description:
-                  <input
-                    type="text"
-                    id="description"
-                    name="description"
-                    className={styles.formControl}
-                    placeholder="Add Item Description ..."
-                    value={item.description}
-                    onChange={(e) => { handleControlledInputChange(e); }}
-                  />
-                </label>
+          <Container>
+            <Paper className={classes.paper}>
+              <Image
+                src={`${item.imagePath}`}
+                alt={`${item?.description}`}
+                />
+              <form>
+                <Grid container>
+                  <Grid item xs={3} />
+                  <Grid item xs={3}>
+                    <Typography style={{ height: '100%' }}>
+                      Description
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        id="description"
+                        name="description"
+                        aria-describedby="description"
+                        value={item.description}
+                        onChange={(e) => { handleControlledInputChange(e); }}
+                        inputProps={{
+                          readOnly: true,
+                          style: {
+                            textAlign: 'right',
+                          },
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={3} />
+                  <Grid item xs={3}>
+                    <Typography style={{ height: '100%' }}>
+                      Value
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        id="value"
+                        name="value"
+                        aria-describedby="value"
+                        value={`$${item?.value || '0.00'}`}
+                        onChange={(e) => { handleControlledInputChange(e); }}
+                        inputProps={{
+                          readOnly: true,
+                          style: {
+                            textAlign: 'right',
+                          },
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={3} />
+                  <Grid item xs={3}>
+                    <Typography style={{ height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
+                      Box
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl fullWidth>
+                      <Select
+                        value={selected}
+                        onChange={handleControlledDropDownChange}
+                        >
+                        <MenuItem value="" disabled>
+                          Boxes
+                        </MenuItem>
+                        {
+                          boxes.map((box) => (
+                            <MenuItem
+                              boxid={box.id}
+                              key={box.id}
+                              value={box.id}
+                            >
+                              { box.location }
+                            </MenuItem>
+                          ))
+                        }
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
+                    <FormGroup>
+                      <FormControlLabel
+                        labelPlacement="start"
+                        label="Fragile"
+                        control={
+                          (
+                            <Checkbox
+                              id="isFragile"
+                              checked={item.isFragile}
+                              color="default"
+                              onChange={handleCheckboxChange}
+                            />
+                            )
+                          }
+                          />
+                    </FormGroup>
+                  </Grid>
+                  <Grid item>
+                    <ButtonGroup
+                      color="default"
+                      aria-label="outlined secondary button group"
+                      style={{ marginLeft: '5px' }}
+                    >
+                      {/*
+                        <input className={classes.imgInputFile}
+                         id={`imageForItemId--${item.id}`}
+                          type="file" ref={imgInputFile}
+                           onChange={imageInputChange} */}
+                      {/* <input
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        id="raised-button-file"
+                        multiple
+                        type="file"
+                        onChange={handlePhotoChange}
+                      /> */}
+                      <Button
+                        id="camera"
+                        type="file"
+                      >
+                        Camera
+                      </Button>
+                      <Button
+                        className={classes.delete}
+                        id={`btn--delete-${item.id}`}
+                        type="button"
+                        onClick={handleDelete}
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        id={`btn--update-${item.id}`}
+                        className={classes.update}
+                        type="submit"
+                        onClick={submitUpdate}
+                      >
+                        Update
+                      </Button>
+                    </ButtonGroup>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    id={`btn--view-${item.boxId}`}
+                    className={classes.view}
+                    variant="contained"
+                    type="button"
+                    component={NavLink}
+                    to={{
+                      pathname: `/boxes/${item.boxId}`,
+                    }}
+                  >
+                    View Box
+                  </Button>
+                </Grid>
+              </form>
 
-                <label className={styles.valueLabel} htmlFor="location">Value:
-                  <input
-                    type="text"
-                    id="value"
-                    name="value"
-                    className={styles.formControl}
-                    placeholder="Add Item value ..."
-                    value={item.value}
-                    onChange={(e) => { handleControlledInputChange(e); }}
-                  />
-                </label>
-
-                <label className={styles.container__dropdownLabel} htmlFor="container__dropdown">Current Box Assignment
-                  <select value={selected} id="container__dropdown" className={styles.formControl} onChange={handleControlledDropDownChange}>
-                    <option value="0">Select Move</option>
-                    {boxes.map((_box) => (
-                      <option boxid={_box.id} key={_box.id} value={_box.location}>
-                        {_box.location}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <NavLink to={`/boxes/${item.boxId}`} className={styles.container__navlink}>
-                  <button type="button" id={`btn--view-${item.boxId}`} className={styles.container__navlinkBtn}>View Box Assgined</button>
-                </NavLink>
-              </fieldset>
-
-              <fieldset className={styles.fragile__checkbox}>
-                <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile
-                  <input type="checkbox" id="isFragile" onChange={handleCheckboxChange} checked={item.isFragile} className={styles.formControl} />
-                </label>
-              </fieldset>
-
-              {/* <div className="form-group">
-              accept="image/*;capture=environment"
-              <input id={`imageForItemId--${item.id}`} className={styles.imgInputFile} type="file"
-                ref={imgInputFile} onChange={imageInputChange} />
-              </div> */}
-              <input className={styles.imgInputFile} id={`imageForItemId--${item.id}`} type="file" ref={imgInputFile} onChange={imageInputChange} />
-              <button className={styles.container__btn__camera} type="button" id="camera" onClick={handleImageUpload}>Camera</button>
-              <button className={styles.container__btn__submit} type="submit" id={`btn--update-${item.id}`} onClick={submitUpdate}>Update</button>
-              <button className={styles.container__btn__delete} type="button" id={`btn--delete-${item.id}`} onClick={handleDelete}>Delete</button>
-            </form>
-          </main>
+            </Paper>
+          </Container>
         )
-        : <>Loading .. </>}
+        : (
+          <Container>
+            <Box>
+              <Paper>
+                <Typography>
+                  Loading . . .
+                </Typography>
+              </Paper>
+            </Box>
+          </Container>
+        )}
     </>
   );
 };
