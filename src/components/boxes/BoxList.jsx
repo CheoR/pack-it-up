@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { Container, Box, Paper, Typography, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
 import { userStorageKey, userStorageUserName } from '../auth/authSettings';
 import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
@@ -8,9 +11,19 @@ import { ItemContext } from '../items/ItemProvider';
 import { BoxSummary } from './BoxSummary';
 import { Counter } from '../counter/Counter';
 import { getSum1 } from '../helpers/helpers';
-import styles from './boxList.module.css';
+
+const useStyles = makeStyles(() => ({
+  paper: {
+    height: '400px',
+  },
+  select: {
+    background: 'gray',
+  },
+}));
 
 export const BoxList = () => {
+  const classes = useStyles();
+
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const loggedInUserName = sessionStorage.getItem(userStorageUserName);
   const { moves, setMoves, getMoves } = useContext(MoveContext);
@@ -20,7 +33,7 @@ export const BoxList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [newBox, setNewBox] = useState({});
   const location = useLocation();
-  const [, setSelected] = useState(0);
+  const [selected, setSelected] = useState(moves[0].id);
 
   useEffect(() => {
     setIsLoading(true);
@@ -77,8 +90,9 @@ export const BoxList = () => {
     /*
       moveid - moveId, not option value.
     */
-    const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
-    const optionId = event.target.options[selectedIndex].getAttribute('moveid');
+    // const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
+    // const optionId = event.target.options[selectedIndex].getAttribute('moveid');
+    const optionId = event.target.value;
     const updateBox = { ...newBox };
 
     /*
@@ -94,32 +108,48 @@ export const BoxList = () => {
     <>
       { isLoaded
         ? (
-          <main className={styles.summary}>
-            <h1 className={styles.summary__header}>{`${loggedInUserName}'s Boxes`}</h1>
-            {
-              boxes.map((box) => <BoxSummary key={box.id} box={box} />)
-            }
-
-            <fieldset className={styles.container__formGroup}>
-              <label className={styles.usersMovesLabel} htmlFor="usersMoves">Assign To Move
-                <select id="usersMoves" className={styles.formControl} onChange={handleControlledDropDownChange} required>
-                  <option value="0">Select Move</option>
+          <Container>
+            <Box>
+              <Typography variant="h4" component="h1" align="center">
+                {`${loggedInUserName || 'User'}'s Boxes`}
+              </Typography>
+              {
+                boxes.map((box) => <BoxSummary key={box.id} box={box} />)
+              }
+              <FormControl fullWidth>
+                <InputLabel>Add Boxes To Move</InputLabel>
+                <Select
+                  className={classes.select}
+                  value={selected}
+                  onChange={handleControlledDropDownChange}
+                >
+                  <MenuItem value="" disabled>
+                    Moves
+                  </MenuItem>
                   {
                     moves.map((move) => (
-                      <option moveid={move.id} key={move.id} value={move.moveName}>{
-                        move.moveName
-                        }
-                      </option>
+                      <MenuItem moveid={move.id} key={move.id} value={move.id}>
+                        { move.moveName }
+                      </MenuItem>
                     ))
                   }
-                </select>
-              </label>
-            </fieldset>
-
-            <Counter objType={newBox} />
-          </main>
+                </Select>
+              </FormControl>
+              <Counter objType={newBox} />
+            </Box>
+          </Container>
         )
-        : <>Loading . . </>}
+        : (
+          <Container>
+            <Box>
+              <Paper>
+                <Typography>
+                  Loading . . .
+                </Typography>
+              </Paper>
+            </Box>
+          </Container>
+        )}
     </>
   ); // return
 };

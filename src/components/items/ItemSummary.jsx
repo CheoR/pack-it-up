@@ -1,10 +1,39 @@
 import React, { useContext } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
+import { TextField, Button, ButtonGroup, Box, Paper, Grid, FormControlLabel, FormGroup, Checkbox } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+import Image from 'material-ui-image';
+
 import { ItemContext } from './ItemProvider';
-import styles from './itemSummary.module.css';
+
+const useStyles = makeStyles(() => ({
+  paper: {
+    background: 'lightgray',
+  },
+  edit: {
+    background: 'lightgreen',
+    paddingLeft: '23px',
+    paddingRight: '23px',
+  },
+  delete: {
+    background: 'salmon',
+  },
+  grid: {
+    flewGrow: 1,
+    gridRowGap: '10px',
+    alignItems: 'center',
+    borderBottom: '1px solid black',
+    marginBottom: '5px',
+  },
+  column: {
+    flexDirection: 'column',
+  },
+}));
 
 export const ItemSummary = ({ item }) => {
+  const classes = useStyles();
   const { deleteItem } = useContext(ItemContext);
   const history = useHistory();
 
@@ -14,40 +43,118 @@ export const ItemSummary = ({ item }) => {
   }; // handleDelete
 
   return (
-    <section className={styles.summary}>
-      <div className={styles.summary__image_summary}>
-        { item.imagePath && (
-          <img className={styles.summary__image} src={item.imagePath} alt="User-defined" />
-        )}
-      </div>
-
-      <fieldset className={styles.move__checkbox}>
-        <label className={styles.move__checkboxLabel} htmlFor="summaryMove">Move
-          <input type="checkbox" id="summaryMove" checked={item.hasAssociatedMove} className={styles.formControl} readOnly />
-        </label>
-      </fieldset>
-      <fieldset className={styles.box__checkbox}>
-        <label className={styles.box__checkboxLabel} htmlFor="summaryBox">Box
-          <input type="checkbox" id="summaryBox" checked={item.hasAssociatedBox} className={styles.formControl} readOnly />
-        </label>
-      </fieldset>
-      <fieldset className={styles.fragile__checkbox}>
-        <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">Fragile
-          <input type="checkbox" id="summaryFragile" checked={item.isFragile} className={styles.formControl} readOnly />
-        </label>
-      </fieldset>
-
-      <div className={styles.summary__description}>Description</div>
-      <div className={styles.summary__description__description}>{`${item.description.substring(0, 5)}. . ` }</div>
-
-      <div className={styles.summary__value}>Value</div>
-      <div className={styles.summary__value__value}>${ item?.value ? item?.value : '0.00' }</div>
-
-      <NavLink to={`/items/${item.id}`} className={styles.container__navlink__edit}>
-        <button type="button" id={`btn--edit-${item.id}`} className={styles.container__navlinkBtn__edit}>Edit</button>
-      </NavLink>
-
-      <button type="button" id={`btn--delete-${item?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
-    </section>
+    <Box component="section">
+      <Paper className={classes.paper}>
+        <Grid container className={classes.grid}>
+          {/* COLUMN 1 */}
+          <Grid item xs={2} className={classes.column} style={{ background: 'pink' }}>
+            <Paper>
+              <Image
+                src={item.imagePath || 'https://via.placeholder.com/300'}
+                alt="User-defined"
+              />
+            </Paper>
+          </Grid>
+          {/* COLUMN 2 */}
+          <Grid item xs={3} className={classes.column} style={{ marginRight: '15px' }}>
+            <FormGroup>
+              <FormControlLabel
+                labelPlacement="start"
+                label="Move"
+                control={
+                  (
+                    <Checkbox
+                      checked={item.hasAssociatedMove}
+                      name="summaryMove"
+                      color="default"
+                    />
+                  )
+                }
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormControlLabel
+                labelPlacement="start"
+                label="Box"
+                control={
+                  (
+                    <Checkbox
+                      checked={item.hasAssociatedBox}
+                      name="summaryBox"
+                      color="default"
+                    />
+                  )
+                }
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormControlLabel
+                labelPlacement="start"
+                label="Fragile"
+                control={
+                  (
+                    <Checkbox
+                      checked={item.isFragile}
+                      name="summaryFragile"
+                      color="default"
+                    />
+                  )
+                }
+              />
+            </FormGroup>
+          </Grid>
+          {/* COLUMN 3 */}
+          <Grid item xs={6} className={classes.column}>
+            <form>
+              <TextField
+                id="itemDescription"
+                label="Description"
+                defaultValue={`${item.description.substring(0, 13)}. . `}
+                inputProps={{
+                  readOnly: true,
+                  style: {
+                    textAlign: 'right',
+                  },
+                }}
+                />
+              <TextField
+                id="value"
+                label="Value"
+                defaultValue={`$${item?.value ? item?.value : '0.00'}`}
+                inputProps={{
+                  readOnly: true,
+                  style: {
+                    textAlign: 'right',
+                  },
+                }}
+                />
+              <ButtonGroup
+                color="default"
+                aria-label="outlined secondary button group"
+                style={{ marginLeft: '5px' }}
+              >
+                <Button
+                  id={`btn--delete-${item?.id}`}
+                  className={classes.delete}
+                  type="button"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+                <Button
+                  id={`btn--edit-${item.id}`}
+                  className={classes.edit}
+                  type="button"
+                  component={NavLink}
+                  to={`/items/${item.id}`}
+                >
+                  Edit
+                </Button>
+              </ButtonGroup>
+            </form>
+          </Grid>
+        </Grid>
+      </Paper>
+    </Box>
   );
 };

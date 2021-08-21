@@ -1,8 +1,6 @@
-/* eslint-disable */
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { Container, Grid, Box, Paper, Typography, FormControl, Input, FormHelperText, InputLabel} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Container, Box, Paper, Typography, FormControl, Input, InputLabel } from '@material-ui/core';
 
 import { userStorageKey, userStorageUserName } from '../auth/authSettings';
 import { MoveSummary } from './MoveSummary';
@@ -14,14 +12,7 @@ import { Counter } from '../counter/Counter';
 // import styles from './moveList.module.css';
 import { getSum2 } from '../helpers/helpers';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    height: "400px",
-  },
-}));
-
 export const MoveList = () => {
-  const classes = useStyles()
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const loggedInUserName = sessionStorage.getItem(userStorageUserName);
   const { moves, getMovesByUserId, setMoves, addMove } = useContext(MoveContext);
@@ -98,13 +89,13 @@ export const MoveList = () => {
     */
 
     const newformField = { ...formField };
-    newformField.type[event.target.id] = inputRef.current.value; // event.target.value
-
+    newformField.type[event.target.id] = event.target.value;
+    // newformField.type[event.target.id] = inputRef.current.value; // event.target.value
     setFormField(newformField);
   }; // handleControlledInputChange
-  
+
   if (isLoading) return <div>Loading</div>;
-  
+
   return (
     <>
       {
@@ -117,14 +108,15 @@ export const MoveList = () => {
                 </Typography>
                 {
                   moves.map((move) => <MoveSummary key={move.id} move={move} />)
-                }             
-                <form style={{ align: 'center', border: '1px solid red', alignItems: 'center' }}>
-                  <FormControl style={{ width: '100%'}}>
+                }
+                <form style={{ align: 'center', alignItems: 'center' }}>
+                  <FormControl style={{ width: '100%' }}>
                     <InputLabel htmlFor="moveName">Move Name</InputLabel>
                     <Input
                       id="moveName"
                       aria-describedby="moveName"
-                      onChange={(e) => {handleControlledInputChange(e)}}
+                      value={formField.type.moveName}
+                      onChange={(e) => { handleControlledInputChange(e); }}
                     />
                     {/* <FormHelperText id="moveName">Move Name</FormHelperText> */}
                   </FormControl>
@@ -134,7 +126,7 @@ export const MoveList = () => {
             </Container>
           )
           : (
-            <Container className={classes.root}>
+            <Container>
               <Box>
                 <Paper>
                   <Typography>
