@@ -115,11 +115,11 @@ export const Counter = ({ objType }) => {
   return (
     <Box>
       <Paper className={classes.paper}>
-        <box className={classes.btnGroup} color="default" aria-label="outlined primary button group">
+        <Box className={classes.btnGroup} color="default" aria-label="outlined primary button group">
           <Button className={classes.btnGroup__minus} type="button" onClick={decrementNum}>-</Button>
           <Button className={classes.btnGroup__display} value={num} disabled>{ num }</Button>
           <Button className={classes.btnGroup__add} type="button" onClick={incrementNum}>+</Button>
-        </box>
+        </Box>
         <Button type="button" className={classes.addBtn} onClick={callAdd}>Add</Button>
       </Paper>
     </Box>
