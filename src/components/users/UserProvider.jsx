@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+// import { userStorageKey } from '../auth/authSettings';
 
 const baseURL = 'http://localhost:8088';
 
@@ -9,12 +10,7 @@ export const UserProvider = (props) => {
 
   const getUsers = () => fetch(`${baseURL}/users`)
     .then((res) => res.json())
-    .then(setUsers)
-    .then(() => {
-      console.log('---userprovider');
-      console.table(users);
-      console.log('---userprovider');
-    }); // getUsers
+    .then(setUsers);
 
   return (
     <UserContext.Provider value={{

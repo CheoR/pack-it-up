@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, Link, useHistory } from 'react-router-dom';
 import { AppBar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -54,7 +54,25 @@ const useStyles = makeStyles((theme) => ({
 
 export const PackItUp = () => {
   const classes = useStyles();
+  const history = useHistory();
+
   const [value, setValue] = React.useState(0);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  useEffect(() => {
+    const user = sessionStorage.getItem(userStorageKey);
+    if (user) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const logout = (event) => {
+    event.preventDefault();
+    sessionStorage.removeItem('app_user_id');
+    sessionStorage.removeItem('app_user_username');
+    setIsLoggedIn(false);
+    history.push('/');
+  };
 
   return (
     <>
@@ -64,22 +82,38 @@ export const PackItUp = () => {
             <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
-            {/* <Typography variant="h6" className={classes.title}>
-              PackItUp
-            </Typography> */}
             <div className={classes.imgBlock}>
               <img src={logo} className={classes.img} alt="Pack It Up Logo" />
             </div>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/login"
-            >
-              Login
-            </Button>
+            {
+              isLoggedIn
+                ? (
+                  <Button
+                    color="inherit"
+                    onClick={logout}
+                    component={Link}
+                    to="/"
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    color="inherit"
+                    component={Link}
+                    to="/login"
+                  >
+                    Login
+                  </Button>
+                )
+            }
+
           </Toolbar>
+          {
+            sessionStorage.getItem(userStorageKey)
+              ? <Navbar />
+              : <></>
+          }
         </AppBar>
-        { sessionStorage.getItem(userStorageKey) ? <Navbar /> : <></> }
         <Switch>
           <Route exact path="/">
             <LandingPage />
@@ -133,7 +167,6 @@ export const PackItUp = () => {
           <BottomNavigationAction label="LinkedIn" icon={<LinkedInIcon />} />
           <BottomNavigationAction label="GitHub" icon={<GitHubIcon />} />
           <BottomNavigationAction label="Portfolio" icon={<LibraryBooksIcon />} />
-
         </BottomNavigation>
         {/* eslint-disable-next-line react/jsx-closing-tag-location */}
       </ItemProvider></BoxProvider></MoveProvider></UserProvider>

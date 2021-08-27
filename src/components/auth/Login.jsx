@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useContext, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -9,37 +11,40 @@ import Paper from '@material-ui/core/Paper';
 import { authApi, userStorageKey, userStorageUserName } from './authSettings';
 import { UserContext } from '../users/UserProvider';
 
-export const Login = () => {
-  const useStyles = makeStyles((theme) => ({
-    main: {
-      height: '75vh',
-      marginBottom: theme.spacing(2),
-    },
-    paper: {
-      position: 'relative',
-      marginTop: theme.spacing(2),
-      padding: `${theme.spacing(2)}px ${theme.spacing(1)}px`,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      maxWidth: '80%',
-      margin: '0 auto',
-      border: '1px solid black',
-    },
-    grid: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      margin: '0 auto',
-    },
-    form: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-    },
-  }));
+const useStyles = makeStyles((theme) => ({
+  main: {
+    height: '75vh',
+    marginBottom: theme.spacing(2),
+  },
+  paper: {
+    position: 'relative',
+    marginTop: theme.spacing(2),
+    padding: `${theme.spacing(2)}px ${theme.spacing(1)}px`,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    maxWidth: '80%',
+    margin: '0 auto',
+    border: '1px solid black',
+  },
+  grid: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '0 auto',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+}));
 
+export const Login = () => {
+  const classes = useStyles();
+
+  // const { users, getUsers } = useContext(UserContext);
+  const { getUsers, getUserById } = useContext(UserContext);
   const [loginUser, setLoginUser] = useState({ email: '' });
-  const { users, getUsers } = useContext(UserContext);
   const history = useHistory();
 
   const handleInputChange = (event) => {
@@ -50,40 +55,30 @@ export const Login = () => {
 
   const existingUserCheck = () => fetch(`${authApi.localApiBaseUrl}/${authApi.endpoint}?email=${loginUser.email}`)
     .then((res) => res.json())
-    .then((user) => (user.length ? user[0] : false)); // existingUserCheck
+    .then((user) => (user.length ? user[0] : false)); // existingUserCheck, user[0] : user object
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(`lgged in user: ${loginUser.email}`);
     existingUserCheck()
-      .then((exists) => {
-        if (exists) {
-          sessionStorage.setItem(userStorageKey, exists.id);
-          return exists;
-        }
-        return false;
-      })
-      .then((exists) => {
-        if (exists) {
+      .then((userObj) => {
+        if (userObj) {
           getUsers()
             .then(() => {
-              console.warn('token set');
-              console.log('users table');
-              console.table(users);
-              console.log('-----');
-              console.log(`userid: ${exists.id}`);
-              const loggedInUser = users.find((user) => user.id === exists.id);
-              console.log(`loggedInUser: ${loggedInUser}`);
-              console.table(loggedInUser);
-              // sessionStorage.setItem(userStorageKey, exists.id);
-              sessionStorage.setItem(userStorageUserName, loggedInUser);
+              sessionStorage.setItem(userStorageUserName, userObj.username);
+              sessionStorage.setItem(userStorageKey, userObj.id);
               history.push('/users');
+            })
+            .catch((err) => {
+              console.error(`Setting Error: ${err.message}`);
+              history.push('/login');
             });
         }
+        history.push('/login');
+      })
+      .catch((err) => {
+        console.error(`Error: ${err.message}`);
       });
   }; // handleLogin
-
-  const classes = useStyles();
 
   return (
     <div className={classes.main}>
