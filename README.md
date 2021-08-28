@@ -45,6 +45,9 @@ GET, POST, PUT, DELETE supported for the following routes
 
 ## Roadmap
 
+- [ ] Port project to the MERN stack.
+- [ ] Style with Material-Ui.
+- [ ] Live launch.
 - [ ] Encode item/box/move data as a QR code that can be printed out as a label for shipping.
 - [ ] Add a complentary QR decoding, so user can scan QR on a box and get information about its contents (if user has authorization). User can limit what data 3rd parties (movers, storage management, ect) can see.
 
