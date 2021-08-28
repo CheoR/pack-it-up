@@ -1,4 +1,4 @@
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { userStorageKey, userStorageUserName } from '../auth/authSettings';
@@ -8,7 +8,7 @@ import './navbar.css';
 export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { users, getUsers } = useContext(UserContext);
-  const history = useHistory();
+  // const history = useHistory();
 
   useEffect(() => {
     getUsers()
@@ -31,14 +31,14 @@ export const Navbar = () => {
       }); // then
   }, [isLoggedIn]); // useEffect
 
-  const handleLogout = (event) => {
-    event.preventDefault();
+  // const handleLogout = (event) => {
+  //   event.preventDefault();
 
-    sessionStorage.removeItem('app_user_id');
-    sessionStorage.removeItem('app_user_username');
-    setIsLoggedIn(false);
-    history.push('/');
-  };
+  //   sessionStorage.removeItem('app_user_id');
+  //   sessionStorage.removeItem('app_user_username');
+  //   setIsLoggedIn(false);
+  //   history.push('/');
+  // };
 
   return (
     <nav className="navbar">
@@ -58,9 +58,9 @@ export const Navbar = () => {
         <li className="navbar__li">
           <Link className="navbar__link" to="/Settings">Settings</Link>
         </li>
-        <li className="navbar__li">
+        {/* <li className="navbar__li">
           <button type="button" className="navbar__link" onClick={handleLogout}>Logout</button>
-        </li>
+        </li> */}
       </ul>
     </nav>
   );
