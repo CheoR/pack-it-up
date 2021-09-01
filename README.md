@@ -1,12 +1,6 @@
 <img src="./src/assets/images/PackItUpLogo.png" alt="Pack It Up Logo" />
 
-# Introduction
-
-Hi, my name's Cheo.
-
-This is my front-end capstone project.
-
-## What is PackItUp
+# PackItUp
 
 PackItUp is a moving/storage CRUD app created with React, HTML, CSS, Fetch API and json-server to help users keep track of what items they pack into boxes for moving/storage.
 
@@ -14,15 +8,43 @@ Initial design made with Figma and the entity relational diagram made with diagr
 
 Issue tickets follow [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development#Behavioral_specifications), Behavior-Driven Development and use Github Project board to track issue lifecyles.
 
-## Capabilities
+# About Me
+
+Hi, my name's Cheo.
+
+This is my front-end capstone project for Nashville Software School.
+
+## 🔗 Links
+
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://cheor.github.io/portfolio/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/cheo-roman/)
+
+## Table of contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Endpoints](#endpoints)
+- [Demo](#demo)
+- [ERD](#erd)
+- [Layout](#layout)
+- [Cloning](#cloning)
+- [Running Tests](#running-tests)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
+
+## Features
 
 - [x] User should be able to add/remove/update item(s).
 
-- [x] User should be able to add/remove/update boxe(s).
+- [x] User should be able to add/remove/update box(es).
 
 - [x] User should be able to add/remove/update move(s).
 
 - [x] User should be able to link/delink items from boxes.
+
+- [x] User should be able to link/delink boxes from moves.
 
 - [x] User should not be able to modifiy other user's information.
 
@@ -32,28 +54,9 @@ Issue tickets follow [BDD](https://en.wikipedia.org/wiki/Behavior-driven_develop
 
 - [x] User should only be able to add/remove/edit boxes, items if they are logged in.
 
-## Endpoints
+- [x] Boxes should automatically aggregate and update its information pertaining to its contents.
 
-GET, POST, PUT, DELETE supported for the following routes
-
-- /users
-- /users/${id}
-- /boxes
-- /boxes/${id}
-- /items
-- /items/${id}
-
-## Roadmap
-
-- [ ] Port project to the MERN stack.
-- [ ] Style with Material-Ui.
-- [ ] Live launch.
-- [ ] Encode item/box/move data as a QR code that can be printed out as a label for shipping.
-- [ ] Add a complentary QR decoding, so user can scan QR on a box and get information about its contents (if user has authorization). User can limit what data 3rd parties (movers, storage management, ect) can see.
-
-## Demo
-
-<img src="./src/assets/screen-recording.gif" alt="Pack It Up App Demo">
+- [x] Moves should automatically aggregate and update its information pertaining to its boxes' contents.
 
 ## Tech Stack
 
@@ -61,6 +64,20 @@ GET, POST, PUT, DELETE supported for the following routes
 2. HTML
 3. CSS
 4. json-server
+
+## Endpoints
+
+GET, POST, PUT, DELETE supported for the following routes
+
+- /user
+- /boxes
+- /box/${id}
+- /items
+- /item/${id}
+
+## Demo
+
+<img src="./src/assets/screen-recording.gif" alt="Pack It Up App Demo">
 
 ## ERD
 
@@ -86,7 +103,7 @@ cd pack-it-up
 npm install
 ```
 
-## Testing Instructions
+## Running Tests
 
 After forking the repo.
 
@@ -104,6 +121,14 @@ In another tab, cd into `api` and run
 `json-server -p 8088 database.json`
 
 Please note, as of right now, running the above command including `-w` would cause json-serve to crash if user chooses to create 4 or more objects at once through the `ADD` button.
+
+## Roadmap
+
+- [_] Port project to the MERN stack.
+- [_] Style with Material-Ui.
+- [_] Live launch.
+- [_] Encode item/box/move data as a QR code that can be printed out as a label for shipping.
+- [_] Add a complentary QR decoding, so user can scan QR on a box and get information about its contents (if user has authorization). User can limit what data 3rd parties (movers, storage management, ect) can see.
 
 ## Contributing
 
