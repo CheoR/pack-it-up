@@ -5,10 +5,10 @@
     in the authApi.js in the auth directory.
 */
 export const authApi = {
-  localApiBaseUrl: "http://localhost:8088",
-  endpoint: "users"
-}
+  localApiBaseUrl: 'http://localhost:8088',
+  endpoint: 'users',
+};
 
 // The user id is saved under the key app_user_id in session Storage. Change below if needed!
-export const userStorageKey = "app_user_id"
-export const userStorageUserName = "app_user_username"
+export const userStorageKey = 'app_user_id';
+export const userStorageUserName = 'app_user_username';
