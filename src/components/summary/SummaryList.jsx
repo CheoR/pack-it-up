@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from '../boxes/BoxProvider';
@@ -9,23 +9,29 @@ import logo from '../../assets/images/PackItUpLogo.png';
 import styles from './summaryList.module.css';
 
 export const SummaryList = () => {
-  const { moves, getMoves } = useContext(MoveContext);
-  const { boxes, getBoxes } = useContext(BoxContext);
-  const { items, getItems } = useContext(ItemContext);
+  const { moves, getMovesByUserId } = useContext(MoveContext);
+  const { boxes, getBoxesByUserId } = useContext(BoxContext);
+  const { items, getItemsByUserId } = useContext(ItemContext);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const loggedInUserId = parseInt(sessionStorage.getItem('app_user_id'), 10);
-  const loggedInUser = sessionStorage.getItem('app_user_username');
+  const loggedInUsername = sessionStorage.getItem('app_user_username');
 
   useEffect(() => {
-    getMoves()
-      .then(getBoxes)
-      .then(getItems);
+    setIsLoading(true);
+    getMovesByUserId()
+      .then(getBoxesByUserId)
+      .then(getItemsByUserId)
+      .then(() => {
+        setIsLoading(false);
+      });
   }, []); // useEffect
 
   const usersMoves = {
     type: 'moves',
-    canUse: false,
-    collection: moves.filter((move) => move.userId === loggedInUserId),
+    canUse: !!moves.length,
+    collection: moves,
   };
 
   const usersBoxes = {
@@ -42,14 +48,13 @@ export const SummaryList = () => {
 
   const dataToRender = [usersMoves, usersBoxes, usersItems];
 
+  if (isLoading) return null;
+
   return (
     <div className={styles.summaryList}>
-      {/* <img src={logo} className={styles.summaryList__logo} alt="Pack It Up Logo"/>
-        <h1 className={styles.summaryList__header}>{ loggedInUser }'s Summary</h1> */}
-
       <div className={styles.summaryList__headerbox}>
         <img src={logo} className={styles.summaryList__logo} alt="Pack It Up Logo" />
-        <h1 className={styles.summaryList__header}>`${loggedInUser}&#poss Summary`</h1>
+        <h1 className={styles.summaryList__header}>{`${loggedInUsername}'s Summary`}</h1>
       </div>
       <Instructions />
       <Summary listOfTypes={dataToRender} />

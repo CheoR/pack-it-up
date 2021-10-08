@@ -9,6 +9,6 @@ export const authApi = {
   endpoint: 'users',
 };
 
-// The user id is saved under the key app_user_id in session Storage. Change below if needed!
+// The user id is saved under the key app_user_id in session Storage.
 export const userStorageKey = 'app_user_id';
 export const userStorageUserName = 'app_user_username';

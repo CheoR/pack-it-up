@@ -1,18 +1,53 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useHistory, useParams } from 'react-router-dom';
 
+import { Button, ButtonGroup, Container, Grid, Box, Paper, Typography, FormControl, Input, FormGroup, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+import Image from 'material-ui-image';
+
 import { userStorageKey } from '../auth/authSettings';
 import { ItemContext } from '../items/ItemProvider';
 import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
 import { getSum3 } from '../helpers/helpers';
-import styles from './boxDetail.module.css';
+
+const useStyles = makeStyles(() => ({
+  paper: {
+    background: 'lightgray',
+  },
+  update: {
+    background: 'lightgreen',
+    paddingLeft: '10px',
+    paddingRight: '10px',
+  },
+  delete: {
+    background: 'salmon',
+  },
+  grid: {
+    gridRowGap: '10px',
+    alignItems: 'center',
+    borderBottom: '1px solid black',
+    marginBottom: '5px',
+  },
+  formGroup: {
+    textAlign: 'center',
+  },
+  edit: {
+    minWidth: '100%',
+    margin: '25px 0',
+  },
+  view: {
+    minWidth: '100%',
+  },
+}));
 
 export const BoxDetail = () => {
+  const classes = useStyles();
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const { moves, setMoves, getMoves } = useContext(MoveContext);
-  const { boxes, getBoxes, updateBox, deleteBox } = useContext(BoxContext);
-  const { items, setItems, getItems } = useContext(ItemContext);
+  const { boxes, getBoxesByUserId, updateBox, deleteBox } = useContext(BoxContext);
+  const { items, setItems, getItemsByUserId } = useContext(ItemContext);
   const [formField, setFormField] = useState({
     userId: loggedInUserId,
     moveId: 0,
@@ -25,18 +60,20 @@ export const BoxDetail = () => {
   const [selected, setSelected] = useState('');
   const [box, setBox] = useState({});
   const { boxId } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     getMoves()
-      .then(getBoxes)
-      .then(getItems)
+      .then(getBoxesByUserId)
+      .then(getItemsByUserId)
       .then(() => setIsLoaded(true));
   }, []); // useEffect
 
   useEffect(() => {
     if (isLoaded && boxes) {
-      const _box = boxes.find((b) => b?.id === parseInt(boxId, 10));
+      const _box = boxes.find((thisBox) => thisBox?.id === parseInt(boxId, 10));
       setBox(_box);
+      _box.move = moves.find((thisMove) => thisMove?.id === _box.moveId);
       setMoves(moves.filter((move) => move?.userId === loggedInUserId));
       setItems(items.filter((item) => item?.boxId === _box?.id));
 
@@ -61,7 +98,6 @@ export const BoxDetail = () => {
     box.isFragile = items.some((item) => item?.isFragile);
   }
 
-  const history = useHistory();
   const handleDelete = (event) => {
     event.preventDefault();
     deleteBox(box?.id).then(() => history.push('/boxes'));
@@ -71,6 +107,13 @@ export const BoxDetail = () => {
     const newformField = { ...formField };
     newformField[event.target.id] = event.target.value;
 
+    // console.log(`
+    //   targetValue: ${event.target.value}
+    //   ======
+    //   targetOptions: ${event.target.options}
+    //   ======
+    //   targetOptionsSelectedIndex: ${event.target.options.selectedIndex}
+    // `)
     const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
     const optionId = event.target.options[selectedIndex].getAttribute('boxid');
 
@@ -96,7 +139,7 @@ export const BoxDetail = () => {
     const newformField = { ...formField };
 
     /*
-      Cleanup. Does not belong to ERD.
+    Cleanup. Does not belong to ERD.
     */
     delete newformField.usersMoves;
     updateBox(newformField);
@@ -108,73 +151,165 @@ export const BoxDetail = () => {
       {
         isLoaded
           ? (
-            <main className={styles.container}>
-              <img className={styles.container__image} src={`https://source.unsplash.com/featured/?${box?.location}`} alt={`${box?.location}`} />
-              <form className={styles.container__form}>
-                <fieldset className={styles.container__formGroup}>
-                  {/* eslint-disable-next-line */}
-                  <label className={styles.locationLable} htmlFor='location'>Location: </label>
-                  <input
-                    type="text"
-                    id="location"
-                    name="location"
-                    className={styles.formControl}
-                    placeholder="Add Box Location ..."
-                    value={formField.location}
-                    onChange={(e) => { handleControlledInputChange(e); }}
-                  />
-                  <div className={styles.container__value}>Value</div>
-                  <div className={styles.container__value__value}>${ box?.totalValue || '0.00' }</div>
-
-                  {/* eslint-disable-next-line */}
-                  <label className={styles.container__dropdownLabel} htmlFor='usersMoves'>Current Move Assignment</label>
-                  {/* excluding value={selected} shows selected move,
-                    including it always shows default */}
-                  <select id="usersMoves" value={selected} className={styles.formControl} onChange={handleControlledDropDownChange}>
-                    <option value="0">Move</option>
-                    {moves.map((move) => (
-                      <option boxid={move.id} key={move.id} value={move.moveName}>
-                        {move.moveName}
-                      </option>
-                    ))}
-                  </select>
-                </fieldset>
-
-                <div className={styles.container__itemCount}>
-                  <div className={styles.container__itemCount__count}>{ box?.totalItems }</div>
-                  <div className={styles.container__itemCount__item}>Items</div>
-                </div> {/* container__itemCount */}
-                <NavLink
-                  to={
-                    {
-                      pathname: '/items',
-                      state: {
-                        box: parseInt(boxId, 10),
-                      },
-                    }
-                  }
-                  className={styles.container__navlink}>
-                  <button type="button" id="btn--edit-items" className={styles.container__navlinkBtn}>
-                    add/update items
-                  </button>
-                </NavLink>
-                <NavLink to={`/moves/${box?.moveId}`} className={styles.container__navlink__view}>
-                  <button type="button" id="btn--viewMove" className={styles.container__navlinkBtn__view}>view move</button>
-                </NavLink>
-
-                <fieldset className={styles.fragile__checkbox}>
-                  {/* eslint-disable-next-line */}
-                  <label className={styles.fragie__checkboxLabel} htmlFor='isFragile'>Fragile</label>
-                  <input type="checkbox" id="isFragile" checked={box?.isFragile} className={styles.formControl} readOnly />
-                </fieldset>
-
-                <button className={styles.container__btn__submit} type="submit" onClick={submitUpdate}>Update</button>
-                <button type="button" id={`btn--delete-${box?.id}`} className={styles.container__btn__delete} onClick={handleDelete}>Delete</button>
-              </form>
-            </main>
+            <Container>
+              <Paper className={classes.paper}>
+                <Image
+                  src={`https://source.unsplash.com/featured/?${box?.location}`}
+                  alt={`${box?.location}`}
+                />
+                <form>
+                  <Grid container>
+                    <Grid item xs={3} />
+                    <Grid item xs={3}>
+                      <Typography style={{ height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
+                        Location
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          id="location"
+                          name="location"
+                          aria-describedby="location"
+                          value={formField.location}
+                          onChange={(e) => { handleControlledInputChange(e); }}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={3} />
+                    <Grid item xs={3}>
+                      <Typography style={{ height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
+                        Value
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          id="value"
+                          name="value"
+                          aria-describedby="value"
+                          value={`$${box?.totalValue || '0.00'}`}
+                          onChange={(e) => { handleControlledInputChange(e); }}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={3} />
+                    <Grid item xs={3}>
+                      <Typography style={{ height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
+                        Move
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormControl fullWidth>
+                        <Select value={selected} onChange={handleControlledDropDownChange}>
+                          <MenuItem value="" disabled>
+                            Moves
+                          </MenuItem>
+                          {
+                            moves.map((move) => (
+                              <MenuItem boxid={move.id} key={move.id} value={move.id}>
+                                { move.moveName }
+                              </MenuItem>
+                            ))
+                          }
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item>
+                      <Typography>
+                        { box?.totalItems } Items
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <FormGroup>
+                        <FormControlLabel
+                          labelPlacement="start"
+                          label="Fragile"
+                          control={
+                            (
+                              <Checkbox
+                                checked={box.isFragile}
+                                name="summaryFragile"
+                                color="default"
+                              />
+                            )
+                          }
+                        />
+                      </FormGroup>
+                    </Grid>
+                    <Grid item>
+                      <ButtonGroup
+                        color="default"
+                        aria-label="outlined secondary button group"
+                        style={{ marginLeft: '5px' }}
+                      >
+                        <Button
+                          className={classes.delete}
+                          id={`btn--delete-${box?.id}`}
+                          type="button"
+                          onClick={handleDelete}
+                        >
+                          Delete
+                        </Button>
+                        <Button
+                          className={classes.update}
+                          type="submit"
+                          onClick={submitUpdate}
+                        >
+                          Update
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        className={classes.edit}
+                        variant="contained"
+                        id="btn--edit-items"
+                        type="button"
+                        component={NavLink}
+                        to={{
+                          pathname: '/items',
+                          state: {
+                            box: parseInt(boxId, 10),
+                          },
+                        }}
+                      >
+                        add/update items
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        className={classes.view}
+                        variant="contained"
+                        id="btn--viewMove"
+                        type="button"
+                        component={NavLink}
+                        to={{
+                          pathname: `/moves/${box?.moveId}`,
+                        }}
+                      >
+                        view move
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </form>
+              </Paper>
+            </Container>
           )
-          : <> Loading ... </>
-    }
+          : (
+            <Container>
+              <Box>
+                <Paper>
+                  <Typography>
+                    Loading . . .
+                  </Typography>
+                </Paper>
+              </Box>
+            </Container>
+          )
+      }
     </>
   );
 };

@@ -1,20 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {  ThemeProvider } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+
+import { defaultTheme } from './components/themes/themes';
 import { PackItUp } from './components/PackItUp';
 import './index.css';
-// import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <PackItUp />
+      <ThemeProvider theme={defaultTheme}>
+        <CssBaseline />
+        <PackItUp />
+      </ThemeProvider>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();

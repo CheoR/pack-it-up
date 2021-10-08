@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+// import { userStorageKey } from '../auth/authSettings';
 
 const baseURL = 'http://localhost:8088';
 
@@ -16,8 +17,9 @@ export const UserProvider = (props) => {
       users,
       getUsers,
       setUsers,
-    }}>
-      {props.children}
+    }}
+    >
+      { props.children }
     </UserContext.Provider>
   );
 };
