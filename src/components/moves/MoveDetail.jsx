@@ -66,7 +66,7 @@ export const MoveDetail = () => {
       json-server only deletes boxes linked to current move and not thier associated items.
       So delete associated items first (if any) before delete move and boxes.
     */
-    // deleteMove(move?.id).then(() => history.push("/moves"))
+    // deleteMove(move?.id).then(() => history.push('/moves'))
 
     const linkedBoxesIds = boxes.filter((box) => box.moveId === move.id).map((box) => box.id);
     const linkedItemsIds = items.filter((item) => linkedBoxesIds.includes(
