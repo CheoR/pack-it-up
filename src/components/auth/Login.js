@@ -38,12 +38,13 @@ export const Login = () => {
     <main className={styles.container__login}>
       <dialog className={`${styles.dialog} ${styles.dialog__auth}`} open={existDialog}>
         <div className={styles.dialog__message}>User does not exist</div>
-        <button className={styles.button__close} onClick={(e) => setExistDialog(false)}>Close</button>
+        <button type="button" className={styles.button__close} onClick={(e) => { e.preventDefault(); setExistDialog(false); }}>Close</button>
       </dialog>
       <section>
         <form className={styles.containerform__login} onSubmit={handleLogin}>
           <h1 className={styles.containerForm__header}>PackItUp</h1>
           <fieldset className={styles.container__fieldset}>
+            {/* eslint-disable-next-line */}
             <label className={styles.emailLable} htmlFor="email"> Email address </label>
             <input
               type="email"
@@ -51,7 +52,6 @@ export const Login = () => {
               className={styles.formControl}
               placeholder="Email address"
               required
-              autoFocus
               value={loginUser.email}
               onChange={handleInputChange} />
           </fieldset>

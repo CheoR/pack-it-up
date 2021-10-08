@@ -4,38 +4,40 @@
  TODO: instead of fetching objcts, only fetch ids
 */
 
-export const getSum1 = ( valueList ) => {
- /*
-  Return arregate value of items/boxes/moves.
- */
+export const getSum1 = (values) => {
+  /*
+    Return arregate value of items/boxes/moves.
+  */
 
- if(!valueList.length) return 0;
+  let valueList = [...values];
 
- if (valueList && valueList[0].value) {
-  valueList = valueList.map(item => item.value)
- }
+  if (!valueList.length) return 0;
 
- return valueList.reduce((acc, curr) => acc + curr, 0)
-}
+  if (valueList && valueList[0].value) {
+    valueList = valueList.map((item) => item.value);
+  }
 
-export const getSum2 = ( valueList ) => {
- /*
-  Using .reduce on list of objects results with incorrect sum values.
- */
+  return valueList.reduce((acc, curr) => acc + curr, 0);
+};
 
- if(!valueList.length) return 0;
+export const getSum2 = (valueList) => {
+  /*
+    Using .reduce on list of objects results with incorrect sum values.
+  */
 
- const numList = valueList.map(item => item.value)
+  if (!valueList.length) return 0;
 
- return numList.reduce((acc, curr) => acc + curr, 0)
-}
+  const numList = valueList.map((item) => item.value);
 
-export const getSum3 = ( valueList ) => {
- /*
-  Using .reduce on list of objects results with incorrect sum values.
- */
+  return numList.reduce((acc, curr) => acc + curr, 0);
+};
 
- if(!valueList.length) return 0;
+export const getSum3 = (valueList) => {
+  /*
+    Using .reduce on list of objects results with incorrect sum values.
+  */
 
- return valueList.reduce((acc, curr) => acc + curr, 0)
-}
+  if (!valueList.length) return 0;
+
+  return valueList.reduce((acc, curr) => acc + curr, 0);
+};
