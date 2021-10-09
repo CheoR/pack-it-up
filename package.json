@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "cors": "^2.8.5",
+    "env-cmd": "^10.1.0",
     "express": "^4.17.1",
     "material-ui-image": "^3.3.2",
     "react": "^17.0.2",
@@ -19,8 +20,9 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f .env.prod react-scripts start",
+    "start-local": "env-cmd -f .env.local react-scripts start",
+    "build": "env-cmd -f .env.prod react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "npx nodemon server.js",

@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
-// import { userStorageKey } from '../auth/authSettings';
+import { authApi } from '../auth/authSettings';
 
-const baseURL = 'http://localhost:8088';
+const { baseURL } = authApi;
 
 export const UserContext = createContext();
 
