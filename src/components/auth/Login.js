@@ -5,6 +5,7 @@ import { authApi, userStorageKey } from './authSettings';
 import styles from './Login.module.css';
 
 export const Login = () => {
+  console.log('NOT LOGIN.JSX');
   const [loginUser, setLoginUser] = useState({ email: '' });
   const [existDialog, setExistDialog] = useState(false);
 
@@ -18,7 +19,8 @@ export const Login = () => {
 
   const existingUserCheck = () => fetch(`${authApi.localApiBaseUrl}/${authApi.endpoint}?email=${loginUser.email}`)
     .then((res) => res.json())
-    .then((user) => (user.length ? user[0] : false));
+    .then((user) => (user.length ? user[0] : false))
+    .catch((err) => console.error(`Error: ${err}`));
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -26,6 +28,8 @@ export const Login = () => {
     existingUserCheck()
       .then((exists) => {
         if (exists) {
+          console.log('user exist');
+          console.table(exists);
           sessionStorage.setItem(userStorageKey, exists.id);
           history.push('/users');
         } else {

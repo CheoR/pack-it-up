@@ -1,6 +1,4 @@
-/* eslint-disable */
-
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { Typography, FormControl, InputLabel, Input, FormHelperText, Grid } from '@material-ui/core';
@@ -9,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
 import { authApi, userStorageKey, userStorageUserName } from './authSettings';
-import { UserContext } from '../users/UserProvider';
+// import { UserContext } from '../users/UserProvider';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -40,10 +38,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Login = () => {
+  console.log('LOGIN.JSX');
+
   const classes = useStyles();
 
   // const { users, getUsers } = useContext(UserContext);
-  const { getUsers, getUserById } = useContext(UserContext);
+  // const { getUser, getUserById } = useContext(UserContext);
   const [loginUser, setLoginUser] = useState({ email: '' });
   const history = useHistory();
 
@@ -53,30 +53,36 @@ export const Login = () => {
     setLoginUser(newUser);
   };
 
-  const existingUserCheck = () => fetch(`${authApi.localApiBaseUrl}/${authApi.endpoint}?email=${loginUser.email}`)
-    .then((res) => res.json())
-    .then((user) => (user.length ? user[0] : false)); // existingUserCheck, user[0] : user object
+  const existingUserCheck = () => fetch(`${authApi.localApiBaseUrl}/${authApi.endpoint}?email=${loginUser.email}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  })
+    .then((res) => {
+      console.log('res');
+      console.table(res);
+      return res.json();
+    })
+    .then((user) => {
+      console.log('user');
+      console.table(user);
+      return (user.length ? user[0] : false);
+    }); // existingUserCheck, user[0] : user object
 
   const handleLogin = (e) => {
     e.preventDefault();
     existingUserCheck()
       .then((userObj) => {
         if (userObj) {
-          getUsers()
-            .then(() => {
-              sessionStorage.setItem(userStorageUserName, userObj.username);
-              sessionStorage.setItem(userStorageKey, userObj.id);
-              history.push('/users');
-            })
-            .catch((err) => {
-              console.error(`Setting Error: ${err.message}`);
-              history.push('/login');
-            });
+          sessionStorage.setItem(userStorageUserName, userObj.username);
+          sessionStorage.setItem(userStorageKey, userObj.id);
+          history.push('/users');
         }
-        history.push('/login');
       })
       .catch((err) => {
-        console.error(`Error: ${err.message}`);
+        console.error(`Setting Error: ${err.message}`);
+        history.push('/login');
       });
   }; // handleLogin
 

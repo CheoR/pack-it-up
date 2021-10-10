@@ -7,11 +7,11 @@ import './navbar.css';
 
 export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { users, getUsers } = useContext(UserContext);
+  const { users, getUser } = useContext(UserContext);
   // const history = useHistory();
 
   useEffect(() => {
-    getUsers()
+    getUser()
       .then(() => {
         const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
 

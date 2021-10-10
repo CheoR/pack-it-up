@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect } from 'react';
 import { Route, Switch, Link, useHistory } from 'react-router-dom';
 import { AppBar } from '@material-ui/core';
@@ -14,8 +16,9 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 
 import { userStorageKey } from './auth/authSettings';
-import { Login } from './auth/Login';
+import { Login } from './auth/Login.jsx';
 import { Register } from './auth/Register';
+import { TmpNavBar } from './navbar/TmpNavBar';
 
 import { LandingPage } from './routes/landingPage/LandingPage';
 import { Navbar } from './navbar/Navbar';
@@ -74,12 +77,15 @@ export const PackItUp = () => {
     history.push('/');
   };
 
+  /* eslint-enable */
+
   return (
     <>
       <UserProvider><MoveProvider><BoxProvider><ItemProvider>
-        <AppBar position="sticky">
+        {/* <AppBar position="sticky">
           <Toolbar>
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <IconButton edge="start" className={classes.menuButton}
+            color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
             <div className={classes.imgBlock}>
@@ -113,7 +119,8 @@ export const PackItUp = () => {
               ? <Navbar />
               : <></>
           }
-        </AppBar>
+        </AppBar> */}
+        <TmpNavBar />
         <Switch>
           <Route exact path="/">
             <LandingPage />

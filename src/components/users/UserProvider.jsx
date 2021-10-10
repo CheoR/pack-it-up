@@ -6,17 +6,17 @@ const { baseURL } = authApi;
 export const UserContext = createContext();
 
 export const UserProvider = (props) => {
-  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState([]);
 
-  const getUsers = () => fetch(`${baseURL}/users`)
+  const getUser = () => fetch(`${baseURL}/users`)
     .then((res) => res.json())
-    .then(setUsers);
+    .then(setUser);
 
   return (
     <UserContext.Provider value={{
-      users,
-      getUsers,
-      setUsers,
+      user,
+      getUser,
+      setUser,
     }}
     >
       { props.children }
