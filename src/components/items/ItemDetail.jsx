@@ -1,48 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 // useRef
-import { NavLink, useHistory, useLocation, useParams } from 'react-router-dom';
-
-import { Button, ButtonGroup, Container, Grid, Box, Paper, Typography, FormControl, Input, FormGroup, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-import Image from 'material-ui-image';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { userStorageKey } from '../auth/authSettings';
 import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from './ItemProvider';
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    background: 'lightgray',
-  },
-  update: {
-    background: 'lightgreen',
-    paddingLeft: '10px',
-    paddingRight: '10px',
-  },
-  delete: {
-    background: 'salmon',
-  },
-  grid: {
-    gridRowGap: '10px',
-    alignItems: 'center',
-    borderBottom: '1px solid black',
-    marginBottom: '5px',
-  },
-  formGroup: {
-    textAlign: 'center',
-  },
-  edit: {
-    minWidth: '100%',
-    margin: '25px 0',
-  },
-  view: {
-    minWidth: '100%',
-  },
-  imgInputFile: {
-    display: 'none',
-  },
-}));
+// import styles from './itemDetail.module.css';
 
 const defaultItem = {
   userId: 0,
@@ -58,8 +22,6 @@ const defaultItem = {
 };
 
 export const ItemDetail = () => {
-  const classes = useStyles();
-
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
 
   // uploadItemImage
@@ -70,7 +32,7 @@ export const ItemDetail = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasSaved, setHasSaved] = useState(false);
   const [item, setItem] = useState(defaultItem);
-  const [selected, setSelected] = useState('');
+  const [setSelected] = useState('');
 
   // const imgInputFile = useRef(null);
   let { itemId } = useParams();
@@ -105,6 +67,7 @@ export const ItemDetail = () => {
     }
   }, [hasSaved, isLoaded]); // useEffect
 
+  /* eslint-disable-next-line */
   const handleDelete = (event) => {
     event.preventDefault();
     deleteItem(item.id).then(() => history.push('/items'));
@@ -115,6 +78,7 @@ export const ItemDetail = () => {
   //   imgInputFile.current.click();
   // }; // handleImageUpload
 
+  /* eslint-disable-next-line */
   const handleControlledInputChange = (event) => {
     const newItem = { ...item };
 
@@ -125,6 +89,7 @@ export const ItemDetail = () => {
     setHasSaved(false);
   }; // handleControlledInputChange
 
+  /* eslint-disable-next-line */
   const handleCheckboxChange = (event) => {
     const newformField = { ...item };
     newformField[event.target.id] = event.target.checked;
@@ -132,6 +97,7 @@ export const ItemDetail = () => {
     setHasSaved(false);
   }; // handleCheckboxChange
 
+  /* eslint-disable-next-line */
   const handleControlledDropDownChange = (event) => {
     // const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
     // const updatedBoxId = event.target.options[selectedIndex].getAttribute('boxid');
@@ -168,6 +134,7 @@ export const ItemDetail = () => {
   //     .catch((err) => console.log(err));
   // }; // imageInputChange
 
+  /* eslint-disable-next-line */
   const submitUpdate = (event) => {
     event.preventDefault();
     const newItem = { ...item };
@@ -186,187 +153,189 @@ export const ItemDetail = () => {
   if (item && !item.imagePath) {
     item.imagePath = 'https://unsplash.com/photos/YXWoEn5uOvg';
   }
-  return (
-    <>
-      { isLoaded
-        ? (
-          <Container>
-            <Paper className={classes.paper}>
-              <Image
-                src={`${item.imagePath}`}
-                alt={`${item?.description}`}
-                />
-              <form>
-                <Grid container>
-                  <Grid item xs={3} />
-                  <Grid item xs={3}>
-                    <Typography style={{ height: '100%' }}>
-                      Description
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        id="description"
-                        name="description"
-                        aria-describedby="description"
-                        value={item.description}
-                        onChange={(e) => { handleControlledInputChange(e); }}
-                        inputProps={{
-                          readOnly: true,
-                          style: {
-                            textAlign: 'right',
-                          },
-                        }}
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={3} />
-                  <Grid item xs={3}>
-                    <Typography style={{ height: '100%' }}>
-                      Value
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        id="value"
-                        name="value"
-                        aria-describedby="value"
-                        value={`$${item?.value || '0.00'}`}
-                        onChange={(e) => { handleControlledInputChange(e); }}
-                        inputProps={{
-                          readOnly: true,
-                          style: {
-                            textAlign: 'right',
-                          },
-                        }}
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={3} />
-                  <Grid item xs={3}>
-                    <Typography style={{ height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
-                      Box
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <FormControl fullWidth>
-                      <Select
-                        value={selected}
-                        onChange={handleControlledDropDownChange}
-                        >
-                        <MenuItem value="" disabled>
-                          Boxes
-                        </MenuItem>
-                        {
-                          boxes.map((box) => (
-                            <MenuItem
-                              boxid={box.id}
-                              key={box.id}
-                              value={box.id}
-                            >
-                              { box.location }
-                            </MenuItem>
-                          ))
-                        }
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    <FormGroup>
-                      <FormControlLabel
-                        labelPlacement="start"
-                        label="Fragile"
-                        control={
-                          (
-                            <Checkbox
-                              id="isFragile"
-                              checked={item.isFragile}
-                              color="default"
-                              onChange={handleCheckboxChange}
-                            />
-                            )
-                          }
-                          />
-                    </FormGroup>
-                  </Grid>
-                  <Grid item>
-                    <ButtonGroup
-                      color="default"
-                      aria-label="outlined secondary button group"
-                      style={{ marginLeft: '5px' }}
-                    >
-                      {/*
-                        <input className={classes.imgInputFile}
-                         id={`imageForItemId--${item.id}`}
-                          type="file" ref={imgInputFile}
-                           onChange={imageInputChange} */}
-                      {/* <input
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                        id="raised-button-file"
-                        multiple
-                        type="file"
-                        onChange={handlePhotoChange}
-                      /> */}
-                      <Button
-                        id="camera"
-                        type="file"
-                      >
-                        Camera
-                      </Button>
-                      <Button
-                        className={classes.delete}
-                        id={`btn--delete-${item.id}`}
-                        type="button"
-                        onClick={handleDelete}
-                      >
-                        Delete
-                      </Button>
-                      <Button
-                        id={`btn--update-${item.id}`}
-                        className={classes.update}
-                        type="submit"
-                        onClick={submitUpdate}
-                      >
-                        Update
-                      </Button>
-                    </ButtonGroup>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    id={`btn--view-${item.boxId}`}
-                    className={classes.view}
-                    variant="contained"
-                    type="button"
-                    component={NavLink}
-                    to={{
-                      pathname: `/boxes/${item.boxId}`,
-                    }}
-                  >
-                    View Box
-                  </Button>
-                </Grid>
-              </form>
+  return (<div>ItemDetail</div>);
+  // return (
+  //   <>
+  //     { isLoaded
+  //       ? (
+  //         <Container>
+  //           <Paper className={styles.paper}>
+  //             <Image
+  //               src={`${item.imagePath}`}
+  //               alt={`${item?.description}`}
+  //               />
+  //             <form>
+  //               <Grid container>
+  //                 <Grid item xs={3} />
+  //                 <Grid item xs={3}>
+  //                   <Typography style={{ height: '100%' }}>
+  //                     Description
+  //                   </Typography>
+  //                 </Grid>
+  //                 <Grid item xs={6}>
+  //                   <FormControl>
+  //                     <Input
+  //                       type="text"
+  //                       id="description"
+  //                       name="description"
+  //                       aria-describedby="description"
+  //                       value={item.description}
+  //                       onChange={(e) => { handleControlledInputChange(e); }}
+  //                       inputProps={{
+  //                         readOnly: true,
+  //                         style: {
+  //                           textAlign: 'right',
+  //                         },
+  //                       }}
+  //                     />
+  //                   </FormControl>
+  //                 </Grid>
+  //                 <Grid item xs={3} />
+  //                 <Grid item xs={3}>
+  //                   <Typography style={{ height: '100%' }}>
+  //                     Value
+  //                   </Typography>
+  //                 </Grid>
+  //                 <Grid item xs={6}>
+  //                   <FormControl>
+  //                     <Input
+  //                       type="text"
+  //                       id="value"
+  //                       name="value"
+  //                       aria-describedby="value"
+  //                       value={`$${item?.value || '0.00'}`}
+  //                       onChange={(e) => { handleControlledInputChange(e); }}
+  //                       inputProps={{
+  //                         readOnly: true,
+  //                         style: {
+  //                           textAlign: 'right',
+  //                         },
+  //                       }}
+  //                     />
+  //                   </FormControl>
+  //                 </Grid>
+  //                 <Grid item xs={3} />
+  //                 <Grid item xs={3}>
+  //                   <Typography style={{
+  // height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
+  //                     Box
+  //                   </Typography>
+  //                 </Grid>
+  //                 <Grid item xs={6}>
+  //                   <FormControl fullWidth>
+  //                     <Select
+  //                       value={selected}
+  //                       onChange={handleControlledDropDownChange}
+  //                       >
+  //                       <MenuItem value="" disabled>
+  //                         Boxes
+  //                       </MenuItem>
+  //                       {
+  //                         boxes.map((box) => (
+  //                           <MenuItem
+  //                             boxid={box.id}
+  //                             key={box.id}
+  //                             value={box.id}
+  //                           >
+  //                             { box.location }
+  //                           </MenuItem>
+  //                         ))
+  //                       }
+  //                     </Select>
+  //                   </FormControl>
+  //                 </Grid>
+  //                 <Grid item>
+  //                   <FormGroup>
+  //                     <FormControlLabel
+  //                       labelPlacement="start"
+  //                       label="Fragile"
+  //                       control={
+  //                         (
+  //                           <Checkbox
+  //                             id="isFragile"
+  //                             checked={item.isFragile}
+  //                             color="default"
+  //                             onChange={handleCheckboxChange}
+  //                           />
+  //                           )
+  //                         }
+  //                         />
+  //                   </FormGroup>
+  //                 </Grid>
+  //                 <Grid item>
+  //                   <ButtonGroup
+  //                     color="default"
+  //                     aria-label="outlined secondary button group"
+  //                     style={{ marginLeft: '5px' }}
+  //                   >
+  //                     {/*
+  //                       <input className={styles.imgInputFile}
+  //                        id={`imageForItemId--${item.id}`}
+  //                         type="file" ref={imgInputFile}
+  //                          onChange={imageInputChange} */}
+  //                     {/* <input
+  //                       accept="image/*"
+  //                       style={{ display: 'none' }}
+  //                       id="raised-button-file"
+  //                       multiple
+  //                       type="file"
+  //                       onChange={handlePhotoChange}
+  //                     /> */}
+  //                     <Button
+  //                       id="camera"
+  //                       type="file"
+  //                     >
+  //                       Camera
+  //                     </Button>
+  //                     <Button
+  //                       className={styles.delete}
+  //                       id={`btn--delete-${item.id}`}
+  //                       type="button"
+  //                       onClick={handleDelete}
+  //                     >
+  //                       Delete
+  //                     </Button>
+  //                     <Button
+  //                       id={`btn--update-${item.id}`}
+  //                       className={styles.update}
+  //                       type="submit"
+  //                       onClick={submitUpdate}
+  //                     >
+  //                       Update
+  //                     </Button>
+  //                   </ButtonGroup>
+  //                 </Grid>
+  //               </Grid>
+  //               <Grid item xs={12}>
+  //                 <Button
+  //                   id={`btn--view-${item.boxId}`}
+  //                   className={styles.view}
+  //                   variant="contained"
+  //                   type="button"
+  //                   component={NavLink}
+  //                   to={{
+  //                     pathname: `/boxes/${item.boxId}`,
+  //                   }}
+  //                 >
+  //                   View Box
+  //                 </Button>
+  //               </Grid>
+  //             </form>
 
-            </Paper>
-          </Container>
-        )
-        : (
-          <Container>
-            <Box>
-              <Paper>
-                <Typography>
-                  Loading . . .
-                </Typography>
-              </Paper>
-            </Box>
-          </Container>
-        )}
-    </>
-  );
+  //           </Paper>
+  //         </Container>
+  //       )
+  //       : (
+  //         <Container>
+  //           <Box>
+  //             <Paper>
+  //               <Typography>
+  //                 Loading . . .
+  //               </Typography>
+  //             </Paper>
+  //           </Box>
+  //         </Container>
+  //       )}
+  //   </>
+  // );
 };

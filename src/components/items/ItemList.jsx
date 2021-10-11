@@ -1,28 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Container, Box, Paper, Typography, FormControl, Select, MenuItem, InputLabel } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-import { userStorageKey, userStorageUserName } from '../auth/authSettings';
+import { userStorageKey } from '../auth/authSettings';
 import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from './ItemProvider';
-import { ItemSummary } from './ItemSummary';
-import { Counter } from '../counter/Counter';
+// import { ItemSummary } from './ItemSummary';
+// import { Counter } from '../counter/Counter';
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    height: '400px',
-  },
-  select: {
-    background: 'gray',
-  },
-}));
+// import styles from './itemList.module.css';
 
 export const ItemList = () => {
-  const classes = useStyles();
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
-  const loggedInUserName = sessionStorage.getItem(userStorageUserName);
+  // const loggedInUserName = sessionStorage.getItem(userStorageUserName);
   const { items, getItemsByUserId, addItem } = useContext(ItemContext);
   const { boxes, setBoxes, getBoxesByUserId } = useContext(BoxContext);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -30,7 +19,7 @@ export const ItemList = () => {
   const [newItem, setNewItem] = useState({});
   const location = useLocation();
   console.log(`firt box id: ${boxes[0].id}`);
-  const [selected, setSelected] = useState(boxes[0].id || 0);
+  const [setSelected] = useState(boxes[0].id || 0);
 
   useEffect(() => {
     getBoxesByUserId()
@@ -81,6 +70,8 @@ export const ItemList = () => {
     item.hasAssociatedBox = !!item.boxId;
     item.hasAssociatedMove = !!item?.box?.moveId;
   });
+
+  /* eslint-disable-next-line */
   const handleControlledDropDownChange = (event) => {
     /*
     boxid - boxid, not option value.
@@ -101,52 +92,53 @@ export const ItemList = () => {
 
   if (!isLoaded) return null;
 
-  return (
-    <>
-      { isLoaded
-        ? (
-          <Container>
-            <Box>
-              <Typography variant="h4" component="h1" align="center">
-                {`${loggedInUserName}'s Items`}
-              </Typography>
-              {
-                itemsData.map((item) => <ItemSummary key={item.id} item={item} />)
-              }
-              <FormControl fullWidth>
-                <InputLabel>Add Item To Box</InputLabel>
-                <Select
-                  className={classes.select}
-                  value={selected}
-                  onChange={handleControlledDropDownChange}
-                >
-                  <MenuItem value="" disabled>
-                    Boxes
-                  </MenuItem>
-                  {
-                    boxes.map((box) => (
-                      <MenuItem boxid={box.id} key={box.id} value={box.id}>
-                        { box.location }
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
-              </FormControl>
-              <Counter objType={newItem} />
-            </Box>
-          </Container>
-        )
-        : (
-          <Container>
-            <Box>
-              <Paper>
-                <Typography>
-                  Loading . . .
-                </Typography>
-              </Paper>
-            </Box>
-          </Container>
-        )}
-    </>
-  );
+  return (<div>ItemList</div>);
+  // return (
+  //   <>
+  //     { isLoaded
+  //       ? (
+  //         <Container>
+  //           <Box>
+  //             <Typography variant="h4" component="h1" align="center">
+  //              {`${loggedInUserName}'s Items`}
+  //             </Typography>
+  //             {
+  //               itemsData.map((item) => <ItemSummary key={item.id} item={item} />)
+  //             }
+  //             <FormControl fullWidth>
+  //               <InputLabel>Add Item To Box</InputLabel>
+  //               <Select
+  //                 className={styles.select}
+  //                 value={selected}
+  //                 onChange={handleControlledDropDownChange}
+  //               >
+  //                 <MenuItem value="" disabled>
+  //                   Boxes
+  //                 </MenuItem>
+  //                 {
+  //                   boxes.map((box) => (
+  //                     <MenuItem boxid={box.id} key={box.id} value={box.id}>
+  //                       { box.location }
+  //                     </MenuItem>
+  //                   ))
+  //                 }
+  //               </Select>
+  //             </FormControl>
+  //             <Counter objType={newItem} />
+  //           </Box>
+  //         </Container>
+  //       )
+  //       : (
+  //         <Container>
+  //           <Box>
+  //             <Paper>
+  //               <Typography>
+  //                 Loading . . .
+  //               </Typography>
+  //             </Paper>
+  //           </Box>
+  //         </Container>
+  //       )}
+  //   </>
+  // );
 };

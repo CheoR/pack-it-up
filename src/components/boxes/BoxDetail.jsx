@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { NavLink, useHistory, useParams } from 'react-router-dom';
-
-import { Button, ButtonGroup, Container, Grid, Box, Paper, Typography, FormControl, Input, FormGroup, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-import Image from 'material-ui-image';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { userStorageKey } from '../auth/authSettings';
 import { ItemContext } from '../items/ItemProvider';
@@ -12,38 +7,9 @@ import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
 import { getSum3 } from '../helpers/helpers';
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    background: 'lightgray',
-  },
-  update: {
-    background: 'lightgreen',
-    paddingLeft: '10px',
-    paddingRight: '10px',
-  },
-  delete: {
-    background: 'salmon',
-  },
-  grid: {
-    gridRowGap: '10px',
-    alignItems: 'center',
-    borderBottom: '1px solid black',
-    marginBottom: '5px',
-  },
-  formGroup: {
-    textAlign: 'center',
-  },
-  edit: {
-    minWidth: '100%',
-    margin: '25px 0',
-  },
-  view: {
-    minWidth: '100%',
-  },
-}));
+// import styles from './boxDetail.module.css';
 
 export const BoxDetail = () => {
-  const classes = useStyles();
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const { moves, setMoves, getMoves } = useContext(MoveContext);
   const { boxes, getBoxesByUserId, updateBox, deleteBox } = useContext(BoxContext);
@@ -57,7 +23,7 @@ export const BoxDetail = () => {
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasSaved, setHasSaved] = useState(false);
-  const [selected, setSelected] = useState('');
+  const [setSelected] = useState('');
   const [box, setBox] = useState({});
   const { boxId } = useParams();
   const history = useHistory();
@@ -98,11 +64,13 @@ export const BoxDetail = () => {
     box.isFragile = items.some((item) => item?.isFragile);
   }
 
+  /* eslint-disable-next-line */
   const handleDelete = (event) => {
     event.preventDefault();
     deleteBox(box?.id).then(() => history.push('/boxes'));
   };
 
+  /* eslint-disable-next-line */
   const handleControlledDropDownChange = (event) => {
     const newformField = { ...formField };
     newformField[event.target.id] = event.target.value;
@@ -127,6 +95,7 @@ export const BoxDetail = () => {
     setHasSaved(false);
   }; // handleControlledInputChange
 
+  /* eslint-disable-next-line */
   const handleControlledInputChange = (event) => {
     const newformField = { ...formField };
     newformField[event.target.id] = event.target.value;
@@ -134,6 +103,7 @@ export const BoxDetail = () => {
     setHasSaved(false);
   }; // handleControlledInputChange
 
+  /* eslint-disable-next-line */
   const submitUpdate = (event) => {
     event.preventDefault();
     const newformField = { ...formField };
@@ -147,169 +117,176 @@ export const BoxDetail = () => {
   }; // updateMove
 
   return (
-    <>
-      {
-        isLoaded
-          ? (
-            <Container>
-              <Paper className={classes.paper}>
-                <Image
-                  src={`https://source.unsplash.com/featured/?${box?.location}`}
-                  alt={`${box?.location}`}
-                />
-                <form>
-                  <Grid container>
-                    <Grid item xs={3} />
-                    <Grid item xs={3}>
-                      <Typography style={{ height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
-                        Location
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          id="location"
-                          name="location"
-                          aria-describedby="location"
-                          value={formField.location}
-                          onChange={(e) => { handleControlledInputChange(e); }}
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={3} />
-                    <Grid item xs={3}>
-                      <Typography style={{ height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
-                        Value
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          id="value"
-                          name="value"
-                          aria-describedby="value"
-                          value={`$${box?.totalValue || '0.00'}`}
-                          onChange={(e) => { handleControlledInputChange(e); }}
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={3} />
-                    <Grid item xs={3}>
-                      <Typography style={{ height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
-                        Move
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <FormControl fullWidth>
-                        <Select value={selected} onChange={handleControlledDropDownChange}>
-                          <MenuItem value="" disabled>
-                            Moves
-                          </MenuItem>
-                          {
-                            moves.map((move) => (
-                              <MenuItem boxid={move.id} key={move.id} value={move.id}>
-                                { move.moveName }
-                              </MenuItem>
-                            ))
-                          }
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                    <Grid item>
-                      <Typography>
-                        { box?.totalItems } Items
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <FormGroup>
-                        <FormControlLabel
-                          labelPlacement="start"
-                          label="Fragile"
-                          control={
-                            (
-                              <Checkbox
-                                checked={box.isFragile}
-                                name="summaryFragile"
-                                color="default"
-                              />
-                            )
-                          }
-                        />
-                      </FormGroup>
-                    </Grid>
-                    <Grid item>
-                      <ButtonGroup
-                        color="default"
-                        aria-label="outlined secondary button group"
-                        style={{ marginLeft: '5px' }}
-                      >
-                        <Button
-                          className={classes.delete}
-                          id={`btn--delete-${box?.id}`}
-                          type="button"
-                          onClick={handleDelete}
-                        >
-                          Delete
-                        </Button>
-                        <Button
-                          className={classes.update}
-                          type="submit"
-                          onClick={submitUpdate}
-                        >
-                          Update
-                        </Button>
-                      </ButtonGroup>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button
-                        className={classes.edit}
-                        variant="contained"
-                        id="btn--edit-items"
-                        type="button"
-                        component={NavLink}
-                        to={{
-                          pathname: '/items',
-                          state: {
-                            box: parseInt(boxId, 10),
-                          },
-                        }}
-                      >
-                        add/update items
-                      </Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button
-                        className={classes.view}
-                        variant="contained"
-                        id="btn--viewMove"
-                        type="button"
-                        component={NavLink}
-                        to={{
-                          pathname: `/moves/${box?.moveId}`,
-                        }}
-                      >
-                        view move
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </form>
-              </Paper>
-            </Container>
-          )
-          : (
-            <Container>
-              <Box>
-                <Paper>
-                  <Typography>
-                    Loading . . .
-                  </Typography>
-                </Paper>
-              </Box>
-            </Container>
-          )
-      }
-    </>
+    <dive>BoxDetail</dive>
   );
+
+  // return (
+  //   <>
+  //     {
+  //       isLoaded
+  //         ? (
+  //           <section>
+  //             <Paper className={styles.paper}>
+  //               <Image
+  //                 src={`https://source.unsplash.com/featured/?${box?.location}`}
+  //                 alt={`${box?.location}`}
+  //               />
+  //               <form>
+  //                 <Grid container>
+  //                   <Grid item xs={3} />
+  //                   <Grid item xs={3}>
+  //                     <Typography style={{
+  // height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
+  //                       Location
+  //                     </Typography>
+  //                   </Grid>
+  //                   <Grid item xs={6}>
+  //                     <FormControl>
+  //                       <Input
+  //                         type="text"
+  //                         id="location"
+  //                         name="location"
+  //                         aria-describedby="location"
+  //                         value={formField.location}
+  //                         onChange={(e) => { handleControlledInputChange(e); }}
+  //                       />
+  //                     </FormControl>
+  //                   </Grid>
+  //                   <Grid item xs={3} />
+  //                   <Grid item xs={3}>
+  //                     <Typography style={{
+  // height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
+  //                       Value
+  //                     </Typography>
+  //                   </Grid>
+  //                   <Grid item xs={6}>
+  //                     <FormControl>
+  //                       <Input
+  //                         type="text"
+  //                         id="value"
+  //                         name="value"
+  //                         aria-describedby="value"
+  //                         value={`$${box?.totalValue || '0.00'}`}
+  //                         onChange={(e) => { handleControlledInputChange(e); }}
+  //                       />
+  //                     </FormControl>
+  //                   </Grid>
+  //                   <Grid item xs={3} />
+  //                   <Grid item xs={3}>
+  //                     <Typography style={{
+  // height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
+  //                       Move
+  //                     </Typography>
+  //                   </Grid>
+  //                   <Grid item xs={6}>
+  //                     <FormControl fullWidth>
+  //                       <Select value={selected} onChange={handleControlledDropDownChange}>
+  //                         <MenuItem value="" disabled>
+  //                           Moves
+  //                         </MenuItem>
+  //                         {
+  //                           moves.map((move) => (
+  //                             <MenuItem boxid={move.id} key={move.id} value={move.id}>
+  //                               { move.moveName }
+  //                             </MenuItem>
+  //                           ))
+  //                         }
+  //                       </Select>
+  //                     </FormControl>
+  //                   </Grid>
+  //                   <Grid item>
+  //                     <Typography>
+  //                       { box?.totalItems } Items
+  //                     </Typography>
+  //                   </Grid>
+  //                   <Grid item>
+  //                     <FormGroup>
+  //                       <FormControlLabel
+  //                         labelPlacement="start"
+  //                         label="Fragile"
+  //                         control={
+  //                           (
+  //                             <Checkbox
+  //                               checked={box.isFragile}
+  //                               name="summaryFragile"
+  //                               color="default"
+  //                             />
+  //                           )
+  //                         }
+  //                       />
+  //                     </FormGroup>
+  //                   </Grid>
+  //                   <Grid item>
+  //                     <ButtonGroup
+  //                       color="default"
+  //                       aria-label="outlined secondary button group"
+  //                       style={{ marginLeft: '5px' }}
+  //                     >
+  //                       <Button
+  //                         className={styles.delete}
+  //                         id={`btn--delete-${box?.id}`}
+  //                         type="button"
+  //                         onClick={handleDelete}
+  //                       >
+  //                         Delete
+  //                       </Button>
+  //                       <Button
+  //                         className={styles.update}
+  //                         type="submit"
+  //                         onClick={submitUpdate}
+  //                       >
+  //                         Update
+  //                       </Button>
+  //                     </ButtonGroup>
+  //                   </Grid>
+  //                   <Grid item xs={12}>
+  //                     <Button
+  //                       className={styles.edit}
+  //                       variant="contained"
+  //                       id="btn--edit-items"
+  //                       type="button"
+  //                       component={NavLink}
+  //                       to={{
+  //                         pathname: '/items',
+  //                         state: {
+  //                           box: parseInt(boxId, 10),
+  //                         },
+  //                       }}
+  //                     >
+  //                       add/update items
+  //                     </Button>
+  //                   </Grid>
+  //                   <Grid item xs={12}>
+  //                     <Button
+  //                       className={styles.view}
+  //                       variant="contained"
+  //                       id="btn--viewMove"
+  //                       type="button"
+  //                       component={NavLink}
+  //                       to={{
+  //                         pathname: `/moves/${box?.moveId}`,
+  //                       }}
+  //                     >
+  //                       view move
+  //                     </Button>
+  //                   </Grid>
+  //                 </Grid>
+  //               </form>
+  //             </Paper>
+  //           </section>
+  //         )
+  //         : (
+  //           <section>
+  //             <Box>
+  //               <Paper>
+  //                 <Typography>
+  //                   Loading . . .
+  //                 </Typography>
+  //               </Paper>
+  //             </Box>
+  //           </section>
+  //         )
+  //     }
+  //   </>
+  // );
 };

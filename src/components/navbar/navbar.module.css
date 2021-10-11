@@ -1,0 +1,24 @@
+:root {
+  --primary-color: #f7f7ff;
+  --secondary-color: #f2d0a4;
+  --tricery-color: #3f826d;
+}
+
+.navbar,
+.navbar__link,
+.navbar__li {
+  background: var(--secondary-color);
+}
+
+.navbar__ul {
+  display: flex;
+  border-bottom: 1px solid blue;
+  justify-content: space-around;
+  padding: 0.5em;
+}
+
+.navbar__li {
+  padding: 0.2em;
+  border: 1px solid black;
+  border-radius: 5px;
+}
