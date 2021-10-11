@@ -1,0 +1,24 @@
+:root {
+  --primary-color: #f7f7ff;
+  --secondary-color: #f2d0a4;
+  --tricery-color: #3f826d;
+}
+
+.userPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 95vh;
+  background: var(--primary-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.logo {
+  max-width: 10%;
+}

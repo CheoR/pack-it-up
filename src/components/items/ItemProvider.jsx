@@ -1,21 +1,23 @@
 import React, { createContext, useState } from 'react';
-import { userStorageKey, authApi } from '../auth/authSettings';
+import { authApi } from '../auth/authSettings';
 
-const { baseURL } = authApi;
+const { localApiBaseUrl: baseURL } = authApi;
 
 export const ItemContext = createContext();
 
 export const ItemProvider = (props) => {
-  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const [items, setItems] = useState([]);
 
   const getItems = () => fetch(`${baseURL}/items?_expand=box`)
     .then((res) => res.json())
     .then(setItems); // getItems
 
-  const getItemsByUserId = () => fetch(`${baseURL}/items?userId=${loggedInUserId}`)
+  const getItemsByUserId = (id) => fetch(`${baseURL}/items?userId=${id}`)
     .then((res) => res.json())
-    .then(setItems); // getItems
+    .then(setItems)
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getItems
 
   const addItem = (item) => fetch(`${baseURL}/items`, {
     method: 'POST',

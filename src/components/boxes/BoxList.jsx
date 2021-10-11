@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Container, Box, Paper, Typography, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
 import { userStorageKey, userStorageUserName } from '../auth/authSettings';
 import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
@@ -12,18 +9,9 @@ import { BoxSummary } from './BoxSummary';
 import { Counter } from '../counter/Counter';
 import { getSum1 } from '../helpers/helpers';
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    height: '400px',
-  },
-  select: {
-    background: 'gray',
-  },
-}));
+import styles from './boxList.module.css';
 
 export const BoxList = () => {
-  const classes = useStyles();
-
   const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const loggedInUserName = sessionStorage.getItem(userStorageUserName);
   const { moves, setMoves, getMoves } = useContext(MoveContext);
@@ -108,47 +96,48 @@ export const BoxList = () => {
     <>
       { isLoaded
         ? (
-          <Container>
-            <Box>
-              <Typography variant="h4" component="h1" align="center">
+          <section>
+            <div>
+              <h4>
                 {`${loggedInUserName || 'User'}'s Boxes`}
-              </Typography>
+              </h4>
               {
                 boxes.map((box) => <BoxSummary key={box.id} box={box} />)
               }
-              <FormControl fullWidth>
-                <InputLabel>Add Boxes To Move</InputLabel>
-                <Select
-                  className={classes.select}
+              <form>
+                {/* eslint-disable-next-line */}
+                <label>Add Boxes To Move</label>
+                <select
+                  className={styles.select}
                   value={selected}
                   onChange={handleControlledDropDownChange}
                 >
-                  <MenuItem value="" disabled>
+                  <option value="" disabled>
                     Moves
-                  </MenuItem>
+                  </option>
                   {
                     moves.map((move) => (
-                      <MenuItem moveid={move.id} key={move.id} value={move.id}>
+                      <option moveid={move.id} key={move.id} value={move.id}>
                         { move.moveName }
-                      </MenuItem>
+                      </option>
                     ))
                   }
-                </Select>
-              </FormControl>
+                </select>
+              </form>
               <Counter objType={newBox} />
-            </Box>
-          </Container>
+            </div>
+          </section>
         )
         : (
-          <Container>
-            <Box>
-              <Paper>
-                <Typography>
+          <section>
+            <div>
+              <div>
+                <h4>
                   Loading . . .
-                </Typography>
-              </Paper>
-            </Box>
-          </Container>
+                </h4>
+              </div>
+            </div>
+          </section>
         )}
     </>
   ); // return

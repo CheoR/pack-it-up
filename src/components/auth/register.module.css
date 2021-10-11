@@ -1,45 +1,59 @@
-.registration {
-  height: 100vh;
+:root {
+  --primary-color: #f7f7ff;
+  --secondary-color: #f2d0a4;
+  --tricery-color: #3f826d;
 }
 
-.registration__form__login {
+.registrationPage {
+  height: 93vh;
+}
+
+.registrationPage__form {
   height: 100%;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  margin: 0 auto;
 }
 
-.registration__header,
-.registration__fieldset,
-.registration__btn__submit,
-.formControl {
-  border-radius: 10px;
+.registrationPage__header {
+  width: 100%;
+  text-align: center;
 }
 
-.registration__header {
-  width: 80%;
+.registrationPage__fieldset {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
-.registration__form__login,
-.registration__fieldset label,
-.registration__btn__submit,
 .formControl {
   padding: 1rem;
+  background: var(--secondary-color);
 }
 
-.registration__btn__submit {
-  display: block;
+.dialog,
+.button__close,
+.registrationPage__register,
+.registrationPage__fieldset {
+  padding: 1rem;
+  border-radius: 5px;
 }
 
-.registration__fieldset {
-  width: 80%;
-  margin: 0 auto;
+.registrationPage_label {
+  width: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.registration__btn__submit,
-.formControl {
-  border: 1px solid blue;
+.dialog {
+  background: var(--secondary-color);
+  text-align: center;
+}
+
+.button__close,
+.registrationPage__register {
+  background: var(--tricery-color);
 }

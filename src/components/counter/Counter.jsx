@@ -1,44 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Button, Box, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    background: 'orange',
-  },
-  paper: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    gap: '10px',
-  },
-  btnGroup: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: '10px',
-  },
-  btnGroup__minus: {
-    border: '1px solid black',
-    background: 'salmon',
-  },
-  btnGroup__add: {
-    border: '1px solid black',
-    background: 'lightgreen',
-  },
-  btnGroup__display: {
-    border: '1px solid black',
-  },
-  addBtn: {
-    border: '1px solid black',
-    width: '100%',
-  },
-}));
+import styles from './counter.module.css';
 
 export const Counter = ({ objType }) => {
-  const classes = useStyles();
   /*
   Counter is object agnostics. It keeps track of user-determined num count and
   calls add function for given object types.
@@ -113,15 +78,15 @@ export const Counter = ({ objType }) => {
   };
 
   return (
-    <Box>
-      <Paper className={classes.paper}>
-        <Box className={classes.btnGroup} color="default" aria-label="outlined primary button group">
-          <Button className={classes.btnGroup__minus} type="button" onClick={decrementNum}>-</Button>
-          <Button className={classes.btnGroup__display} value={num} disabled>{ num }</Button>
-          <Button className={classes.btnGroup__add} type="button" onClick={incrementNum}>+</Button>
-        </Box>
-        <Button type="button" className={classes.addBtn} onClick={callAdd}>Add</Button>
-      </Paper>
-    </Box>
+    <div>
+      <div className={styles.paper}>
+        <div className={styles.btnGroup} color="default" aria-label="outlined primary button group">
+          <button className={styles.btnGroup__minus} type="button" onClick={decrementNum}>-</button>
+          <button className={styles.btnGroup__display} type="button" value={num} disabled>{ num }</button>
+          <button className={styles.btnGroup__add} type="button" onClick={incrementNum}>+</button>
+        </div>
+        <button type="button" className={styles.addBtn} onClick={callAdd}>Add</button>
+      </div>
+    </div>
   );
 };
