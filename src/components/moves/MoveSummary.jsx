@@ -1,13 +1,11 @@
-// eslint-disable
-
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import { MoveContext } from './MoveProvider';
 import { ItemContext } from '../items/ItemProvider';
 import { BoxContext } from '../boxes/BoxProvider';
 
-// import styles from './moveSummary.module.css';
+import styles from './moveSummary.module.css';
 
 export const MoveSummary = ({ move }) => {
   const { deleteMove } = useContext(MoveContext);
@@ -16,7 +14,6 @@ export const MoveSummary = ({ move }) => {
 
   const history = useHistory();
 
-  /* eslint-disable-next-line */
   const handleDelete = (event) => {
     event.preventDefault();
 
@@ -53,87 +50,42 @@ export const MoveSummary = ({ move }) => {
     }
   }; // handleDelete
 
-  return (<div>MoveSumary</div>);
+  return (
+    <section className={styles.summary}>
 
-  // return (
-  //   <Box component="section">
-  //     <Paper className={styles.paper}>
-  //       <Grid container className={styles.grid}>
-  //         <Grid item xs={6} />
-  //         <Grid item xs={3}>
-  //           <Typography>
-  //             Move
-  //           </Typography>
-  //         </Grid>
-  //         <Grid item xs={3}>
-  //           <Typography>
-  //             { `${move.moveName.substring(0, 5)} . .` }
-  //           </Typography>
-  //         </Grid>
-  //         <Grid item xs={6}>
-  //           <Typography>
-  //             { move.totalBoxCount } Boxes
-  //           </Typography>
-  //         </Grid>
-  //         <Grid item xs={3}>
-  //           <Typography>
-  //             Value
-  //           </Typography>
-  //         </Grid>
-  //         <Grid item xs={3}>
-  //           <Typography>
-  //             {`$${move.totalItemsValue || '0.00'}`}
-  //           </Typography>
-  //         </Grid>
-  //         <Grid item>
-  //           <Typography>
-  //             { move.totalItemsCount } Items
-  //           </Typography>
-  //         </Grid>
-  //         <Grid item>
-  //           <FormGroup>
-  //             <FormControlLabel
-  //               label="Fragile"
-  //               labelPlacement="start"
-  //               control={
-  //                 (
-  //                   <Checkbox
-  //                     checked={move.isFragile}
-  //                     name="summaryFragile"
-  //                     color="default"
-  //                   />
-  //                 )
-  //               }
-  //             />
-  //           </FormGroup>
-  //         </Grid>
-  //         <Grid item>
-  //           <ButtonGroup
-  //             color="default"
-  //             aria-label="outlined secondary button group"
-  //             style={{ marginLeft: '15px' }}
-  //           >
-  //             <Button
-  //               id={`btn--delete-${move.id}`}
-  //               type="button"
-  //               className={styles.delete}
-  //               onClick={handleDelete}
-  //             >
-  //               Delete
-  //             </Button>
-  //             <Button
-  //               className={styles.edit}
-  //               type="button"
-  //               id={`btn--edit-${move.id}`}
-  //               component={NavLink}
-  //               to={`/moves/${move.id}`}
-  //             >
-  //               Edit
-  //             </Button>
-  //           </ButtonGroup>
-  //         </Grid>
-  //       </Grid>
-  //     </Paper>
-  //   </Box>
-  // );
+      <div className={styles.summary__move}>Move</div>
+      <div className={styles.summary__move__move}>{ `${move.moveName.substring(0, 5)} . .` }</div>
+
+      <div className={styles.summary__value}>Value</div>
+      <div className={styles.summary__value__value}>${ move.totalItemsValue || '0.00' }</div>
+
+      <div className={styles.summary__boxCount}>
+        <div className={styles.summary__boxCount__count}>{ move.totalBoxCount }</div>
+        <div className={styles.summary__boxCount__box}>Boxes</div>
+      </div> {/* summary__boxCount */}
+      <div className={styles.summary__itemCount}>
+        <div className={styles.summary__itemCount__count}>{ move.totalItemsCount }</div>
+        <div className={styles.summary__itemCount__item}>Items</div>
+      </div> {/* summary__itemCount */}
+
+      {/* <fieldset className={styles.fragile__checkbox}>
+        <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">Fragile</label>
+        <input type="checkbox" name="summaryFragile" id="summaryFragile" checked={move.isFragile}
+         className={styles.formControl} readOnly />
+      </fieldset> */}
+      <fieldset className={styles.fragile__checkbox}>
+        <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">
+          Fragile
+          <input type="checkbox" name="summaryFragile" id="summaryFragile" checked={move.isFragile} className={styles.formControl} readOnly />
+        </label>
+      </fieldset>
+
+      <NavLink to={`/moves/${move.id}`} className={styles.summary__navlink__edit}>
+        <button type="button" id={`btn--edit-${move.id}`} className={styles.summary__navlinkBtn__edit}>Edit</button>
+      </NavLink>
+
+      <button type="button" id={`btn--delete-${move.id}`} className={styles.summary__btn__delete} onClick={handleDelete}>Delete</button>
+
+    </section>
+  );
 };

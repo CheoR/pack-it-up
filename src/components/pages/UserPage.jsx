@@ -9,7 +9,7 @@ import { Instructions } from '../helpers/instructions/Instructions';
 import { Summary } from '../helpers/summary/Summary';
 
 import styles from './userPage.module.css';
-import logo from '../../assets/images/PackItUpLogo.png';
+import { UserHeader } from '../helpers/UserHeader';
 
 export const UserPage = () => {
   const { user } = useContext(UserContext);
@@ -29,19 +29,19 @@ export const UserPage = () => {
 
   const usersMoves = {
     type: 'moves',
-    canUse: !!moves.length,
+    canUse: true,
     count: moves.length,
   };
 
   const usersBoxes = {
     type: 'boxes',
-    canUse: !!boxes.length,
+    canUse: !!moves.length,
     count: boxes.length,
   };
 
   const usersItems = {
     type: 'items',
-    canUse: !!items.length,
+    canUse: !!boxes.length,
     count: items.length,
   };
 
@@ -51,10 +51,7 @@ export const UserPage = () => {
 
   return (
     <main className={styles.userPage}>
-      <section className={styles.header}>
-        <img src={logo} className={styles.logo} alt="Pack It Up Logo" />
-        <h1 className={styles.username}>{`${user.username}'s Summary`}</h1>
-      </section>
+      <UserHeader user={user} text="Summary" />
       <Instructions />
       <Summary listOfTypes={dataToRender} />
     </main>

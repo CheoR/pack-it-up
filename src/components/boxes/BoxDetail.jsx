@@ -18,7 +18,6 @@ export const BoxDetail = () => {
     userId: loggedInUserId,
     moveId: 0,
     location: '',
-    qrCode: '',
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -49,7 +48,6 @@ export const BoxDetail = () => {
         userId: loggedInUserId,
         moveId: _box?.moveId,
         location: _box?.location,
-        qrCode: '',
       });
     } // if
 
