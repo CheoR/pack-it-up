@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import styles from './counter.module.css';
 
@@ -67,8 +67,10 @@ export const Counter = ({ objType }) => {
           const { resetInputRef } = objType;
           resetInputRef.current.value = '';
         } catch {
-          console.log('You cannot name boxes/items this way.');
+          console.warn('You cannot name boxes/items this way.');
         } finally {
+          const { refresh } = objType;
+          refresh(objType.type.userId);
           history.push(location.pathname);
         }
       })
@@ -78,15 +80,11 @@ export const Counter = ({ objType }) => {
   };
 
   return (
-    <div>
-      <div className={styles.paper}>
-        <div className={styles.btnGroup} color="default" aria-label="outlined primary button group">
-          <button className={styles.btnGroup__minus} type="button" onClick={decrementNum}>-</button>
-          <button className={styles.btnGroup__display} type="button" value={num} disabled>{ num }</button>
-          <button className={styles.btnGroup__add} type="button" onClick={incrementNum}>+</button>
-        </div>
-        <button type="button" className={styles.addBtn} onClick={callAdd}>Add</button>
-      </div>
-    </div>
+    <section className={styles.counter}>
+      <button type="button" className={styles.counter__btn__decrement} onClick={decrementNum}>-</button>
+      <div className={styles.counter__btn__increment} value={num}>{ num }</div>
+      <button type="button" className={styles.counter__numDisplay} onClick={incrementNum}>+</button>
+      <button type="button" id="btn--add" className={styles.counter__btn__add} onClick={callAdd}>add</button>
+    </section>
   );
 };
