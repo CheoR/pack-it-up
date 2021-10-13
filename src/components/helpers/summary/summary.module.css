@@ -6,6 +6,7 @@
 
 .summary__ul {
   border: 2px solid black;
+  width: 90%;
 }
 
 .summary__li {

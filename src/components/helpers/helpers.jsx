@@ -40,3 +40,11 @@ export const getSum3 = (valueList) => {
 
   return valueList.reduce((acc, curr) => acc + curr, 0);
 };
+
+// export const getBoxDetails = (moves, boxes, items) => {
+
+// };
+
+// export const getItemDetails = () => {
+
+// };

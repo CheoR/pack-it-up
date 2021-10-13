@@ -5,7 +5,7 @@
     in the authApi.js in the auth directory.
 */
 export const authApi = {
-  localApiBaseUrl: 'http://localhost:8088',
+  localApiBaseUrl: process.env.REACT_APP_API,
   endpoint: 'users',
 };
 

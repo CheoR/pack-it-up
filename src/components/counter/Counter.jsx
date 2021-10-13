@@ -1,44 +1,9 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { Button, Box, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useLocation, useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    background: 'orange',
-  },
-  paper: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    gap: '10px',
-  },
-  btnGroup: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: '10px',
-  },
-  btnGroup__minus: {
-    border: '1px solid black',
-    background: 'salmon',
-  },
-  btnGroup__add: {
-    border: '1px solid black',
-    background: 'lightgreen',
-  },
-  btnGroup__display: {
-    border: '1px solid black',
-  },
-  addBtn: {
-    border: '1px solid black',
-    width: '100%',
-  },
-}));
+import styles from './counter.module.css';
 
 export const Counter = ({ objType }) => {
-  const classes = useStyles();
   /*
   Counter is object agnostics. It keeps track of user-determined num count and
   calls add function for given object types.
@@ -102,8 +67,10 @@ export const Counter = ({ objType }) => {
           const { resetInputRef } = objType;
           resetInputRef.current.value = '';
         } catch {
-          console.log('You cannot name boxes/items this way.');
+          console.warn('You cannot name boxes/items this way.');
         } finally {
+          const { refresh } = objType;
+          refresh(objType.type.userId);
           history.push(location.pathname);
         }
       })
@@ -113,15 +80,11 @@ export const Counter = ({ objType }) => {
   };
 
   return (
-    <Box>
-      <Paper className={classes.paper}>
-        <Box className={classes.btnGroup} color="default" aria-label="outlined primary button group">
-          <Button className={classes.btnGroup__minus} type="button" onClick={decrementNum}>-</Button>
-          <Button className={classes.btnGroup__display} value={num} disabled>{ num }</Button>
-          <Button className={classes.btnGroup__add} type="button" onClick={incrementNum}>+</Button>
-        </Box>
-        <Button type="button" className={classes.addBtn} onClick={callAdd}>Add</Button>
-      </Paper>
-    </Box>
+    <section className={styles.counter}>
+      <button type="button" className={styles.counter__btn__decrement} onClick={decrementNum}>-</button>
+      <div className={styles.counter__btn__increment} value={num}>{ num }</div>
+      <button type="button" className={styles.counter__numDisplay} onClick={incrementNum}>+</button>
+      <button type="button" id="btn--add" className={styles.counter__btn__add} onClick={callAdd}>add</button>
+    </section>
   );
 };

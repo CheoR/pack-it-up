@@ -1,21 +1,29 @@
 import React, { createContext, useState } from 'react';
-import { userStorageKey } from '../auth/authSettings';
+import { authApi } from '../auth/authSettings';
 
-const baseURL = 'http://localhost:8088';
+const { localApiBaseUrl: baseURL } = authApi;
 
 export const ItemContext = createContext();
 
 export const ItemProvider = (props) => {
-  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const [items, setItems] = useState([]);
 
   const getItems = () => fetch(`${baseURL}/items?_expand=box`)
     .then((res) => res.json())
     .then(setItems); // getItems
 
-  const getItemsByUserId = () => fetch(`${baseURL}/items?userId=${loggedInUserId}`)
+  const getItemByItemId = (id) => fetch(`${baseURL}/items/${id}`)
     .then((res) => res.json())
-    .then(setItems); // getItems
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getItems
+
+  const getItemsByUserId = (id) => fetch(`${baseURL}/items?userId=${id}`)
+    .then((res) => res.json())
+    .then(setItems)
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getItems
 
   const addItem = (item) => fetch(`${baseURL}/items`, {
     method: 'POST',
@@ -51,6 +59,7 @@ export const ItemProvider = (props) => {
     <ItemContext.Provider value={{
       items,
       getItems,
+      getItemByItemId,
       getItemsByUserId,
       setItems,
       addItem,

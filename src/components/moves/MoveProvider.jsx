@@ -1,22 +1,31 @@
 import React, { createContext, useState } from 'react';
 
-import { userStorageKey } from '../auth/authSettings';
+import { authApi } from '../auth/authSettings';
 
-const baseURL = 'http://localhost:8088';
+const { localApiBaseUrl: baseURL } = authApi;
 
 export const MoveContext = createContext();
 
 export const MoveProvider = (props) => {
-  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
   const [moves, setMoves] = useState([]);
 
   const getMoves = () => fetch(`${baseURL}/moves?_expand=user`)
     .then((res) => res.json())
     .then(setMoves); // getMoves
 
-  const getMovesByUserId = () => fetch(`${baseURL}/moves?userId=${loggedInUserId}`)
+  const getMoveByMoveId = (id) => fetch(`${baseURL}/moves/${id}`)
     .then((res) => res.json())
-    .then(setMoves); // getMoves
+    .then(setMoves)
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getMoves
+
+  const getMovesByUserId = (id) => fetch(`${baseURL}/moves?userId=${id}`)
+    .then((res) => res.json())
+    .then(setMoves)
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getMoves
 
   const addMove = (move) => fetch(`${baseURL}/moves`, {
     method: 'POST',
@@ -45,6 +54,7 @@ export const MoveProvider = (props) => {
     <MoveContext.Provider value={{
       moves,
       getMoves,
+      getMoveByMoveId,
       getMovesByUserId,
       setMoves,
       addMove,

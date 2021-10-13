@@ -1,22 +1,30 @@
 import React, { createContext, useState } from 'react';
-import { userStorageKey } from '../auth/authSettings';
 
-const baseURL = 'http://localhost:8088';
+import { authApi } from '../auth/authSettings';
+
+const { localApiBaseUrl: baseURL } = authApi;
 
 export const BoxContext = createContext();
 
 export const BoxProvider = (props) => {
-  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
-
   const [boxes, setBoxes] = useState([]);
 
   const getBoxes = () => fetch(`${baseURL}/boxes?_expand=move`)
     .then((res) => res.json())
     .then(setBoxes); // getBoxes
 
-  const getBoxesByUserId = () => fetch(`${baseURL}/boxes?userId=${loggedInUserId}`)
+  const getBoxByBoxId = (id) => fetch(`${baseURL}/boxes/${id}`)
     .then((res) => res.json())
-    .then(setBoxes); // getBoxes
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getBoxes
+
+  const getBoxesByUserId = (id) => fetch(`${baseURL}/boxes?userId=${id}`)
+    .then((res) => res.json())
+    .then(setBoxes)
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getBoxes
 
   const addBox = (box) => fetch(`${baseURL}/boxes`, {
     method: 'POST',
@@ -47,6 +55,7 @@ export const BoxProvider = (props) => {
       addBox,
       updateBox,
       getBoxes,
+      getBoxByBoxId,
       getBoxesByUserId,
       setBoxes,
       deleteBox,

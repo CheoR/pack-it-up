@@ -44,5 +44,5 @@
 .counter__btn__add {
   grid-column-start: 2;
   grid-column-end: 10;
-  background: var(--secondary-color);
+  background: var(--tricery-color);
 }

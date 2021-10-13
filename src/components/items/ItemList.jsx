@@ -1,75 +1,59 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Container, Box, Paper, Typography, FormControl, Select, MenuItem, InputLabel } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-import { userStorageKey, userStorageUserName } from '../auth/authSettings';
+import { UserContext } from '../auth/UserProvider';
 import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from './ItemProvider';
-import { ItemSummary } from './ItemSummary';
-import { Counter } from '../counter/Counter';
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    height: '400px',
-  },
-  select: {
-    background: 'gray',
-  },
-}));
+import { UserHeader } from '../helpers/UserHeader';
+import { Counter } from '../counter/Counter';
+import { ItemSummary } from './ItemSummary';
+
+import styles from './itemList.module.css';
 
 export const ItemList = () => {
-  const classes = useStyles();
-  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
-  const loggedInUserName = sessionStorage.getItem(userStorageUserName);
+  const { user } = useContext(UserContext);
   const { items, getItemsByUserId, addItem } = useContext(ItemContext);
-  const { boxes, setBoxes, getBoxesByUserId } = useContext(BoxContext);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { boxes, getBoxesByUserId } = useContext(BoxContext);
+
+  const [isLoading, setIsLoading] = useState(false);
   const [selectionMade, setSelectionMade] = useState(false);
   const [newItem, setNewItem] = useState({});
+
   const location = useLocation();
-  console.log(`firt box id: ${boxes[0].id}`);
-  const [selected, setSelected] = useState(boxes[0].id || 0);
+  const [setSelected] = useState(0);
 
   useEffect(() => {
-    getBoxesByUserId()
-      .then(getItemsByUserId)
-      .then(() => setIsLoaded(true))
-      .then(() => setSelectionMade(false));
+    setIsLoading(true);
+    getBoxesByUserId(user.id)
+      .then(getItemsByUserId(user.id))
+      .then(() => setSelectionMade(false))
+      .then(() => setIsLoading(false));
   }, []); // useEffect
 
   useEffect(() => {
-    if (isLoaded) {
-      /*
-      So following references to boxes only pertain to those linked to logged in user.
-      */
-      const userBoxes = boxes.filter((box) => box.userId === loggedInUserId);
-      setBoxes(userBoxes);
+    /*
+    If user comes from box detail page, assign new items to that box.
+    */
 
-      /*
-      If user comes from box detail page, assign new items to that box.
-      */
+    const defaultBoxId = location.state && location.state.box
+      ? location.state.box
+      : boxes[0].id;
 
-      const defaultBoxId = location.state && location.state.box
-        ? location.state.box
-        : userBoxes[0].id;
+    setNewItem({
+      type: {
+        userId: user.id,
+        boxId: defaultBoxId,
+        description: 'Change Item Description',
+        value: 0,
+        isFragile: false,
+        imagePath: '',
+      },
+      addObj: addItem,
+    }); // setNewItem
+  }, [selectionMade]);
 
-      setNewItem({
-        type: {
-          userId: loggedInUserId,
-          boxId: defaultBoxId,
-          description: 'Change Item Description',
-          value: 0,
-          isFragile: false,
-          imagePath: '',
-        },
-        addObj: addItem,
-      }); // setNewItem
-    } // if
-  }, [isLoaded, selectionMade]);
-
-  const itemsData = items.filter((item) => item.userId === loggedInUserId);
+  const itemsData = items.filter((item) => item.userId === user.id);
 
   /* eslint-disable no-param-reassign */
   itemsData.forEach((item) => {
@@ -81,6 +65,8 @@ export const ItemList = () => {
     item.hasAssociatedBox = !!item.boxId;
     item.hasAssociatedMove = !!item?.box?.moveId;
   });
+
+  /* eslint-disable-next-line */
   const handleControlledDropDownChange = (event) => {
     /*
     boxid - boxid, not option value.
@@ -99,54 +85,34 @@ export const ItemList = () => {
     setSelectionMade(true);
   }; // handleControlledDropDownChange
 
-  if (!isLoaded) return null;
+  if (isLoading) return <>Loading .. . </>;
 
   return (
-    <>
-      { isLoaded
-        ? (
-          <Container>
-            <Box>
-              <Typography variant="h4" component="h1" align="center">
-                {`${loggedInUserName}'s Items`}
-              </Typography>
-              {
-                itemsData.map((item) => <ItemSummary key={item.id} item={item} />)
-              }
-              <FormControl fullWidth>
-                <InputLabel>Add Item To Box</InputLabel>
-                <Select
-                  className={classes.select}
-                  value={selected}
-                  onChange={handleControlledDropDownChange}
-                >
-                  <MenuItem value="" disabled>
-                    Boxes
-                  </MenuItem>
-                  {
-                    boxes.map((box) => (
-                      <MenuItem boxid={box.id} key={box.id} value={box.id}>
-                        { box.location }
-                      </MenuItem>
-                    ))
-                  }
-                </Select>
-              </FormControl>
-              <Counter objType={newItem} />
-            </Box>
-          </Container>
-        )
-        : (
-          <Container>
-            <Box>
-              <Paper>
-                <Typography>
-                  Loading . . .
-                </Typography>
-              </Paper>
-            </Box>
-          </Container>
-        )}
-    </>
+    <section className={styles.summary}>
+      <UserHeader user={user} text="Items" />
+      <ul>
+        {
+          itemsData.map((item) => <ItemSummary key={item.id} item={item} />)
+        }
+      </ul>
+      <fieldset className={styles.container__formGroup}>
+        <label className={styles.usersBoxesLabel} htmlFor="usersBoxes">Box Selection
+          {/*
+          Adding value={boxes[0]?.id} always renders with the default value.
+          */}
+          <select id="usersBoxes" className={styles.formControl} onChange={handleControlledDropDownChange} required>
+            <option value="0">Select a box</option>
+            {
+              boxes.map((box) => (
+                <option boxid={box.id} key={box.id} value={box.location}>
+                  {box.location}
+                </option>
+              ))
+            }
+          </select>
+        </label>
+      </fieldset>
+      <Counter objType={newItem} />
+    </section>
   );
 };
