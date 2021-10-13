@@ -22,9 +22,9 @@ const defaultItem = {
 
 export const ItemDetail = () => {
   const { user } = useContext(UserContext);
-  const { boxes, getBoxesByUserId, setBoxes } = useContext(BoxContext);
+  const { boxes, getBoxesByUserId } = useContext(BoxContext);
   // uploadItemImage
-  const { items, getItemsByUserId, deleteItem, uploadItemImage, updateItem } = useContext(
+  const { getItemByItemId, deleteItem, uploadItemImage, updateItem } = useContext(
     ItemContext
   );
 
@@ -46,17 +46,14 @@ export const ItemDetail = () => {
   useEffect(() => {
     setIsLoading(true);
     getBoxesByUserId(user.id)
-      .then(getItemsByUserId(user.id))
-      .then(() => {
-        const _item = items.find((thisItem) => thisItem.id === itemId);
+      .then(() => getItemByItemId(itemId))
+      .then((_item) => {
         const _box = boxes.find((thisBox) => _item.boxId === thisBox.id);
-
-        setBoxes(boxes.filter((thisBox) => thisBox.userId === user.id));
-        setItem(items.find((thisItem) => thisItem.id === itemId));
-        setSelected(_box.location);
         setItem(_item);
+        setSelected(_box.location);
         setIsLoading(false);
-      });
+      })
+      .catch((err) => console.log(`UseEffect Error: ${err}`));
   }, []); // useEffect
 
   useEffect(() => {
@@ -93,16 +90,16 @@ export const ItemDetail = () => {
   }; // handleCheckboxChange
 
   const handleControlledDropDownChange = (event) => {
-    // const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
-    // const updatedBoxId = event.target.options[selectedIndex].getAttribute('boxid');
-    const updatedBoxId = event.target.value;
+    const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
+    const updatedBoxId = event.target.options[selectedIndex].getAttribute('boxid');
+
     const newItem = { ...item };
 
-    newItem[event.target.id] = event.target.value;
     newItem.boxId = parseInt(updatedBoxId, 10);
 
     setSelected(event.target.value);
     setItem(newItem);
+
     setHasSaved(false);
   }; // handleControlledDropDownChange
 
@@ -150,13 +147,13 @@ export const ItemDetail = () => {
   if (isLoading) return <>Loading .. . </>;
 
   return (
-    <section className={styles.summary}>
+    <section className={styles.container}>
       <div className={styles.imgContainer}>
         { item.imagePath && (
           <img className={styles.img} src={item.imagePath} alt={`${item.description}`} />
         )}
       </div>
-      <form action="" className={styles.container__form}>
+      <form className={styles.container__form}>
         <fieldset className={styles.container__formGroup}>
           <label className={styles.descriptionLabel} htmlFor="location">Description:
             <input
