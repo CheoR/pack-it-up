@@ -13,6 +13,13 @@ export const MoveProvider = (props) => {
     .then((res) => res.json())
     .then(setMoves); // getMoves
 
+  const getMoveByMoveId = (id) => fetch(`${baseURL}/moves/${id}`)
+    .then((res) => res.json())
+    .then(setMoves)
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getMoves
+
   const getMovesByUserId = (id) => fetch(`${baseURL}/moves?userId=${id}`)
     .then((res) => res.json())
     .then(setMoves)
@@ -47,6 +54,7 @@ export const MoveProvider = (props) => {
     <MoveContext.Provider value={{
       moves,
       getMoves,
+      getMoveByMoveId,
       getMovesByUserId,
       setMoves,
       addMove,
