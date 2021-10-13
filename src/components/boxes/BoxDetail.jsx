@@ -1,60 +1,60 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { NavLink, useHistory, useParams } from 'react-router-dom';
 
-import { userStorageKey } from '../auth/authSettings';
+import { UserContext } from '../auth/UserProvider';
 import { ItemContext } from '../items/ItemProvider';
 import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
 import { getSum3 } from '../helpers/helpers';
 
-// import styles from './boxDetail.module.css';
+import styles from './boxDetail.module.css';
 
 export const BoxDetail = () => {
-  const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey), 10);
-  const { moves, setMoves, getMoves } = useContext(MoveContext);
-  const { boxes, getBoxesByUserId, updateBox, deleteBox } = useContext(BoxContext);
-  const { items, setItems, getItemsByUserId } = useContext(ItemContext);
+  const { user } = useContext(UserContext);
+  const { moves, getMovesByUserId, setMoves } = useContext(MoveContext);
+  const { boxes, getBoxesByUserId, getBoxByBoxId, updateBox, deleteBox } = useContext(BoxContext);
+  const { items, getItemsByUserId, setItems } = useContext(ItemContext);
+
+  const [selected, setSelected] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasSaved, setHasSaved] = useState(false);
+  const [box, setBox] = useState({});
   const [formField, setFormField] = useState({
-    userId: loggedInUserId,
+    userId: user.id,
     moveId: 0,
     location: '',
   });
 
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasSaved, setHasSaved] = useState(false);
-  const [setSelected] = useState('');
-  const [box, setBox] = useState({});
   const { boxId } = useParams();
   const history = useHistory();
 
   useEffect(() => {
-    getMoves()
-      .then(getBoxesByUserId)
-      .then(getItemsByUserId)
-      .then(() => setIsLoaded(true));
+    setIsLoading(true);
+    getMovesByUserId(user.id)
+      .then(getBoxesByUserId(user.id))
+      .then(getItemsByUserId(user.id))
+      .then(() => setIsLoading(false));
   }, []); // useEffect
 
   useEffect(() => {
-    if (isLoaded && boxes) {
-      const _box = boxes.find((thisBox) => thisBox?.id === parseInt(boxId, 10));
-      setBox(_box);
-      _box.move = moves.find((thisMove) => thisMove?.id === _box.moveId);
-      setMoves(moves.filter((move) => move?.userId === loggedInUserId));
-      setItems(items.filter((item) => item?.boxId === _box?.id));
+    const _box = getBoxByBoxId(boxId);
+    setBox(_box);
+    _box.move = moves.find((thisMove) => thisMove?.id === _box.moveId);
+    setMoves(moves.filter((move) => move?.userId === user.id));
+    setItems(items.filter((item) => item?._boxId === _box?.id));
 
-      setSelected(_box.move.moveName);
-      setFormField({
-        id: _box?.id,
-        userId: loggedInUserId,
-        moveId: _box?.moveId,
-        location: _box?.location,
-      });
-    } // if
+    setSelected(_box.move?.moveName);
+    setFormField({
+      id: _box?.id,
+      userId: user.id,
+      moveId: _box?.moveId,
+      location: _box?.location,
+    });
 
     if (hasSaved) {
       window.alert('Updated');
     }
-  }, [boxes, isLoaded]);
+  }, [boxes, isLoading]);
 
   if (box) {
     box.totalItems = items?.length;
@@ -62,13 +62,11 @@ export const BoxDetail = () => {
     box.isFragile = items.some((item) => item?.isFragile);
   }
 
-  /* eslint-disable-next-line */
   const handleDelete = (event) => {
     event.preventDefault();
     deleteBox(box?.id).then(() => history.push('/boxes'));
   };
 
-  /* eslint-disable-next-line */
   const handleControlledDropDownChange = (event) => {
     const newformField = { ...formField };
     newformField[event.target.id] = event.target.value;
@@ -93,7 +91,6 @@ export const BoxDetail = () => {
     setHasSaved(false);
   }; // handleControlledInputChange
 
-  /* eslint-disable-next-line */
   const handleControlledInputChange = (event) => {
     const newformField = { ...formField };
     newformField[event.target.id] = event.target.value;
@@ -101,7 +98,6 @@ export const BoxDetail = () => {
     setHasSaved(false);
   }; // handleControlledInputChange
 
-  /* eslint-disable-next-line */
   const submitUpdate = (event) => {
     event.preventDefault();
     const newformField = { ...formField };
@@ -115,176 +111,79 @@ export const BoxDetail = () => {
   }; // updateMove
 
   return (
-    <dive>BoxDetail</dive>
-  );
+    <section className={styles.container}>
+      <div className={styles.imgContainer}>
+        <img className={styles.img} src={`https://source.unsplash.com/featured/?${box?.location}`} alt={`${box?.location}`} />
+      </div>
+      <form action="" className={styles.container__form}>
+        <fieldset className={styles.container__formGroup}>
+          <label className={styles.locationLable} htmlFor="location">Location:
+            <input
+              type="text"
+              id="location"
+              name="location"
+              className={styles.formControl}
+              placeholder="Add Box Location ..."
+              value={formField.location}
+              onChange={(e) => { handleControlledInputChange(e); }}
+            />
+          </label>
+          <label className={styles.locationLable} htmlFor="value">Value
+            <input
+              type="text"
+              id="value"
+              name="value"
+              className={styles.formControl}
+              placeholder="Box Value"
+              value={`$${box?.totalValue || '0.00'}`}
+              disabled
+            />
+          </label>
+          {/* <div className={styles.container__value}>Value</div>
+          <div className={styles.container__value__value}>$
+          { box?.totalValue || '0.00' }</div> */}
 
-  // return (
-  //   <>
-  //     {
-  //       isLoaded
-  //         ? (
-  //           <section>
-  //             <Paper className={styles.paper}>
-  //               <Image
-  //                 src={`https://source.unsplash.com/featured/?${box?.location}`}
-  //                 alt={`${box?.location}`}
-  //               />
-  //               <form>
-  //                 <Grid container>
-  //                   <Grid item xs={3} />
-  //                   <Grid item xs={3}>
-  //                     <Typography style={{
-  // height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
-  //                       Location
-  //                     </Typography>
-  //                   </Grid>
-  //                   <Grid item xs={6}>
-  //                     <FormControl>
-  //                       <Input
-  //                         type="text"
-  //                         id="location"
-  //                         name="location"
-  //                         aria-describedby="location"
-  //                         value={formField.location}
-  //                         onChange={(e) => { handleControlledInputChange(e); }}
-  //                       />
-  //                     </FormControl>
-  //                   </Grid>
-  //                   <Grid item xs={3} />
-  //                   <Grid item xs={3}>
-  //                     <Typography style={{
-  // height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
-  //                       Value
-  //                     </Typography>
-  //                   </Grid>
-  //                   <Grid item xs={6}>
-  //                     <FormControl>
-  //                       <Input
-  //                         type="text"
-  //                         id="value"
-  //                         name="value"
-  //                         aria-describedby="value"
-  //                         value={`$${box?.totalValue || '0.00'}`}
-  //                         onChange={(e) => { handleControlledInputChange(e); }}
-  //                       />
-  //                     </FormControl>
-  //                   </Grid>
-  //                   <Grid item xs={3} />
-  //                   <Grid item xs={3}>
-  //                     <Typography style={{
-  // height: '100%', display: 'flex', align: 'center', justifyContent: 'center' }}>
-  //                       Move
-  //                     </Typography>
-  //                   </Grid>
-  //                   <Grid item xs={6}>
-  //                     <FormControl fullWidth>
-  //                       <Select value={selected} onChange={handleControlledDropDownChange}>
-  //                         <MenuItem value="" disabled>
-  //                           Moves
-  //                         </MenuItem>
-  //                         {
-  //                           moves.map((move) => (
-  //                             <MenuItem boxid={move.id} key={move.id} value={move.id}>
-  //                               { move.moveName }
-  //                             </MenuItem>
-  //                           ))
-  //                         }
-  //                       </Select>
-  //                     </FormControl>
-  //                   </Grid>
-  //                   <Grid item>
-  //                     <Typography>
-  //                       { box?.totalItems } Items
-  //                     </Typography>
-  //                   </Grid>
-  //                   <Grid item>
-  //                     <FormGroup>
-  //                       <FormControlLabel
-  //                         labelPlacement="start"
-  //                         label="Fragile"
-  //                         control={
-  //                           (
-  //                             <Checkbox
-  //                               checked={box.isFragile}
-  //                               name="summaryFragile"
-  //                               color="default"
-  //                             />
-  //                           )
-  //                         }
-  //                       />
-  //                     </FormGroup>
-  //                   </Grid>
-  //                   <Grid item>
-  //                     <ButtonGroup
-  //                       color="default"
-  //                       aria-label="outlined secondary button group"
-  //                       style={{ marginLeft: '5px' }}
-  //                     >
-  //                       <Button
-  //                         className={styles.delete}
-  //                         id={`btn--delete-${box?.id}`}
-  //                         type="button"
-  //                         onClick={handleDelete}
-  //                       >
-  //                         Delete
-  //                       </Button>
-  //                       <Button
-  //                         className={styles.update}
-  //                         type="submit"
-  //                         onClick={submitUpdate}
-  //                       >
-  //                         Update
-  //                       </Button>
-  //                     </ButtonGroup>
-  //                   </Grid>
-  //                   <Grid item xs={12}>
-  //                     <Button
-  //                       className={styles.edit}
-  //                       variant="contained"
-  //                       id="btn--edit-items"
-  //                       type="button"
-  //                       component={NavLink}
-  //                       to={{
-  //                         pathname: '/items',
-  //                         state: {
-  //                           box: parseInt(boxId, 10),
-  //                         },
-  //                       }}
-  //                     >
-  //                       add/update items
-  //                     </Button>
-  //                   </Grid>
-  //                   <Grid item xs={12}>
-  //                     <Button
-  //                       className={styles.view}
-  //                       variant="contained"
-  //                       id="btn--viewMove"
-  //                       type="button"
-  //                       component={NavLink}
-  //                       to={{
-  //                         pathname: `/moves/${box?.moveId}`,
-  //                       }}
-  //                     >
-  //                       view move
-  //                     </Button>
-  //                   </Grid>
-  //                 </Grid>
-  //               </form>
-  //             </Paper>
-  //           </section>
-  //         )
-  //         : (
-  //           <section>
-  //             <Box>
-  //               <Paper>
-  //                 <Typography>
-  //                   Loading . . .
-  //                 </Typography>
-  //               </Paper>
-  //             </Box>
-  //           </section>
-  //         )
-  //     }
-  //   </>
-  // );
+          <label className={styles.container__dropdownLabel} htmlFor="usersMoves">Current Move Assignment
+            {/* excluding value={selected}
+            shows selected move, including it always shows default */}
+            <select id="usersMoves" value={selected} className={styles.formControl} onChange={handleControlledDropDownChange}>
+              <option value="0">Move</option>
+              {moves.map((move) => (
+                <option boxid={move.id} key={move.id} value={move.moveName}>
+                  {move.moveName}
+                </option>
+              ))}
+            </select>
+          </label>
+        </fieldset>
+
+        <div className={styles.container__itemCount}>
+          <div className={styles.container__itemCount__count}>{ box?.totalItems }</div>
+          <div className={styles.container__itemCount__item}>Items</div>
+        </div> {/* container__itemCount */}
+        <NavLink
+          className={styles.container__navlink}
+          to={{
+            pathname: '/items',
+            state: {
+              box: parseInt(boxId, 10),
+            },
+          }}>
+          <button type="button" id="btn--edit-items" className={styles.container__navlinkBtn}>add/update items</button>
+        </NavLink>
+        <NavLink to={`/moves/${box?.moveId}`} className={styles.container__navlink__view}>
+          <button type="button" id="btn--viewMove" className={styles.container__navlinkBtn__view}>view move</button>
+        </NavLink>
+
+        <fieldset className={styles.fragile__checkbox}>
+          <label className={styles.fragile__checkboxLabel} htmlFor="isFragile">Fragile
+            <input type="checkbox" id="isFragile" checked={box?.isFragile} className={styles.formControl} readOnly />
+          </label>
+        </fieldset>
+
+        <button type="submit" className={styles.container__btn__submit} onClick={submitUpdate}>Update</button>
+        <button type="button" className={styles.container__btn__delete} onClick={handleDelete} id={`btn--delete-${box?.id}`}>Delete</button>
+      </form>
+    </section>
+  );
 };

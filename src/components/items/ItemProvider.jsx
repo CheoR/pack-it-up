@@ -12,6 +12,12 @@ export const ItemProvider = (props) => {
     .then((res) => res.json())
     .then(setItems); // getItems
 
+  const getItemByItemId = (id) => fetch(`${baseURL}/items/${id}`)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getItems
+
   const getItemsByUserId = (id) => fetch(`${baseURL}/items?userId=${id}`)
     .then((res) => res.json())
     .then(setItems)
@@ -53,6 +59,7 @@ export const ItemProvider = (props) => {
     <ItemContext.Provider value={{
       items,
       getItems,
+      getItemByItemId,
       getItemsByUserId,
       setItems,
       addItem,
