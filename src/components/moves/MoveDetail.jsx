@@ -152,12 +152,6 @@ export const MoveDetail = () => {
               value={`$${formField.totalValue || '0.00'}`}
               disabled />
           </label>
-          <div className={styles.container__value}>
-            Value
-          </div>
-          <div className={styles.container__value__value}>
-            ${ formField.totalValue || '0.00' }
-          </div>
         </fieldset>
         <div className={styles.container__boxCount}>
           <div className={styles.container__boxCount__count}>
