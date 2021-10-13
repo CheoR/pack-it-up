@@ -13,6 +13,12 @@ export const BoxProvider = (props) => {
     .then((res) => res.json())
     .then(setBoxes); // getBoxes
 
+  const getBoxByBoxId = (id) => fetch(`${baseURL}/boxes/${id}`)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+    }); // getBoxes
+
   const getBoxesByUserId = (id) => fetch(`${baseURL}/boxes?userId=${id}`)
     .then((res) => res.json())
     .then(setBoxes)
@@ -49,6 +55,7 @@ export const BoxProvider = (props) => {
       addBox,
       updateBox,
       getBoxes,
+      getBoxByBoxId,
       getBoxesByUserId,
       setBoxes,
       deleteBox,
