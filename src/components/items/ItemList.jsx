@@ -21,7 +21,7 @@ export const ItemList = () => {
   const [newItem, setNewItem] = useState({});
 
   const location = useLocation();
-  const [setSelected] = useState(0);
+  const [selected, setSelected] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
@@ -50,6 +50,7 @@ export const ItemList = () => {
         imagePath: '',
       },
       addObj: addItem,
+      refresh: getItemsByUserId,
     }); // setNewItem
   }, [selectionMade]);
 
@@ -74,11 +75,12 @@ export const ItemList = () => {
     items can only be created when there is at least one box made.
     */
 
-    // const selectedIndex = parseInt(event.target.options.selectedIndex, 10) || 1;
-    // const optionId = event.target.options[selectedIndex].getAttribute('boxid');
-    const optionId = event.target.value;
+    const selectedIndex = parseInt(event.target.options.selectedIndex, 10) || 1;
+    const optionId = event.target.options[selectedIndex].getAttribute('boxid');
+    // const optionId = event.target.value;
     const updatedItem = { ...newItem };
 
+    console.log('option id: ', optionId);
     setSelected(parseInt(optionId, 10));
     updatedItem.type.boxId = parseInt(optionId, 10);
     setNewItem(updatedItem);
@@ -101,7 +103,7 @@ export const ItemList = () => {
           Adding value={boxes[0]?.id} always renders with the default value.
           */}
           <select id="usersBoxes" className={styles.formControl} onChange={handleControlledDropDownChange} required>
-            <option value="0">Select a box</option>
+            <option value={selected || 0}>Select a box</option>
             {
               boxes.map((box) => (
                 <option boxid={box.id} key={box.id} value={box.location}>

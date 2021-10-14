@@ -44,9 +44,9 @@ export const BoxList = () => {
     /*
       moveid - moveId, not option value.
     */
-    // const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
-    // const optionId = event.target.options[selectedIndex].getAttribute('moveid');
-    const optionId = event.target.value;
+    const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
+    const optionId = event.target.options[selectedIndex].getAttribute('moveid');
+    // const optionId = event.target.value;
     const updateBox = { ...newBox };
 
     /*
@@ -102,7 +102,7 @@ export const BoxList = () => {
       </ul>
       <form>
         {/* eslint-disable-next-line */}
-        <label htmlFor="moveSelect">Add Boxes To Move</label>
+        <label htmlFor="moveSelect">Move Selection</label>
         <select
           id="moveSelect"
           className={styles.select}
