@@ -16,18 +16,37 @@ export const ItemList = () => {
   const { items, getItemsByUserId, addItem } = useContext(ItemContext);
   const { boxes, getBoxesByUserId } = useContext(BoxContext);
 
+  const [dropdownSelection, setDropdownSelection] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectionMade, setSelectionMade] = useState(false);
   const [newItem, setNewItem] = useState({});
 
   const location = useLocation();
-  const [setSelected] = useState(0);
+
+  items.forEach((item) => {
+    item.hasAssociatedBox = !!item.boxId;
+    item.hasAssociatedMove = !!item?.box?.moveId;
+  });
+
+  const handleControlledDropDownChange = (event) => {
+    /*
+    boxid - boxid, not option value.
+    if user does not make a selection, select first box by default since
+    items can only be created when there is at least one box made.
+    */
+
+    const dropdownSelectionIndex = parseInt(event.target.options.dropdownSelectionIndex, 10) || 1;
+    const optionId = event.target.options[dropdownSelectionIndex].getAttribute('boxid');
+    const updatedItem = { ...newItem };
+
+    setDropdownSelection(parseInt(optionId, 10));
+    updatedItem.type.boxId = parseInt(optionId, 10);
+    setNewItem(updatedItem);
+  }; // handleControlledDropDownChange
 
   useEffect(() => {
     setIsLoading(true);
     getBoxesByUserId(user.id)
       .then(getItemsByUserId(user.id))
-      .then(() => setSelectionMade(false))
       .then(() => setIsLoading(false));
   }, []); // useEffect
 
@@ -51,39 +70,7 @@ export const ItemList = () => {
       },
       addObj: addItem,
     }); // setNewItem
-  }, [selectionMade]);
-
-  const itemsData = items.filter((item) => item.userId === user.id);
-
-  /* eslint-disable no-param-reassign */
-  itemsData.forEach((item) => {
-    /*
-    item.hasAssociatedBox = item.boxId ? true : false
-    item.hasAssociatedMove = item?.box.moveId ? true : false
-    Neat way to turn number into a boolean
-    */
-    item.hasAssociatedBox = !!item.boxId;
-    item.hasAssociatedMove = !!item?.box?.moveId;
-  });
-
-  /* eslint-disable-next-line */
-  const handleControlledDropDownChange = (event) => {
-    /*
-    boxid - boxid, not option value.
-    if user does not make a selection, select first box by default since
-    items can only be created when there is at least one box made.
-    */
-
-    // const selectedIndex = parseInt(event.target.options.selectedIndex, 10) || 1;
-    // const optionId = event.target.options[selectedIndex].getAttribute('boxid');
-    const optionId = event.target.value;
-    const updatedItem = { ...newItem };
-
-    setSelected(parseInt(optionId, 10));
-    updatedItem.type.boxId = parseInt(optionId, 10);
-    setNewItem(updatedItem);
-    setSelectionMade(true);
-  }; // handleControlledDropDownChange
+  }, [items]);
 
   if (isLoading) return <>Loading .. . </>;
 
@@ -92,16 +79,24 @@ export const ItemList = () => {
       <UserHeader user={user} text="Items" />
       <ul>
         {
-          itemsData.map((item) => <ItemSummary key={item.id} item={item} />)
+          items.map((item) => <ItemSummary key={item.id} item={item} />)
         }
       </ul>
       <fieldset className={styles.container__formGroup}>
-        <label className={styles.usersBoxesLabel} htmlFor="usersBoxes">Box Selection
+        <label className={styles.usersBoxesLabel} htmlFor="usersBoxes">
+          Add Items To Box
           {/*
           Adding value={boxes[0]?.id} always renders with the default value.
           */}
-          <select id="usersBoxes" className={styles.formControl} onChange={handleControlledDropDownChange} required>
-            <option value="0">Select a box</option>
+          <select
+            id="usersBoxes"
+            className={styles.formControl}
+            onChange={handleControlledDropDownChange}
+            required
+          >
+            <option value={dropdownSelection || 0}>
+              Select a Box
+            </option>
             {
               boxes.map((box) => (
                 <option boxid={box.id} key={box.id} value={box.location}>

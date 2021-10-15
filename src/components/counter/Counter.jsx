@@ -65,12 +65,12 @@ export const Counter = ({ objType }) => {
         try {
           // only used to name moves
           const { resetInputRef } = objType;
-          resetInputRef.current.value = '';
-        } catch {
-          console.warn('You cannot name boxes/items this way.');
+          if (resetInputRef) {
+            resetInputRef.current.value = '';
+          }
+        } catch (err) {
+          console.error(`resetInputRef missing: .\n${err}`);
         } finally {
-          const { refresh } = objType;
-          refresh(objType.type.userId);
           history.push(location.pathname);
         }
       })

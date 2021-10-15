@@ -39,4 +39,5 @@
 
 .container__formGroup {
   display: flex;
+  justify-content: space-between;
 }
