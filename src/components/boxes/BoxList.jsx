@@ -33,9 +33,6 @@ export const BoxList = () => {
       box.totalItemsCount = itemsForThisBox.length;
       box.totalItemsValue = getSum1(itemsForThisBox.map((item) => item.value || 0));
       box.isFragile = itemsForThisBox.some((item) => item.isFragile);
-
-      // console.log('box', box.id);
-      // console.table(box);
     }); // boxes.forEach
     setBoxes(boxes);
   }; // aggregateBoxInfo
@@ -46,7 +43,6 @@ export const BoxList = () => {
     */
     const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
     const optionId = event.target.options[selectedIndex].getAttribute('moveid');
-    // const optionId = event.target.value;
     const updateBox = { ...newBox };
 
     /*
@@ -93,34 +89,35 @@ export const BoxList = () => {
   if (isLoading) return <>Loading . . </>;
 
   return (
-    <section>
+    <section className={styles.summary}>
       <UserHeader user={user} text="Boxes" />
       <ul>
         {
           boxes.map((box) => <BoxSummary key={box.id} box={box} />)
         }
       </ul>
-      <form>
-        {/* eslint-disable-next-line */}
-        <label htmlFor="moveSelect">Move Selection</label>
-        <select
-          id="moveSelect"
-          className={styles.select}
-          value={dropdownSelection}
-          onChange={handleControlledDropDownChange}
-        >
-          <option value="" disabled>
-            Moves
-          </option>
-          {
-            moves.map((move) => (
-              <option moveid={move.id} key={move.id} value={move.id}>
-                { move.moveName }
-              </option>
-            ))
-          }
-        </select>
-      </form>
+      <fieldset className={styles.container__formGroup}>
+        <label className={styles.usersMovesLabel} htmlFor="moveSelect">
+          Add Boxes To Move
+          <select
+            id="moveSelect"
+            className={styles.formControl}
+            onChange={handleControlledDropDownChange}
+            required
+          >
+            <option value={dropdownSelection || 0}>
+              Select a Move
+            </option>
+            {
+              moves.map((move) => (
+                <option moveid={move.id} key={move.id} value={move.id}>
+                  { move.moveName }
+                </option>
+              ))
+            }
+          </select>
+        </label>
+      </fieldset>
       <Counter objType={newBox} />
     </section>
   );
