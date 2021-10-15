@@ -79,7 +79,6 @@ export const BoxList = () => {
         userId: user.id,
         moveId: defaultMoveId,
         location: 'Change Box Location',
-        refresh: getBoxesByUserId,
       },
       addObj: addBox,
     }); // setNewBox

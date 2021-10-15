@@ -69,7 +69,6 @@ export const ItemList = () => {
         imagePath: '',
       },
       addObj: addItem,
-      refresh: getItemsByUserId,
     }); // setNewItem
   }, [items]);
 

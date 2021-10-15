@@ -1,4 +1,6 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+
+import { UserContext } from '../auth/UserProvider';
 import { authApi } from '../auth/authSettings';
 
 const { localApiBaseUrl: baseURL } = authApi;
@@ -6,6 +8,8 @@ const { localApiBaseUrl: baseURL } = authApi;
 export const ItemContext = createContext();
 
 export const ItemProvider = (props) => {
+  const { user } = useContext(UserContext);
+
   const [items, setItems] = useState([]);
 
   const getItems = () => fetch(`${baseURL}/items?_expand=box`)
@@ -18,7 +22,7 @@ export const ItemProvider = (props) => {
       console.log(`Error: ${err}`);
     }); // getItems
 
-  const getItemsByUserId = (id) => fetch(`${baseURL}/items?userId=${id}`)
+  const getItemsByUserId = () => fetch(`${baseURL}/items?userId=${user.id}`)
     .then((res) => res.json())
     .then(setItems)
     .catch((err) => {

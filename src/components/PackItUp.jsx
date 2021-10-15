@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import { LandingPage } from './pages/LandingPage';
 import { Login } from './auth/Login';
@@ -21,53 +21,62 @@ import { BoxDetail } from './boxes/BoxDetail';
 import { ItemProvider } from './items/ItemProvider';
 import { ItemList } from './items/ItemList';
 import { ItemDetail } from './items/ItemDetail';
+import { authApi } from './auth/authSettings';
 
-export const PackItUp = () => (
-  <>
-    <UserProvider><MoveProvider><BoxProvider><ItemProvider>
-      <Navbar />
-      <Switch>
-        <Route exact path="/">
-          <LandingPage />
-        </Route>
+export const PackItUp = () => {
+  const { userStorageKey } = authApi;
 
-        <Route path="/login">
-          <Login />
-        </Route>
+  return (
+    <>
+      <UserProvider><MoveProvider><BoxProvider><ItemProvider>
+        <Navbar />
+        <Switch>
+          <Route exact path="/">
+            {
+              userStorageKey
+                ? <Redirect to="/user" />
+                : <LandingPage />
+            }
+          </Route>
 
-        <Route path="/register">
-          <Register />
-        </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
 
-        <Route exact path="/user">
-          <UserPage />
-        </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
 
-        <Route exact path="/items">
-          <ItemList />
-        </Route>
+          <Route exact path="/user">
+            <UserPage />
+          </Route>
 
-        <Route exact path="/items/:itemId(\d+)">
-          <ItemDetail />
-        </Route>
+          <Route exact path="/items">
+            <ItemList />
+          </Route>
 
-        <Route exact path="/boxes">
-          <BoxList />
-        </Route>
+          <Route exact path="/items/:itemId(\d+)">
+            <ItemDetail />
+          </Route>
 
-        <Route exact path="/boxes/:boxId(\d+)">
-          <BoxDetail />
-        </Route>
+          <Route exact path="/boxes">
+            <BoxList />
+          </Route>
 
-        <Route exact path="/moves">
-          <MoveList />
-        </Route>
+          <Route exact path="/boxes/:boxId(\d+)">
+            <BoxDetail />
+          </Route>
 
-        <Route exact path="/moves/:moveId(\d+)">
-          <MoveDetail />
-        </Route>
-      </Switch>
-      {/* eslint-disable-next-line react/jsx-closing-tag-location */}
-    </ItemProvider></BoxProvider></MoveProvider></UserProvider>
-  </>
-);
+          <Route exact path="/moves">
+            <MoveList />
+          </Route>
+
+          <Route exact path="/moves/:moveId(\d+)">
+            <MoveDetail />
+          </Route>
+        </Switch>
+        {/* eslint-disable-next-line react/jsx-closing-tag-location */}
+      </ItemProvider></BoxProvider></MoveProvider></UserProvider>
+    </>
+  );
+};

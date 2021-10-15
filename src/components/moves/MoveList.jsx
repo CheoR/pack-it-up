@@ -79,7 +79,6 @@ export const MoveList = () => {
       },
       addObj: addMove,
       resetInputRef: inputRef,
-      refresh: getMovesByUserId,
     });
     setIsLoading(false);
   }, []);
