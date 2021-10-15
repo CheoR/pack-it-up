@@ -1,12 +1,15 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 import { authApi } from '../auth/authSettings';
+
+import { UserContext } from '../auth/UserProvider';
 
 const { localApiBaseUrl: baseURL } = authApi;
 
 export const BoxContext = createContext();
 
 export const BoxProvider = (props) => {
+  const { user } = useContext(UserContext);
   const [boxes, setBoxes] = useState([]);
 
   const getBoxes = () => fetch(`${baseURL}/boxes?_expand=move`)
@@ -19,7 +22,7 @@ export const BoxProvider = (props) => {
       console.log(`Error: ${err}`);
     }); // getBoxes
 
-  const getBoxesByUserId = (id) => fetch(`${baseURL}/boxes?userId=${id}`)
+  const getBoxesByUserId = () => fetch(`${baseURL}/boxes?userId=${user.id}`)
     .then((res) => res.json())
     .then(setBoxes)
     .catch((err) => {
@@ -47,7 +50,7 @@ export const BoxProvider = (props) => {
   const deleteBox = (id) => fetch(`${baseURL}/boxes/${id}`, {
     method: 'DELETE',
   })
-    .then(getBoxesByUserId); // deleteBox
+    .then(getBoxesByUserId(user.id)); // deleteBox
 
   return (
     <BoxContext.Provider value={{
