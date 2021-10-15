@@ -1,5 +1,6 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
+import { UserContext } from '../auth/UserProvider';
 import { authApi } from '../auth/authSettings';
 
 const { localApiBaseUrl: baseURL } = authApi;
@@ -7,6 +8,8 @@ const { localApiBaseUrl: baseURL } = authApi;
 export const MoveContext = createContext();
 
 export const MoveProvider = (props) => {
+  const { user } = useContext(UserContext);
+
   const [moves, setMoves] = useState([]);
 
   const getMoves = () => fetch(`${baseURL}/moves?_expand=user`)
@@ -20,7 +23,7 @@ export const MoveProvider = (props) => {
       console.log(`Error: ${err}`);
     }); // getMoves
 
-  const getMovesByUserId = (id) => fetch(`${baseURL}/moves?userId=${id}`)
+  const getMovesByUserId = () => fetch(`${baseURL}/moves?userId=${user.id}`)
     .then((res) => res.json())
     .then(setMoves)
     .catch((err) => {

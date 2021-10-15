@@ -22,7 +22,7 @@ export const MoveList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [newMove, setNewMove] = useState({});
 
-  const inputRef = useRef();
+  const inputRef = useRef(undefined);
 
   const aggregateMoveInfo = () => {
     moves.forEach((move) => {
@@ -79,7 +79,6 @@ export const MoveList = () => {
       },
       addObj: addMove,
       resetInputRef: inputRef,
-      refresh: getMovesByUserId,
     });
     setIsLoading(false);
   }, []);
