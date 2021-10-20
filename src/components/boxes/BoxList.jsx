@@ -56,12 +56,12 @@ export const BoxList = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getMovesByUserId(user.id)
-      .then(getBoxesByUserId(user.id))
-      .then(getItemsByUserId(user.id))
+    getMovesByUserId()
+      .then(getBoxesByUserId)
+      .then(getItemsByUserId)
       .then(setDropdownSelection(moves[0].id))
       .then(aggregateBoxInfo)
-      .then(setIsLoading(false))
+      .then(() => setIsLoading(false))
       .catch((err) => console.error(`Fetching Error: ${err}`));
   }, []); // useEffect
 
@@ -78,7 +78,7 @@ export const BoxList = () => {
       type: {
         userId: user.id,
         moveId: defaultMoveId,
-        location: 'Change Box Location',
+        location: `${moves[0].moveName} Box`,
       },
       addObj: addBox,
     }); // setNewBox

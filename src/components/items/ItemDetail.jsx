@@ -1,107 +1,62 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { NavLink, useHistory, useLocation, useParams } from 'react-router-dom';
 
-import { UserContext } from '../auth/UserProvider';
 import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from './ItemProvider';
 
 import styles from './itemDetail.module.css';
 
-const defaultItem = {
-  userId: 0,
-  boxId: 0,
-  description: 'loading',
-  value: 0,
-  isFragile: false,
-  imagePath: 'loading',
-  box: {
-    id: 0,
-    location: 'loading',
-  },
-};
-
 export const ItemDetail = () => {
-  const { user } = useContext(UserContext);
   const { boxes, getBoxesByUserId } = useContext(BoxContext);
-  // uploadItemImage
   const { getItemByItemId, deleteItem, uploadItemImage, updateItem } = useContext(
     ItemContext
   );
 
-  const [hasSaved, setHasSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [item, setItem] = useState(defaultItem);
+  const [hasSaved, setHasSaved] = useState(false);
   const [selected, setSelected] = useState('');
+  const [item, setItemDetail] = useState({});
 
   const imgInputFile = useRef(null);
-  let { itemId } = useParams();
   const location = useLocation();
   const history = useHistory();
+  let { itemId } = useParams();
 
   /*
     In case user does a hard refresh, otherwise app will error out due to missing itemId.
   */
   itemId = parseInt(itemId, 10) || parseInt(location.pathname.split('/')[2], 10);
 
-  useEffect(() => {
-    setIsLoading(true);
-    getBoxesByUserId(user.id)
-      .then(() => getItemByItemId(itemId))
-      .then((_item) => {
-        const _box = boxes.find((thisBox) => _item.boxId === thisBox.id);
-        setItem(_item);
-        setSelected(_box.location);
-        setIsLoading(false);
-      })
-      .catch((err) => console.log(`UseEffect Error: ${err}`));
-  }, []); // useEffect
-
-  useEffect(() => {
-    if (hasSaved) {
-      window.alert('Updated');
-    }
-  }, [hasSaved, isLoading]); // useEffect
-
-  const handleDelete = (event) => {
-    event.preventDefault();
-    deleteItem(item.id).then(() => history.push('/items'));
-  }; // handleDelete
-
-  const handleImageUpload = (event) => {
-    event.preventDefault();
-    imgInputFile.current.click();
-  }; // handleImageUpload
-
-  const handleControlledInputChange = (event) => {
-    const newItem = { ...item };
-
-    newItem[event.target.id] = event.target.value;
-    newItem.value = parseInt(newItem.value, 10) || 0;
-
-    setItem(newItem);
-    setHasSaved(false);
-  }; // handleControlledInputChange
-
-  const handleCheckboxChange = (event) => {
-    const newformField = { ...item };
-    newformField[event.target.id] = event.target.checked;
-    setItem(newformField);
-    setHasSaved(false);
-  }; // handleCheckboxChange
-
   const handleControlledDropDownChange = (event) => {
     const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
-    const updatedBoxId = event.target.options[selectedIndex].getAttribute('boxid');
+
+    /*
+      User should not be able to select label.
+    */
+    if (!selectedIndex) return;
+
+    const updatedBoxId = parseInt(event.target.options[selectedIndex].getAttribute('boxid'), 10);
+
+    console.log(` selectedIndex: ${selectedIndex}\nupdatedBoxId: ${updatedBoxId}\nvalue: ${event.target.value}`);
+    const _box = boxes.find((box) => box.id === updatedBoxId);
 
     const newItem = { ...item };
 
     newItem.boxId = parseInt(updatedBoxId, 10);
+    newItem.moveId = parseInt(_box.moveId, 10);
 
     setSelected(event.target.value);
-    setItem(newItem);
+    setItemDetail(newItem);
 
     setHasSaved(false);
   }; // handleControlledDropDownChange
+
+  const handleCheckboxChange = (event) => {
+    const newformField = { ...item };
+    newformField[event.target.id] = event.target.checked;
+    setItemDetail(newformField);
+    setHasSaved(false);
+  }; // handleCheckboxChange
 
   const imageInputChange = (event) => {
     event.stopPropagation();
@@ -119,11 +74,16 @@ export const ItemDetail = () => {
         // res.original_filename,
         newItem.imagePath = res.secure_url;
 
-        setItem(newItem);
+        setItemDetail(newItem);
         setHasSaved(false);
       })
       .catch((err) => console.log(err));
   }; // imageInputChange
+
+  const handleImageUpload = (event) => {
+    event.preventDefault();
+    imgInputFile.current.click();
+  }; // handleImageUpload
 
   const submitUpdate = (event) => {
     event.preventDefault();
@@ -131,7 +91,6 @@ export const ItemDetail = () => {
     /*
     Remove attributes not matching ERD.
     */
-    delete newItem.container__dropdown;
     delete newItem.hasAssociatedMove;
     delete newItem.hasAssociatedBox;
     delete newItem.box;
@@ -140,11 +99,38 @@ export const ItemDetail = () => {
     setHasSaved(true);
   }; // updateMove
 
-  if (item && !item.imagePath) {
-    item.imagePath = 'https://unsplash.com/photos/YXWoEn5uOvg';
-  }
+  const handleDelete = (event) => {
+    event.preventDefault();
+    deleteItem(item.id).then(() => history.push('/items'));
+  }; // handleDelete
 
-  if (isLoading) return <>Loading .. . </>;
+  const handleControlledInputChange = (event) => {
+    const newItem = { ...item };
+
+    newItem[event.target.id] = event.target.value;
+    newItem.value = parseInt(newItem.value, 10) || 0;
+
+    setItemDetail(newItem);
+    setHasSaved(false);
+  }; // handleControlledInputChange
+
+  useEffect(() => {
+    setIsLoading(true);
+    getItemByItemId(itemId)
+      .then((_item) => setItemDetail(_item))
+      .then(getBoxesByUserId)
+      .then(() => setSelected(item?.box?.location))
+      .then(() => setIsLoading(false))
+      .catch((err) => console.error(`useEffect Error: ${err}`));
+  }, []); // useEffect
+
+  useEffect(() => {
+    if (hasSaved) {
+      window.alert('Updated');
+    }
+  }, [hasSaved]); // useEffect
+
+  if (isLoading) return <>Loading Item Detail. . </>;
 
   return (
     <section className={styles.container}>
@@ -180,8 +166,8 @@ export const ItemDetail = () => {
           </label>
 
           <label className={styles.container__dropdownLabel} htmlFor="container__dropdown">Current Box Assignment
-            <select value={selected} id="container__dropdown" className={styles.formControl} onChange={handleControlledDropDownChange}>
-              <option value="0">Select Move</option>
+            <select value={selected} id="container__dropdown" className={styles.formControl} onChange={handleControlledDropDownChange} required>
+              <option value={item?.box?.id || 0}>Select Box</option>
               {boxes.map((_box) => (
                 <option boxid={_box.id} key={_box.id} value={_box.location}>
                   {_box.location}

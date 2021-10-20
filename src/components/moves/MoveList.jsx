@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { UserContext } from '../auth/UserProvider';
 import { MoveContext } from './MoveProvider';
@@ -21,14 +21,13 @@ export const MoveList = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [newMove, setNewMove] = useState({});
-
-  const inputRef = useRef(undefined);
+  const [value, setValue] = useState('New Move');
 
   const aggregateMoveInfo = () => {
     moves.forEach((move) => {
       const boxesForThisMove = boxes.filter((box) => box.moveId === move.id);
 
-      move.totalBoxCount = boxesForThisMove.length;
+      move.totalBoxesCount = boxesForThisMove.length;
       move.totalItemsCount = 0;
       move.totalItemsValue = 0;
 
@@ -56,31 +55,28 @@ export const MoveList = () => {
     */
     const updatedMove = { ...newMove };
     updatedMove.type[event.target.id] = event.target.value;
-    // updatedMove.type[event.target.id] = inputRef.current.value; // event.target.value
     setNewMove(updatedMove);
+    setValue(event.target.value);
   }; // handleControlledInputChange
 
   useEffect(() => {
     setIsLoading(true);
-    getMovesByUserId(user.id)
-      .then(getBoxesByUserId(user.id))
-      .then(getItemsByUserId(user.id))
+    getMovesByUserId()
+      .then(getBoxesByUserId)
+      .then(getItemsByUserId)
       .then(aggregateMoveInfo)
-      .then(setIsLoading(false))
+      .then(() => {
+        setNewMove({
+          type: {
+            userId: user.id,
+            moveName: value,
+          },
+          addObj: addMove,
+          resetInput: setValue,
+        });
+      })
+      .then(() => setIsLoading(false))
       .catch((err) => console.error(`Fetching Error: ${err}`));
-  }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
-    setNewMove({
-      type: {
-        userId: user.id,
-        moveName: 'New Move',
-      },
-      addObj: addMove,
-      resetInputRef: inputRef,
-    });
-    setIsLoading(false);
   }, []);
 
   if (isLoading) return <>Loading .. . </>;
@@ -93,21 +89,19 @@ export const MoveList = () => {
           moves.map((move) => <MoveSummary key={move.id} move={move} />)
         }
       </ul>
-      <form action="" className="summary__form">
-        <fieldset className={styles.summary__formGroup}>
-          <label className={styles.moveNameLabel} htmlFor="moveName">Move Name:
-            <input
-              type="text"
-              id="moveName"
-              name="moveName"
-              ref={inputRef}
-              className={styles.formControl}
-              placeholder="Add Move Name..."
-              // value={newMove.type.moveName}
-              onChange={(e) => { handleControlledInputChange(e); }} />
-          </label>
-        </fieldset>
-      </form>
+      <fieldset className={styles.summary__formGroup}>
+        <label className={styles.moveNameLabel} htmlFor="moveName">Move Name:
+          <input
+            type="text"
+            id="moveName"
+            name="moveName"
+            className={styles.formControl}
+            placeholder="Add Move Name..."
+            value={value}
+            onChange={(e) => { handleControlledInputChange(e); }}
+          />
+        </label>
+      </fieldset>
       <Counter objType={newMove} />
     </section>
   );
