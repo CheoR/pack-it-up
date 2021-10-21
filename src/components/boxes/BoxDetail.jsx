@@ -4,10 +4,12 @@ import { NavLink, useLocation, useHistory, useParams } from 'react-router-dom';
 
 import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
+import { ItemContext } from '../items/ItemProvider';
 
 import styles from './boxDetail.module.css';
 
 export const BoxDetail = () => {
+  const { getItemByItemId, updateItem } = useContext(ItemContext);
   const { moves, getMovesByUserId } = useContext(MoveContext);
   const { getBoxByBoxId, updateBox, deleteBox } = useContext(BoxContext);
 
@@ -28,7 +30,7 @@ export const BoxDetail = () => {
   const aggregateBoxInfo = () => {
     const _box = { ...boxDetail };
 
-    console.log('aggregateBoxInfo box before');
+    console.log('aggregateBoxInfo box before ');
     console.table(_box);
     _box.totalItemsCount = _box.items?.length;
     _box.totalItemsValue = _box.items?.map((item) => item.value)
@@ -48,7 +50,7 @@ export const BoxDetail = () => {
     const optionId = parseInt(event.target.options[selectedIndex].getAttribute('moveid'), 10);
 
     console.log('handleControlledDropDownChange');
-    console.log('_box');
+    console.log('_box ');
     console.table(_box);
     console.log(` selectedIndex: ${selectedIndex}\noptionId:${optionId}`);
 
@@ -65,7 +67,18 @@ export const BoxDetail = () => {
   const submitUpdate = (event) => {
     event.preventDefault();
     const _box = { ...boxDetail };
+    const id = _box.move.id;
+    const itemIds = _box.items.map((item) => item.id);
 
+    Promise.all(itemIds.map((id) => getItemByItemId(id)))
+      .then((objs) => {
+        Promise.all(obj.forEach((obj) => {
+          obj.moveId = _box.moveId;
+          delete obj.box;
+          updateItem(obj);
+        }))
+      })
+      .catch((err) => console.error(`Promise.all Error: ${err}`));
     /*
     Cleanup. Does not belong to ERD.
     */
@@ -77,6 +90,7 @@ export const BoxDetail = () => {
     delete _box.move;
 
     updateBox(_box);
+
     setHasSaved(true);
   }; // updateMove
 
@@ -95,9 +109,14 @@ export const BoxDetail = () => {
   }; // handleControlledInputChange
 
   useEffect(() => {
+    setIsLoading(true);
     getBoxByBoxId(boxId)
-      .then((_box) => setBoxDetail(_box))
-      .then(aggregateBoxInfo)
+      .then((_box) => {
+        console.log('current box');
+        console.table(_box);
+        setBoxDetail(_box);
+      })
+      .then(() => aggregateBoxInfo())
       .then(() => setSelected(boxDetail?.move?.moveName))
       .then(getMovesByUserId)
       .then(() => setIsLoading(false))
