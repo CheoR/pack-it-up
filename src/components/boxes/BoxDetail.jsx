@@ -7,20 +7,22 @@ import { BoxContext } from './BoxProvider';
 import { ItemContext } from '../items/ItemProvider';
 
 import styles from './boxDetail.module.css';
-
+console.log('BEFORE BOX DETAIL LOADS');
 export const BoxDetail = () => {
+  
   const { getItemByItemId, updateItem } = useContext(ItemContext);
   const { moves, getMovesByUserId } = useContext(MoveContext);
   const { getBoxByBoxId, updateBox, deleteBox } = useContext(BoxContext);
-
+  
   const [isLoading, setIsLoading] = useState(true);
   const [hasSaved, setHasSaved] = useState(false);
   const [selected, setSelected] = useState('');
   const [boxDetail, setBoxDetail] = useState({});
-
+  
   const location = useLocation();
   const history = useHistory();
   let { boxId } = useParams();
+  console.log(`start of BoxDetail , isLoading: ${isLoading}`);
 
   /*
     In case user does a hard refresh, otherwise app will error out due to missing boxId.
@@ -28,6 +30,7 @@ export const BoxDetail = () => {
   boxId = parseInt(boxId, 10) || parseInt(location.pathname.split('/')[2], 10);
 
   const aggregateBoxInfo = () => {
+    console.log(`aggregateBoxInfo, isLoading: ${isLoading}`);
     const _box = { ...boxDetail };
 
     console.log('aggregateBoxInfo box before ');
@@ -39,9 +42,14 @@ export const BoxDetail = () => {
     console.log('aggregateBoxInfo box after');
     console.table(_box);
     setBoxDetail(_box);
+    return new Promise((resolve, reject) => {
+      resolve(true);
+      reject(() => new Error('aggregateBoxInfo something went wrong'));
+    });
   }; // aggregateMoveInfo
 
   const handleControlledDropDownChange = (event) => {
+    console.log(`handleControlledDropDownChange, isLoading: ${isLoading}`);
     const _box = { ...boxDetail };
 
     _box[event.target.id] = event.target.value;
@@ -66,6 +74,7 @@ export const BoxDetail = () => {
 
   const submitUpdate = (event) => {
     event.preventDefault();
+    console.log(`submitUpdate, isLoading: ${isLoading}`);
     const _box = { ...boxDetail };
     const id = _box.move.id;
     const itemIds = _box.items.map((item) => item.id);
@@ -100,6 +109,7 @@ export const BoxDetail = () => {
   };
 
   const handleControlledInputChange = (event) => {
+    console.log(`handleControlledInputChange, isLoading: ${isLoading}`);
     const _box = { ...boxDetail };
   
     _box[event.target.id] = event.target.value;
@@ -108,29 +118,84 @@ export const BoxDetail = () => {
     setHasSaved(false);
   }; // handleControlledInputChange
 
+
   useEffect(() => {
+    console.log('USE EFFECT 1');
     setIsLoading(true);
     getBoxByBoxId(boxId)
-      .then((_box) => {
-        console.log('current box');
-        console.table(_box);
-        setBoxDetail(_box);
+      .then((box) => setBoxDetail((prevState) => {
+        return {
+          ...prevState,
+          ...box,
+        }
+      }))
+      .then(setIsLoading(false))
+      .then(() => {
+        console.log('------in first use effect-------');
+        console.table(boxDetail);
+        console.log('------in first use effect-------');
       })
-      .then(() => aggregateBoxInfo())
-      .then(() => setSelected(boxDetail?.move?.moveName))
-      .then(getMovesByUserId)
-      .then(() => setIsLoading(false))
       .catch((err) => console.error(`useEffect Error: ${err}`));
   }, []);
 
   useEffect(() => {
+    console.log('use effect 2');
+    setIsLoading(true);
+    aggregateBoxInfo();
+    setSelected(boxDetail?.move?.moveName);
+    getMovesByUserId();
+    setIsLoading(false);
+  }, [boxDetailx, "mooo dow");
+  // useEffect(() => {
+  //   console.log(`use effect 1 loaded, isLoading: ${isLoading}`);
+  //   setIsLoading(true);
+  //   getBoxByBoxId(boxId)
+  //     .then((_box) => {
+  //       console.log('current box');
+  //       console.table(_box);
+  //       setBoxDetail(_box);
+  //     })
+  //     .then(() => aggregateBoxInfo())
+  //     .then(() => setSelected(boxDetail?.move?.moveName))
+  //     .then(getMovesByUserId)
+  //     .then(() => setIsLoading(false))
+  //     .catch((err) => console.error(`useEffect Error: ${err}`));
+  // }, []);
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       setIsLoading(true);
+  //       const box = await getBoxByBoxId(boxId);
+  //       console.log('box ------------ box');
+  //       console.table(box);
+  //       console.log('box ------------ box');
+  //       await setBoxDetail(box);
+  //       console.log('box detail set 1');
+  //       console.table(boxDetail);
+  //       await aggregateBoxInfo();
+  //       console.log('box detail set 2');
+  //       console.table(boxDetail);
+  //     } catch (err) {
+  //       console.error(`useEffect Error: ${err}`)
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   }
+  //   fetchData();
+  // }, []);
+
+  useEffect(() => {
+    console.log(`use effect 2 loaded, isLoading: ${isLoading}`);
+
     if (hasSaved) {
       window.alert('Updated');
     }
   }, [hasSaved]); // useEffect
 
+  console.log(` end of file before if, isLoading: ${isLoading}`);
   if (isLoading) return <>Loading Box Detail. . </>;
-
+  console.log(`end of file after if isLoading: ${isLoading}`);
   return (
     <section className={styles.container}>
       <div className={styles.imgContainer}>
@@ -204,3 +269,4 @@ export const BoxDetail = () => {
     </section>
   );
 };
+console.log('AFTER BOXDETAIL LOADS');
