@@ -83,12 +83,11 @@ export const MoveDetail = () => {
   const aggregateMoveInfo = () => {
     const _move = { ...moveDetail };
 
-    _move.totalBoxesCount = _move?.boxes.length;
-    _move.totalItemsCount = _move?.items.length;
-    _move.totalItemsValue = _move?.items
-      .map((item) => item.value)
+    _move.totalBoxesCount = _move?.boxes?.length;
+    _move.totalItemsCount = _move?.items?.length;
+    _move.totalItemsValue = _move?.items?.map((item) => item.value)
       .reduce((acc, curr) => acc + curr, 0);
-    _move.isFragile = _move.items.some((item) => item.isFragile);
+    _move.isFragile = _move.items?.some((item) => item.isFragile);
 
     setMoveDetail(_move);
   }; // aggregateMoveInfo

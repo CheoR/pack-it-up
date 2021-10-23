@@ -9,16 +9,16 @@ import { ItemContext } from '../items/ItemProvider';
 import styles from './boxDetail.module.css';
 console.log('BEFORE BOX DETAIL LOADS');
 export const BoxDetail = () => {
-  
+
   const { getItemByItemId, updateItem } = useContext(ItemContext);
   const { moves, getMovesByUserId } = useContext(MoveContext);
   const { getBoxByBoxId, updateBox, deleteBox } = useContext(BoxContext);
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [hasSaved, setHasSaved] = useState(false);
   const [selected, setSelected] = useState('');
   const [boxDetail, setBoxDetail] = useState({});
-  
+
   const location = useLocation();
   const history = useHistory();
   let { boxId } = useParams();
@@ -29,9 +29,9 @@ export const BoxDetail = () => {
   */
   boxId = parseInt(boxId, 10) || parseInt(location.pathname.split('/')[2], 10);
 
-  const aggregateBoxInfo = () => {
+  const aggregateBoxInfo = (_box) => {
     console.log(`aggregateBoxInfo, isLoading: ${isLoading}`);
-    const _box = { ...boxDetail };
+    // const _box = { ...boxDetail };
 
     console.log('aggregateBoxInfo box before ');
     console.table(_box);
@@ -42,10 +42,10 @@ export const BoxDetail = () => {
     console.log('aggregateBoxInfo box after');
     console.table(_box);
     setBoxDetail(_box);
-    return new Promise((resolve, reject) => {
-      resolve(true);
-      reject(() => new Error('aggregateBoxInfo something went wrong'));
-    });
+    // return new Promise((resolve, reject) => {
+    //   resolve(true);
+    //   reject(() => new Error('aggregateBoxInfo something went wrong'));
+    // });
   }; // aggregateMoveInfo
 
   const handleControlledDropDownChange = (event) => {
@@ -111,56 +111,84 @@ export const BoxDetail = () => {
   const handleControlledInputChange = (event) => {
     console.log(`handleControlledInputChange, isLoading: ${isLoading}`);
     const _box = { ...boxDetail };
-  
+
     _box[event.target.id] = event.target.value;
 
     setBoxDetail(_box);
     setHasSaved(false);
   }; // handleControlledInputChange
 
-
   useEffect(() => {
-    console.log('USE EFFECT 1');
+    console.log(`use effect 1 loaded, isLoading: ${isLoading}`);
     setIsLoading(true);
     getBoxByBoxId(boxId)
-      .then((box) => setBoxDetail((prevState) => {
-        return {
-          ...prevState,
-          ...box,
-        }
-      }))
-      .then(setIsLoading(false))
-      .then(() => {
-        console.log('------in first use effect-------');
-        console.table(boxDetail);
-        console.log('------in first use effect-------');
+      .then((_box) => {
+        console.log('current box');
+        console.table(_box);
+        // setBoxDetail(_box);
+        // .then(() => aggregateBoxInfo())
+        aggregateBoxInfo(_box);
       })
+      .then(() => setSelected(boxDetail?.move?.moveName))
+      .then(getMovesByUserId)
+      .then(() => setIsLoading(false))
       .catch((err) => console.error(`useEffect Error: ${err}`));
   }, []);
 
-  useEffect(() => {
-    console.log('use effect 2');
-    setIsLoading(true);
-    aggregateBoxInfo();
-    setSelected(boxDetail?.move?.moveName);
-    getMovesByUserId();
-    setIsLoading(false);
-  }, [boxDetailx, "mooo dow");
-  // useEffect(() => {
-  //   console.log(`use effect 1 loaded, isLoading: ${isLoading}`);
-  //   setIsLoading(true);
-  //   getBoxByBoxId(boxId)
-  //     .then((_box) => {
-  //       console.log('current box');
-  //       console.table(_box);
-  //       setBoxDetail(_box);
-  //     })
-  //     .then(() => aggregateBoxInfo())
-  //     .then(() => setSelected(boxDetail?.move?.moveName))
-  //     .then(getMovesByUserId)
-  //     .then(() => setIsLoading(false))
-  //     .catch((err) => console.error(`useEffect Error: ${err}`));
-  // }, []);
+
+//   Hello everybody, i was wondering if I can get some help on my thought process why this is no working. 
+// Issue is with setState as part of a then chain inside a useEffect. 
+
+// There's more to this file but it's not important. 
+
+// Things to note:
+
+// 1. fetchBoxById successfully fetches the box object by id.
+// 2. setBox fails to update the box state
+// 3. callFuncThatDoesStuffWithBoxData fails to mutate box since box state never updated before being called
+
+// I see that 
+
+// then
+
+//  returns resolved/rejected values in a new promise, so I don't mind that 
+
+// setBox
+
+//  returns undefined. 
+// I just can't figure out why box's value is not set before 
+
+// callFuncThatDoesStuffWithBoxData
+
+//  runs. 
+
+// const [box, setBox] = useState({});
+// const { boxId } = useParams();
+
+// const callFuncThatDoesStuffWithBoxData = () => {
+//   const updateBox = { ...box };
+//   update fields for updateBox
+//   add extra fields to updateBox
+//   setBox(updateBox);
+// }
+
+// useEffect(() => {
+//   setIsLoading(true);
+//   fetchBoxById(boxId)
+//     .then(setBox)
+//     .then(callFuncThatDoesStuffWithBoxData)
+//     .finally(setIsLoading(false))
+//     .catch((err) => console.err(`Hey, look at this error: ${err.message}`);
+// }, []);
+
+// if (isLoading) return <>Loading Box Detail. . </>;
+
+// return (
+//   <div>
+//     <other stuff here />
+//   </div>
+// )
+
 
   // useEffect(() => {
   //   async function fetchData() {
@@ -184,6 +212,31 @@ export const BoxDetail = () => {
   //   }
   //   fetchData();
   // }, []);
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getBoxByBoxId(boxId)
+  //     .then((_box) => setBoxDetail((prevState, _box) => {
+  //       return {
+  //         ...prevState,
+  //         ..._box,
+  //       }
+  //     }))
+  //     .then(() => aggregateBoxInfo())
+  //     .then(() => setSelected(boxDetail?.move?.moveName))
+  //     .then(getMovesByUserId)
+  //     .then(() => setIsLoading(false))
+  //     .catch((err) => console.error(`useEffect Error: ${err}`));
+  // }, []);
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   aggregateBoxInfo()
+  //     .then(() => setSelected(boxDetail?.move?.moveName))
+  //     .then(getMovesByUserId)
+  //     .then(() => setIsLoading(false))
+  //     .catch((err) => console.error(`useEffect Error: ${err}`));
+  // }, [boxDetail]);
 
   useEffect(() => {
     console.log(`use effect 2 loaded, isLoading: ${isLoading}`);
@@ -240,7 +293,7 @@ export const BoxDetail = () => {
         </fieldset>
 
         <div className={styles.container__itemCount}>
-          <div className={styles.container__itemCount__count}>{ boxDetail?.totalItemsCount }</div>
+          <div className={styles.container__itemCount__count}>{boxDetail?.totalItemsCount}</div>
           <div className={styles.container__itemCount__item}>Items</div>
         </div> {/* container__itemCount */}
         <NavLink
