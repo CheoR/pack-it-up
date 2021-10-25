@@ -16,7 +16,7 @@ export const BoxProvider = (props) => {
     .then((res) => res.json())
     .then(setBoxes); // getBoxes
 
-  const getBoxByBoxId = (id) => fetch(`${baseURL}/boxes/${id}`)
+  const getBoxByBoxId = (id) => fetch(`${baseURL}/boxes/${id}?_embed=items&_expand=move`)
     .then((res) => res.json())
     .catch((err) => {
       console.log(`Error: ${err}`);

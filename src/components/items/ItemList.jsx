@@ -22,11 +22,6 @@ export const ItemList = () => {
 
   const location = useLocation();
 
-  items.forEach((item) => {
-    item.hasAssociatedBox = !!item.boxId;
-    item.hasAssociatedMove = !!item?.box?.moveId;
-  });
-
   const handleControlledDropDownChange = (event) => {
     /*
     boxid - boxid, not option value.
@@ -45,9 +40,10 @@ export const ItemList = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getBoxesByUserId(user.id)
-      .then(getItemsByUserId(user.id))
-      .then(() => setIsLoading(false));
+    getBoxesByUserId()
+      .then(getItemsByUserId)
+      .then(() => setIsLoading(false))
+      .catch((err) => console.error(`useEffect Error: ${err}`));
   }, []); // useEffect
 
   useEffect(() => {
@@ -55,14 +51,19 @@ export const ItemList = () => {
     If user comes from box detail page, assign new items to that box.
     */
 
-    const defaultBoxId = location.state && location.state.box
+    const defaultBoxId = location?.state && location?.state?.box
       ? location.state.box
       : boxes[0].id;
+
+    const defaultMoveId = location?.state && location?.state?.box
+      ? location.state.box.moveId
+      : boxes[0].moveId;
 
     setNewItem({
       type: {
         userId: user.id,
         boxId: defaultBoxId,
+        moveId: defaultMoveId,
         description: 'Change Item Description',
         value: 0,
         isFragile: false,
@@ -73,6 +74,11 @@ export const ItemList = () => {
   }, [items]);
 
   if (isLoading) return <>Loading .. . </>;
+
+  items.forEach((item) => {
+    item.hasAssociatedBox = !!item.boxId;
+    item.hasAssociatedMove = !!item.moveId;
+  });
 
   return (
     <section className={styles.summary}>
@@ -85,9 +91,6 @@ export const ItemList = () => {
       <fieldset className={styles.container__formGroup}>
         <label className={styles.usersBoxesLabel} htmlFor="usersBoxes">
           Add Items To Box
-          {/*
-          Adding value={boxes[0]?.id} always renders with the default value.
-          */}
           <select
             id="usersBoxes"
             className={styles.formControl}

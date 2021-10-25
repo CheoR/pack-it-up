@@ -64,12 +64,12 @@ export const Counter = ({ objType }) => {
         // reset
         try {
           // only used to name moves
-          const { resetInputRef } = objType;
-          if (resetInputRef) {
-            resetInputRef.current.value = '';
+          const { resetInput } = objType;
+          if (resetInput) {
+            resetInput('');
           }
         } catch (err) {
-          console.error(`resetInputRef missing: .\n${err}`);
+          console.error(`resetInput missing: .\n${err}`);
         } finally {
           history.push(location.pathname);
         }
