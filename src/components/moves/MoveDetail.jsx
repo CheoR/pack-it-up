@@ -1,40 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { NavLink, useHistory, useParams } from 'react-router-dom';
+import { NavLink, useLocation, useHistory, useParams } from 'react-router-dom';
 
-import { ItemContext } from '../items/ItemProvider';
 import { MoveContext } from './MoveProvider';
-import { BoxContext } from '../boxes/BoxProvider';
+import { ItemContext } from '../items/ItemProvider';
 
 import styles from './moveDetail.module.css';
 
-const _getSum = (valueList) => {
-  /*
-  Using .reduce on list of objects ults with incorrect sum values.
-  */
-
-  if (!valueList.length) return 0;
-
-  return valueList.reduce((acc, curr) => acc + curr, 0);
-};
-
 export const MoveDetail = () => {
-  const { moves, getMoves, updateMove, deleteMove } = useContext(MoveContext);
-  const { boxes, getBoxes } = useContext(BoxContext);
-  const { items, getItemsByUserId, deleteItem } = useContext(ItemContext);
+  const { getMoveByMoveId, updateMove, deleteMove } = useContext(MoveContext);
+  const { deleteItem } = useContext(ItemContext);
 
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [moveDetail, setMoveDetail] = useState({});
   const [hasSaved, setHasSaved] = useState(false);
-  const [move, setMove] = useState({});
-  const [formField, setFormField] = useState({
-    moveName: '',
-    userId: 0,
-    totalValue: 0,
-    isFragile: false,
-    totalBoxes: 0,
-  });
 
-  const { moveId } = useParams();
+  const location = useLocation();
   const history = useHistory();
+  let { moveId } = useParams();
+
+  /*
+    In case user does a hard refresh, otherwise app will error out due to missing moveId.
+  */
+  moveId = parseInt(moveId, 10) || parseInt(location.pathname.split('/')[2], 10);
 
   const handleDelete = (event) => {
     event.preventDefault();
@@ -42,12 +29,8 @@ export const MoveDetail = () => {
       json-server only deletes boxes linked to current move and not thier associated items.
       So delete associated items first (if any) before delete move and boxes.
     */
-    // deleteMove(move?.id).then(() => history.push('/moves'))
 
-    const linkedBoxesIds = boxes.filter((box) => box.moveId === move.id).map((box) => box.id);
-    const linkedItemsIds = items.filter((item) => linkedBoxesIds.includes(
-      item.boxId
-    )).map((item) => item.id);
+    const linkedItemsIds = moveDetail.items.map((item) => item.id);
 
     if (linkedItemsIds.length) {
       const addFuncs = [];
@@ -57,77 +40,75 @@ export const MoveDetail = () => {
       }
 
       /*
-        Delete items before deleing given move.
+        Delete items before deleting given moveDetail.
       */
       Promise.all(addFuncs.map((callback, idx) => callback(linkedItemsIds[idx])))
         .then(() => {
-          deleteMove(move?.id).then(() => history.push('/moves'));
+          deleteMove(moveDetail?.id).then(() => history.push('/moves'));
         })
         .catch((err) => {
           console.log(`Error: ${err}`);
         });
     } else {
-      deleteMove(move?.id).then(() => history.push('/moves'));
+      deleteMove(moveDetail?.id).then(() => history.push('/moves'));
     }
   }; // handleDelete
 
-  useEffect(() => {
-    const getData = async () => {
-      Promise.all([getMoves, getBoxes, getItemsByUserId])
-        .then(() => {
-          setIsLoaded(true);
-        });
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {
-    /*
-      Aggregate number of boxes for this move, total value, and if anything is fragile.
-    */
-    if (isLoaded) {
-      const _move = moves.find((m) => m.id === parseInt(moveId, 10));
-      const userBoxes = boxes.filter((box) => box.moveId === _move.id);
-      const boxIds = userBoxes.map((box) => box.id);
-      const userItems = items.filter((item) => boxIds.includes(item.boxId));
-
-      _move.totalBoxes = userBoxes.length;
-      // move.totalValue = _getSum(userItems.map((item) => item.value ? item.value : 0));
-      _move.totalValue = _getSum(userItems.map((item) => item.value || 0));
-      _move.isFragile = userItems.some((item) => item.isFragile);
-      setMove(_move);
-      setFormField(_move);
-    } // if
-
-    if (hasSaved) {
-      window.alert('Updated');
-    }
-  }, [isLoaded, hasSaved]);
-
   const handleControlledInputChange = (event) => {
-    const newformField = { ...formField };
-    newformField[event.target.id] = event.target.value;
-    setFormField(newformField);
+    const _move = { ...moveDetail };
+
+    _move[event.target.id] = event.target.value;
+    setMoveDetail(_move);
     setHasSaved(false);
   }; // handleControlledInputChange
 
   const submitUpdate = (event) => {
     event.preventDefault();
-    const newformField = { ...formField };
+    const _move = { ...moveDetail };
 
     /*
       Cleanup. Does not belong to ERD.
     */
-    delete newformField.user;
-    delete newformField.totalValue;
-    delete newformField.isFragile;
-    delete newformField.totalBoxes;
+    delete _move.totalItemsValue;
+    delete _move.totalBoxesCount;
+    delete _move.totalItemsCount;
+    delete _move.isFragile;
+    delete _move.boxes;
+    delete _move.items;
 
-    updateMove(newformField)
-      .then(() => setHasSaved(true));
+    updateMove(_move);
+    setHasSaved(true);
   }; // updateMove
 
-  if (!formField) return null;
+  const aggregateMoveInfo = () => {
+    const _move = { ...moveDetail };
+
+    _move.totalBoxesCount = _move?.boxes?.length;
+    _move.totalItemsCount = _move?.items?.length;
+    _move.totalItemsValue = _move?.items?.map((item) => item.value)
+      .reduce((acc, curr) => acc + curr, 0);
+    _move.isFragile = _move.items?.some((item) => item.isFragile);
+
+    setMoveDetail(_move);
+  }; // aggregateMoveInfo
+
+  useEffect(() => {
+    setIsLoading(true);
+    getMoveByMoveId(moveId)
+      .then(setMoveDetail)
+      .then(aggregateMoveInfo)
+      .then(() => setIsLoading(false))
+      .catch((err) => console.error(`useEffect Error: ${err}`));
+  }, []); // useEffect
+
+  useEffect(() => {
+    if (hasSaved) {
+      window.alert('Updated');
+    }
+  }, [hasSaved, isLoading]); // useEffect
+
+  if (isLoading) return <>Loading . . . </>;
+
   return (
     <section className={styles.container}>
       <form action="" className={styles.container__form}>
@@ -139,7 +120,7 @@ export const MoveDetail = () => {
               name="moveName"
               className={styles.formControl}
               placeholder="Add Move Name..."
-              value={formField.moveName}
+              value={moveDetail?.moveName}
               onChange={(e) => { handleControlledInputChange(e); }} />
           </label>
           <label className={styles.moveNameLabel} htmlFor="moveName">Value:
@@ -149,13 +130,13 @@ export const MoveDetail = () => {
               name="moveName"
               className={styles.formControl}
               placeholder="Add Move Name..."
-              value={`$${formField.totalValue || '0.00'}`}
+              value={`$${moveDetail?.totalItemsValue || '0.00'}`}
               disabled />
           </label>
         </fieldset>
         <div className={styles.container__boxCount}>
           <div className={styles.container__boxCount__count}>
-            { formField.totalBoxes || '0' }
+            { moveDetail?.totalBoxesCount || '0' }
           </div>
           <div className={styles.container__boxCount__box}>
             Boxes
@@ -182,7 +163,7 @@ export const MoveDetail = () => {
             <input
               type="checkbox"
               id="isFragile"
-              checked={formField?.isFragile}
+              checked={moveDetail?.isFragile}
               className={styles.formControl}
               readOnly
             />
@@ -197,7 +178,7 @@ export const MoveDetail = () => {
         </button>
         <button
           type="button"
-          id={`btn--delete-${move?.id}`}
+          id={`btn--delete-${moveDetail?.id}`}
           className={styles.container__btn__delete}
           onClick={handleDelete}
         >

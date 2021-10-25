@@ -1,107 +1,62 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { NavLink, useHistory, useLocation, useParams } from 'react-router-dom';
 
-import { UserContext } from '../auth/UserProvider';
 import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from './ItemProvider';
 
 import styles from './itemDetail.module.css';
 
-const defaultItem = {
-  userId: 0,
-  boxId: 0,
-  description: 'loading',
-  value: 0,
-  isFragile: false,
-  imagePath: 'loading',
-  box: {
-    id: 0,
-    location: 'loading',
-  },
-};
-
 export const ItemDetail = () => {
-  const { user } = useContext(UserContext);
   const { boxes, getBoxesByUserId } = useContext(BoxContext);
-  // uploadItemImage
   const { getItemByItemId, deleteItem, uploadItemImage, updateItem } = useContext(
     ItemContext
   );
 
-  const [hasSaved, setHasSaved] = useState(false);
+  const [dropdownSelection, setDropdownSelection] = useState('');
+  const [itemDetail, setItemDetail] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [item, setItem] = useState(defaultItem);
-  const [selected, setSelected] = useState('');
+  const [hasSaved, setHasSaved] = useState(false);
 
   const imgInputFile = useRef(null);
-  let { itemId } = useParams();
   const location = useLocation();
   const history = useHistory();
+  let { itemId } = useParams();
 
   /*
     In case user does a hard refresh, otherwise app will error out due to missing itemId.
   */
   itemId = parseInt(itemId, 10) || parseInt(location.pathname.split('/')[2], 10);
 
-  useEffect(() => {
-    setIsLoading(true);
-    getBoxesByUserId(user.id)
-      .then(() => getItemByItemId(itemId))
-      .then((_item) => {
-        const _box = boxes.find((thisBox) => _item.boxId === thisBox.id);
-        setItem(_item);
-        setSelected(_box.location);
-        setIsLoading(false);
-      })
-      .catch((err) => console.log(`UseEffect Error: ${err}`));
-  }, []); // useEffect
-
-  useEffect(() => {
-    if (hasSaved) {
-      window.alert('Updated');
-    }
-  }, [hasSaved, isLoading]); // useEffect
-
-  const handleDelete = (event) => {
-    event.preventDefault();
-    deleteItem(item.id).then(() => history.push('/items'));
-  }; // handleDelete
-
-  const handleImageUpload = (event) => {
-    event.preventDefault();
-    imgInputFile.current.click();
-  }; // handleImageUpload
-
-  const handleControlledInputChange = (event) => {
-    const newItem = { ...item };
-
-    newItem[event.target.id] = event.target.value;
-    newItem.value = parseInt(newItem.value, 10) || 0;
-
-    setItem(newItem);
-    setHasSaved(false);
-  }; // handleControlledInputChange
-
-  const handleCheckboxChange = (event) => {
-    const newformField = { ...item };
-    newformField[event.target.id] = event.target.checked;
-    setItem(newformField);
-    setHasSaved(false);
-  }; // handleCheckboxChange
-
   const handleControlledDropDownChange = (event) => {
-    const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
-    const updatedBoxId = event.target.options[selectedIndex].getAttribute('boxid');
+    const dropdownSelectionIndex = parseInt(event.target.options.selectedIndex, 10);
 
-    const newItem = { ...item };
+    /*
+      User should not be able to select label.
+    */
+    if (!dropdownSelectionIndex) return;
 
-    newItem.boxId = parseInt(updatedBoxId, 10);
+    const updatedBoxId = parseInt(event.target.options[dropdownSelectionIndex].getAttribute('boxid'), 10);
 
-    setSelected(event.target.value);
-    setItem(newItem);
+    const _box = boxes.find((box) => box.id === updatedBoxId);
+
+    const newitemDetail = { ...itemDetail };
+
+    newitemDetail.boxId = parseInt(updatedBoxId, 10);
+    newitemDetail.moveId = parseInt(_box.moveId, 10);
+
+    setDropdownSelection(event.target.value);
+    setItemDetail(newitemDetail);
 
     setHasSaved(false);
   }; // handleControlledDropDownChange
+
+  const handleCheckboxChange = (event) => {
+    const newformField = { ...itemDetail };
+    newformField[event.target.id] = event.target.checked;
+
+    setItemDetail(newformField);
+    setHasSaved(false);
+  }; // handleCheckboxChange
 
   const imageInputChange = (event) => {
     event.stopPropagation();
@@ -115,42 +70,78 @@ export const ItemDetail = () => {
 
     uploadItemImage(formData)
       .then((res) => {
-        const newItem = { ...item };
+        const newitemDetail = { ...itemDetail };
         // res.original_filename,
-        newItem.imagePath = res.secure_url;
+        newitemDetail.imagePath = res.secure_url;
 
-        setItem(newItem);
+        setItemDetail(newitemDetail);
         setHasSaved(false);
       })
       .catch((err) => console.log(err));
   }; // imageInputChange
 
+  const handleImageUpload = (event) => {
+    event.preventDefault();
+    imgInputFile.current.click();
+  }; // handleImageUpload
+
   const submitUpdate = (event) => {
     event.preventDefault();
-    const newItem = { ...item };
+    const newitemDetail = { ...itemDetail };
     /*
     Remove attributes not matching ERD.
     */
-    delete newItem.container__dropdown;
-    delete newItem.hasAssociatedMove;
-    delete newItem.hasAssociatedBox;
-    delete newItem.box;
+    delete newitemDetail.hasAssociatedMove;
+    delete newitemDetail.hasAssociatedBox;
+    delete newitemDetail.box;
 
-    updateItem(newItem);
+    updateItem(newitemDetail);
     setHasSaved(true);
   }; // updateMove
 
-  if (item && !item.imagePath) {
-    item.imagePath = 'https://unsplash.com/photos/YXWoEn5uOvg';
-  }
+  const handleDelete = (event) => {
+    event.preventDefault();
+    deleteItem(itemDetail.id)
+      .then(() => history.push('/itemDetails'));
+  }; // handleDelete
 
-  if (isLoading) return <>Loading .. . </>;
+  const handleControlledInputChange = (event) => {
+    const newitemDetail = { ...itemDetail };
+
+    newitemDetail[event.target.id] = event.target.value;
+    newitemDetail.value = parseInt(newitemDetail.value, 10) || 0;
+
+    setItemDetail(newitemDetail);
+    setHasSaved(false);
+  }; // handleControlledInputChange
+
+  const loadFormFields = (item) => {
+    setDropdownSelection(item.box.location);
+    setItemDetail(item);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    getBoxesByUserId()
+      .then(() => getItemByItemId(itemId))
+      .then(loadFormFields)
+      .finally(() => setIsLoading(false))
+      .catch((err) => console.error(`useEffect Error: ${err}`));
+  }, []); // useEffect
+
+  useEffect(() => {
+    if (hasSaved) {
+      window.alert('Updated');
+    }
+  }, [hasSaved]); // useEffect
+
+  if (isLoading) return <>Loading itemDetail Detail. . </>;
 
   return (
     <section className={styles.container}>
       <div className={styles.imgContainer}>
-        { item.imagePath && (
-          <img className={styles.img} src={item.imagePath} alt={`${item.description}`} />
+        { itemDetail.imagePath && (
+          <img className={styles.img} src={itemDetail.imagePath} alt={`${itemDetail.description}`} />
         )}
       </div>
       <form className={styles.container__form}>
@@ -162,7 +153,7 @@ export const ItemDetail = () => {
               name="description"
               className={styles.formControl}
               placeholder="Add Item Description ..."
-              value={item.description}
+              value={itemDetail.description}
               onChange={(e) => { handleControlledInputChange(e); }}
             />
           </label>
@@ -173,15 +164,21 @@ export const ItemDetail = () => {
               id="value"
               name="value"
               className={styles.formControl}
-              placeholder="Add Item value ..."
-              value={item.value}
+              placeholder="Add itemDetail value ..."
+              value={itemDetail.value}
               onChange={(e) => { handleControlledInputChange(e); }}
             />
           </label>
 
           <label className={styles.container__dropdownLabel} htmlFor="container__dropdown">Current Box Assignment
-            <select value={selected} id="container__dropdown" className={styles.formControl} onChange={handleControlledDropDownChange}>
-              <option value="0">Select Move</option>
+            <select
+              id="container__dropdown"
+              className={styles.formControl}
+              value={dropdownSelection}
+              onChange={handleControlledDropDownChange}
+              required
+            >
+              <option value={itemDetail.box.id || 0}>Select Box</option>
               {boxes.map((_box) => (
                 <option boxid={_box.id} key={_box.id} value={_box.location}>
                   {_box.location}
@@ -190,26 +187,34 @@ export const ItemDetail = () => {
             </select>
           </label>
 
-          <NavLink to={`/boxes/${item.boxId}`} className={styles.container__navlink}>
-            <button type="button" id={`btn--view-${item.boxId}`} className={styles.container__navlinkBtn}>View Box Assgined</button>
+          <NavLink to={`/boxes/${itemDetail.boxId}`} className={styles.container__navlink}>
+            <button type="button" id={`btn--view-${itemDetail.boxId}`} className={styles.container__navlinkBtn}>
+              View Box Assgined
+            </button>
           </NavLink>
         </fieldset>
 
         <fieldset className={styles.fragile__checkbox}>
           <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile
-            <input type="checkbox" id="isFragile" onChange={handleCheckboxChange} checked={item.isFragile} className={styles.formControl} />
+            <input
+              id="isFragile"
+              className={styles.formControl}
+              type="checkbox"
+              checked={itemDetail.isFragile}
+              onChange={handleCheckboxChange}
+            />
           </label>
         </fieldset>
 
         {/* <div className="form-group">
         accept="image/*;capture=environment"
-        <input id={`imageForItemId--${item.id}`} className={styles.imgInputFile} type="file"
+        <input id={`imageForItemId--${itemDetail.id}`} className={styles.imgInputFile} type="file"
           ref={imgInputFile} onChange={imageInputChange} />
         </div> */}
-        <input className={styles.imgInputFile} id={`imageForItemId--${item.id}`} type="file" ref={imgInputFile} onChange={imageInputChange} />
+        <input className={styles.imgInputFile} id={`imageForItemId--${itemDetail.id}`} type="file" ref={imgInputFile} onChange={imageInputChange} />
         <button className={styles.container__btn__camera} type="button" id="camera" onClick={handleImageUpload}>Camera</button>
-        <button className={styles.container__btn__submit} type="submit" id={`btn--update-${item.id}`} onClick={submitUpdate}>Update</button>
-        <button className={styles.container__btn__delete} type="button" id={`btn--delete-${item.id}`} onClick={handleDelete}>Delete</button>
+        <button className={styles.container__btn__submit} type="submit" id={`btn--update-${itemDetail.id}`} onClick={submitUpdate}>Update</button>
+        <button className={styles.container__btn__delete} type="button" id={`btn--delete-${itemDetail.id}`} onClick={handleDelete}>Delete</button>
       </form>
     </section>
   );

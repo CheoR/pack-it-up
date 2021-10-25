@@ -16,19 +16,18 @@ export const MoveProvider = (props) => {
     .then((res) => res.json())
     .then(setMoves); // getMoves
 
-  const getMoveByMoveId = (id) => fetch(`${baseURL}/moves/${id}`)
+  const getMoveByMoveId = (id) => fetch(`${baseURL}/moves/${id}?_embed=boxes&_embed=items`)
     .then((res) => res.json())
-    .then(setMoves)
     .catch((err) => {
       console.log(`Error: ${err}`);
-    }); // getMoves
+    }); // getMoveByMoveId
 
   const getMovesByUserId = () => fetch(`${baseURL}/moves?userId=${user.id}`)
     .then((res) => res.json())
     .then(setMoves)
     .catch((err) => {
       console.log(`Error: ${err}`);
-    }); // getMoves
+    }); // getMovesByUserId
 
   const addMove = (move) => fetch(`${baseURL}/moves`, {
     method: 'POST',
@@ -37,7 +36,7 @@ export const MoveProvider = (props) => {
     },
     body: JSON.stringify(move),
   })
-    .then(getMovesByUserId);
+    .then(getMovesByUserId); // addMove
 
   const updateMove = (move) => fetch(`${baseURL}/moves/${move.id}`, {
     method: 'PUT',
@@ -46,7 +45,7 @@ export const MoveProvider = (props) => {
     },
     body: JSON.stringify(move),
   })
-    .then(getMovesByUserId); // sendMessage
+    .then(getMovesByUserId); // updateMove
 
   const deleteMove = (id) => fetch(`${baseURL}/moves/${id}`, {
     method: 'DELETE',

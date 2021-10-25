@@ -60,7 +60,7 @@ export const MoveSummary = ({ move }) => {
       <div className={styles.summary__value__value}>${ move.totalItemsValue || '0.00' }</div>
 
       <div className={styles.summary__boxCount}>
-        <div className={styles.summary__boxCount__count}>{ move.totalBoxCount }</div>
+        <div className={styles.summary__boxCount__count}>{ move.totalBoxesCount }</div>
         <div className={styles.summary__boxCount__box}>Boxes</div>
       </div> {/* summary__boxCount */}
       <div className={styles.summary__itemCount}>
@@ -68,11 +68,6 @@ export const MoveSummary = ({ move }) => {
         <div className={styles.summary__itemCount__item}>Items</div>
       </div> {/* summary__itemCount */}
 
-      {/* <fieldset className={styles.fragile__checkbox}>
-        <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">Fragile</label>
-        <input type="checkbox" name="summaryFragile" id="summaryFragile" checked={move.isFragile}
-         className={styles.formControl} readOnly />
-      </fieldset> */}
       <fieldset className={styles.fragile__checkbox}>
         <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">
           Fragile

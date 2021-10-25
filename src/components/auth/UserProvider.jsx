@@ -14,8 +14,8 @@ export const UserProvider = (props) => {
 
   const logout = () => {
     setUser({});
-    sessionStorage.removeItem('app_user_id');
-    sessionStorage.removeItem('app_user_username');
+    sessionStorage.removeItem(userStorageUserName);
+    sessionStorage.removeItem(userStorageKey);
   };
 
   const isUserLoggedIn = () => !!user.id;
