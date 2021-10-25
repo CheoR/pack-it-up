@@ -1,119 +1,131 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { NavLink, useHistory, useParams } from 'react-router-dom';
+import { NavLink, useLocation, useHistory, useParams } from 'react-router-dom';
 
-import { UserContext } from '../auth/UserProvider';
-import { ItemContext } from '../items/ItemProvider';
 import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
-import { getSum3 } from '../helpers/helpers';
+import { ItemContext } from '../items/ItemProvider';
 
 import styles from './boxDetail.module.css';
 
 export const BoxDetail = () => {
-  const { user } = useContext(UserContext);
-  const { moves, getMovesByUserId, setMoves } = useContext(MoveContext);
-  const { boxes, getBoxesByUserId, getBoxByBoxId, updateBox, deleteBox } = useContext(BoxContext);
-  const { items, getItemsByUserId, setItems } = useContext(ItemContext);
-
-  const [selected, setSelected] = useState(0);
+  const { moves, getMovesByUserId } = useContext(MoveContext);
+  const { getBoxByBoxId, updateBox, deleteBox } = useContext(BoxContext);
+  const { getItemByItemId, updateItem } = useContext(ItemContext);
+  const [dropdownSelection, setDropdownSelection] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasSaved, setHasSaved] = useState(false);
-  const [box, setBox] = useState({});
-  const [formField, setFormField] = useState({
-    userId: user.id,
-    moveId: 0,
-    location: '',
-  });
+  const [boxDetail, setBoxDetail] = useState({});
 
-  const { boxId } = useParams();
+  const location = useLocation();
   const history = useHistory();
+  let { boxId } = useParams();
 
-  useEffect(() => {
-    setIsLoading(true);
-    getMovesByUserId(user.id)
-      .then(getBoxesByUserId(user.id))
-      .then(getItemsByUserId(user.id))
-      .then(() => setIsLoading(false));
-  }, []); // useEffect
+  /*
+    In case user does a hard refresh, otherwise app will error out due to missing boxId.
+  */
+  boxId = parseInt(boxId, 10) || parseInt(location.pathname.split('/')[2], 10);
 
-  useEffect(() => {
-    const _box = getBoxByBoxId(boxId);
-    setBox(_box);
-    _box.move = moves.find((thisMove) => thisMove?.id === _box.moveId);
-    setMoves(moves.filter((move) => move?.userId === user.id));
-    setItems(items.filter((item) => item?._boxId === _box?.id));
+  const aggregateBoxInfo = (box) => {
+    box.totalItemsCount = box.items?.length;
+    box.totalItemsValue = box.items?.map((item) => item.value)
+      .reduce((acc, curr) => acc + curr, 0);
+    box.isFragile = box.items?.some((item) => item.isFragile);
 
-    setSelected(_box.move?.moveName);
-    setFormField({
-      id: _box?.id,
-      userId: user.id,
-      moveId: _box?.moveId,
-      location: _box?.location,
-    });
-
-    if (hasSaved) {
-      window.alert('Updated');
-    }
-  }, [boxes, isLoading]);
-
-  if (box) {
-    box.totalItems = items?.length;
-    box.totalValue = getSum3(items.map((item) => item?.value || 0));
-    box.isFragile = items.some((item) => item?.isFragile);
-  }
-
-  const handleDelete = (event) => {
-    event.preventDefault();
-    deleteBox(box?.id).then(() => history.push('/boxes'));
-  };
+    setDropdownSelection(box.move.moveName);
+    setBoxDetail(box);
+  }; // aggregateMoveInfo
 
   const handleControlledDropDownChange = (event) => {
-    const newformField = { ...formField };
-    newformField[event.target.id] = event.target.value;
+    const box = { ...boxDetail };
 
-    // console.log(`
-    //   targetValue: ${event.target.value}
-    //   ======
-    //   targetOptions: ${event.target.options}
-    //   ======
-    //   targetOptionsSelectedIndex: ${event.target.options.selectedIndex}
-    // `)
-    const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
-    const optionId = event.target.options[selectedIndex].getAttribute('boxid');
+    // box[event.target.id] = event.target.value;
+
+    const dropdownSelectionIndex = parseInt(event.target.options.selectedIndex, 10);
+    /*
+      User should not be able to select label.
+    */
+    if (!dropdownSelectionIndex) return;
+
+    const updatedMoveId = parseInt(event.target.options[dropdownSelectionIndex].getAttribute('moveid'), 10);
 
     /*
       Default 1st move if no selection made.
-      No select results in praseInt(optionId) is null.
+      No select results in parseInt(updatedMoveId) is null.
     */
-    setSelected(event.target.value);
-    newformField.moveId = parseInt(optionId, 10) || moves[0].id;
-    setFormField(newformField);
-    setHasSaved(false);
-  }; // handleControlledInputChange
+    setDropdownSelection(event.target.value);
+    box.moveId = parseInt(updatedMoveId, 10) || moves[0].id;
 
-  const handleControlledInputChange = (event) => {
-    const newformField = { ...formField };
-    newformField[event.target.id] = event.target.value;
-    setFormField(newformField);
+    setBoxDetail(box);
     setHasSaved(false);
   }; // handleControlledInputChange
 
   const submitUpdate = (event) => {
     event.preventDefault();
-    const newformField = { ...formField };
+
+    const box = { ...boxDetail };
+    const itemIds = box.items.map((item) => item.id);
+
+    /*
+      Update box's associated items so they match moveId.
+    */
+    Promise.all(itemIds.map((id) => getItemByItemId(id)))
+      .then((items) => items.forEach((item) => {
+        item.moveId = box.moveId;
+        delete item.box;
+        updateItem(item);
+      }))
+      .catch((err) => console.error(`Promise all Error: ${err}`));
 
     /*
     Cleanup. Does not belong to ERD.
     */
-    delete newformField.usersMoves;
-    updateBox(newformField);
+    delete box.totalItemsCount;
+    delete box.totalItemsValue;
+    delete box.usersMoves;
+    delete box.isFragile;
+    delete box.items;
+    delete box.move;
+
+    updateBox(box);
+
     setHasSaved(true);
   }; // updateMove
+
+  const handleDelete = (event) => {
+    event.preventDefault();
+    deleteBox(boxDetail?.id).then(() => history.push('/boxes'));
+  };
+
+  const handleControlledInputChange = (event) => {
+    const box = { ...boxDetail };
+
+    box[event.target.id] = event.target.value;
+
+    setBoxDetail(box);
+    setHasSaved(false);
+  }; // handleControlledInputChange
+
+  useEffect(() => {
+    setIsLoading(true);
+    getMovesByUserId()
+      .then(() => getBoxByBoxId(boxId))
+      .then(aggregateBoxInfo)
+      .finally(() => setIsLoading(false))
+      .catch((err) => console.error(`useEffect Error: ${err}`));
+  }, []);
+
+  useEffect(() => {
+    if (hasSaved) {
+      window.alert('Updated');
+    }
+  }, [hasSaved]);
+
+  if (isLoading) return <>Loading Box Detail. . </>;
 
   return (
     <section className={styles.container}>
       <div className={styles.imgContainer}>
-        <img className={styles.img} src={`https://source.unsplash.com/featured/?${box?.location}`} alt={`${box?.location}`} />
+        <img className={styles.img} src={`https://source.unsplash.com/featured/?${boxDetail?.location}`} alt={`${boxDetail?.location}`} />
       </div>
       <form action="" className={styles.container__form}>
         <fieldset className={styles.container__formGroup}>
@@ -123,8 +135,8 @@ export const BoxDetail = () => {
               id="location"
               name="location"
               className={styles.formControl}
-              placeholder="Add Box Location ..."
-              value={formField.location}
+              placeholder="Add boxDetail Location ..."
+              value={boxDetail.location}
               onChange={(e) => { handleControlledInputChange(e); }}
             />
           </label>
@@ -134,22 +146,24 @@ export const BoxDetail = () => {
               id="value"
               name="value"
               className={styles.formControl}
-              placeholder="Box Value"
-              value={`$${box?.totalValue || '0.00'}`}
+              placeholder="boxDetail Value"
+              value={`$${boxDetail?.totalItemsValue || '0.00'}`}
               disabled
             />
           </label>
-          {/* <div className={styles.container__value}>Value</div>
-          <div className={styles.container__value__value}>$
-          { box?.totalValue || '0.00' }</div> */}
-
-          <label className={styles.container__dropdownLabel} htmlFor="usersMoves">Current Move Assignment
-            {/* excluding value={selected}
-            shows selected move, including it always shows default */}
-            <select id="usersMoves" value={selected} className={styles.formControl} onChange={handleControlledDropDownChange}>
-              <option value="0">Move</option>
+          <label className={styles.container__dropdownLabel} htmlFor="container__dropdown">Current Move Assignment
+            {/* excluding value={dropdownSelection}
+            shows dropdownSelection move, including it always shows default */}
+            <select
+              id="container__dropdown"
+              className={styles.formControl}
+              value={dropdownSelection}
+              onChange={handleControlledDropDownChange}
+              required
+            >
+              <option value={boxDetail.move.id || 0}>Move</option>
               {moves.map((move) => (
-                <option boxid={move.id} key={move.id} value={move.moveName}>
+                <option moveid={move.id} key={move.id} value={move.moveName}>
                   {move.moveName}
                 </option>
               ))}
@@ -158,7 +172,7 @@ export const BoxDetail = () => {
         </fieldset>
 
         <div className={styles.container__itemCount}>
-          <div className={styles.container__itemCount__count}>{ box?.totalItems }</div>
+          <div className={styles.container__itemCount__count}>{boxDetail?.totalItemsCount}</div>
           <div className={styles.container__itemCount__item}>Items</div>
         </div> {/* container__itemCount */}
         <NavLink
@@ -166,23 +180,25 @@ export const BoxDetail = () => {
           to={{
             pathname: '/items',
             state: {
-              box: parseInt(boxId, 10),
+              boxDetail: parseInt(boxId, 10),
             },
           }}>
           <button type="button" id="btn--edit-items" className={styles.container__navlinkBtn}>add/update items</button>
         </NavLink>
-        <NavLink to={`/moves/${box?.moveId}`} className={styles.container__navlink__view}>
+        <NavLink to={`/moves/${boxDetail?.moveId}`} className={styles.container__navlink__view}>
           <button type="button" id="btn--viewMove" className={styles.container__navlinkBtn__view}>view move</button>
         </NavLink>
 
         <fieldset className={styles.fragile__checkbox}>
           <label className={styles.fragile__checkboxLabel} htmlFor="isFragile">Fragile
-            <input type="checkbox" id="isFragile" checked={box?.isFragile} className={styles.formControl} readOnly />
+            <input type="checkbox" id="isFragile" checked={boxDetail?.isFragile} className={styles.formControl} readOnly />
           </label>
         </fieldset>
 
         <button type="submit" className={styles.container__btn__submit} onClick={submitUpdate}>Update</button>
-        <button type="button" className={styles.container__btn__delete} onClick={handleDelete} id={`btn--delete-${box?.id}`}>Delete</button>
+        <button type="button" className={styles.container__btn__delete} onClick={handleDelete} id={`btn--delete-${boxDetail?.id}`}>
+          Delete
+        </button>
       </form>
     </section>
   );

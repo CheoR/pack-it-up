@@ -16,13 +16,13 @@ export const ItemProvider = (props) => {
     .then((res) => res.json())
     .then(setItems); // getItems
 
-  const getItemByItemId = (id) => fetch(`${baseURL}/items/${id}`)
+  const getItemByItemId = (id) => fetch(`${baseURL}/items/${id}?_expand=box`)
     .then((res) => res.json())
     .catch((err) => {
       console.log(`Error: ${err}`);
     }); // getItems
 
-  const getItemsByUserId = () => fetch(`${baseURL}/items?userId=${user.id}`)
+  const getItemsByUserId = () => fetch(`${baseURL}/items?userId=${user.id}&_expand=box`)
     .then((res) => res.json())
     .then(setItems)
     .catch((err) => {

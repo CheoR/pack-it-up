@@ -5,11 +5,11 @@ import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from '../items/ItemProvider';
 
+import { UserHeader } from '../helpers/UserHeader';
 import { Instructions } from '../helpers/instructions/Instructions';
 import { Summary } from '../helpers/summary/Summary';
 
 import styles from './userPage.module.css';
-import { UserHeader } from '../helpers/UserHeader';
 
 export const UserPage = () => {
   const { user } = useContext(UserContext);
@@ -21,9 +21,9 @@ export const UserPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getMovesByUserId(user.id)
-      .then(getBoxesByUserId(user.id))
-      .then(getItemsByUserId(user.id))
+    getMovesByUserId()
+      .then(getBoxesByUserId)
+      .then(getItemsByUserId)
       .then(() => setIsLoading(false));
   }, []); // useEffect
 
@@ -47,7 +47,7 @@ export const UserPage = () => {
 
   const dataToRender = [usersMoves, usersBoxes, usersItems];
 
-  if (isLoading) return null;
+  if (isLoading) return <>Loading . . </>;
 
   return (
     <main className={styles.userPage}>
