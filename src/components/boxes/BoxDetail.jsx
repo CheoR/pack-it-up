@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useLocation, useHistory, useParams } from 'react-router-dom';
 
@@ -7,98 +6,87 @@ import { BoxContext } from './BoxProvider';
 import { ItemContext } from '../items/ItemProvider';
 
 import styles from './boxDetail.module.css';
-console.log('BEFORE BOX DETAIL LOADS');
-export const BoxDetail = () => {
 
-  const { getItemByItemId, updateItem } = useContext(ItemContext);
+export const BoxDetail = () => {
   const { moves, getMovesByUserId } = useContext(MoveContext);
   const { getBoxByBoxId, updateBox, deleteBox } = useContext(BoxContext);
-
+  const { getItemByItemId, updateItem } = useContext(ItemContext);
+  const [dropdownSelection, setDropdownSelection] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasSaved, setHasSaved] = useState(false);
-  const [selected, setSelected] = useState('');
   const [boxDetail, setBoxDetail] = useState({});
 
   const location = useLocation();
   const history = useHistory();
   let { boxId } = useParams();
-  console.log(`start of BoxDetail , isLoading: ${isLoading}`);
 
   /*
     In case user does a hard refresh, otherwise app will error out due to missing boxId.
   */
   boxId = parseInt(boxId, 10) || parseInt(location.pathname.split('/')[2], 10);
 
-  const aggregateBoxInfo = (_box) => {
-    console.log(`aggregateBoxInfo, isLoading: ${isLoading}`);
-    // const _box = { ...boxDetail };
-
-    console.log('aggregateBoxInfo box before ');
-    console.table(_box);
-    _box.totalItemsCount = _box.items?.length;
-    _box.totalItemsValue = _box.items?.map((item) => item.value)
+  const aggregateBoxInfo = (box) => {
+    box.totalItemsCount = box.items?.length;
+    box.totalItemsValue = box.items?.map((item) => item.value)
       .reduce((acc, curr) => acc + curr, 0);
-    _box.isFragile = _box.items?.some((item) => item.isFragile);
-    console.log('aggregateBoxInfo box after');
-    console.table(_box);
-    setBoxDetail(_box);
-    // return new Promise((resolve, reject) => {
-    //   resolve(true);
-    //   reject(() => new Error('aggregateBoxInfo something went wrong'));
-    // });
+    box.isFragile = box.items?.some((item) => item.isFragile);
+
+    setDropdownSelection(box.move.moveName);
+    setBoxDetail(box);
   }; // aggregateMoveInfo
 
   const handleControlledDropDownChange = (event) => {
-    console.log(`handleControlledDropDownChange, isLoading: ${isLoading}`);
-    const _box = { ...boxDetail };
+    const box = { ...boxDetail };
 
-    _box[event.target.id] = event.target.value;
+    // box[event.target.id] = event.target.value;
 
-    const selectedIndex = parseInt(event.target.options.selectedIndex, 10);
-    const optionId = parseInt(event.target.options[selectedIndex].getAttribute('moveid'), 10);
+    const dropdownSelectionIndex = parseInt(event.target.options.selectedIndex, 10);
+    /*
+      User should not be able to select label.
+    */
+    if (!dropdownSelectionIndex) return;
 
-    console.log('handleControlledDropDownChange');
-    console.log('_box ');
-    console.table(_box);
-    console.log(` selectedIndex: ${selectedIndex}\noptionId:${optionId}`);
+    const updatedMoveId = parseInt(event.target.options[dropdownSelectionIndex].getAttribute('moveid'), 10);
 
     /*
       Default 1st move if no selection made.
-      No select results in parseInt(optionId) is null.
+      No select results in parseInt(updatedMoveId) is null.
     */
-    setSelected(event.target.value);
-    _box.moveId = parseInt(optionId, 10) || moves[0].id;
-    setBoxDetail(_box);
+    setDropdownSelection(event.target.value);
+    box.moveId = parseInt(updatedMoveId, 10) || moves[0].id;
+
+    setBoxDetail(box);
     setHasSaved(false);
   }; // handleControlledInputChange
 
   const submitUpdate = (event) => {
     event.preventDefault();
-    console.log(`submitUpdate, isLoading: ${isLoading}`);
-    const _box = { ...boxDetail };
-    const id = _box.move.id;
-    const itemIds = _box.items.map((item) => item.id);
 
+    const box = { ...boxDetail };
+    const itemIds = box.items.map((item) => item.id);
+
+    /*
+      Update box's associated items so they match moveId.
+    */
     Promise.all(itemIds.map((id) => getItemByItemId(id)))
-      .then((objs) => {
-        Promise.all(obj.forEach((obj) => {
-          obj.moveId = _box.moveId;
-          delete obj.box;
-          updateItem(obj);
-        }))
-      })
-      .catch((err) => console.error(`Promise.all Error: ${err}`));
+      .then((items) => items.forEach((item) => {
+        item.moveId = box.moveId;
+        delete item.box;
+        updateItem(item);
+      }))
+      .catch((err) => console.error(`Promise all Error: ${err}`));
+
     /*
     Cleanup. Does not belong to ERD.
     */
-    delete _box.totalItemsCount;
-    delete _box.totalItemsValue;
-    delete _box.usersMoves;
-    delete _box.isFragile
-    delete _box.items;
-    delete _box.move;
+    delete box.totalItemsCount;
+    delete box.totalItemsValue;
+    delete box.usersMoves;
+    delete box.isFragile;
+    delete box.items;
+    delete box.move;
 
-    updateBox(_box);
+    updateBox(box);
 
     setHasSaved(true);
   }; // updateMove
@@ -109,146 +97,31 @@ export const BoxDetail = () => {
   };
 
   const handleControlledInputChange = (event) => {
-    console.log(`handleControlledInputChange, isLoading: ${isLoading}`);
-    const _box = { ...boxDetail };
+    const box = { ...boxDetail };
 
-    _box[event.target.id] = event.target.value;
+    box[event.target.id] = event.target.value;
 
-    setBoxDetail(_box);
+    setBoxDetail(box);
     setHasSaved(false);
   }; // handleControlledInputChange
 
   useEffect(() => {
-    console.log(`use effect 1 loaded, isLoading: ${isLoading}`);
     setIsLoading(true);
-    getBoxByBoxId(boxId)
-      .then((_box) => {
-        console.log('current box');
-        console.table(_box);
-        // setBoxDetail(_box);
-        // .then(() => aggregateBoxInfo())
-        aggregateBoxInfo(_box);
-      })
-      .then(() => setSelected(boxDetail?.move?.moveName))
-      .then(getMovesByUserId)
-      .then(() => setIsLoading(false))
+    getMovesByUserId()
+      .then(() => getBoxByBoxId(boxId))
+      .then(aggregateBoxInfo)
+      .finally(() => setIsLoading(false))
       .catch((err) => console.error(`useEffect Error: ${err}`));
   }, []);
 
-
-//   Hello everybody, i was wondering if I can get some help on my thought process why this is no working. 
-// Issue is with setState as part of a then chain inside a useEffect. 
-
-// There's more to this file but it's not important. 
-
-// Things to note:
-
-// 1. fetchBoxById successfully fetches the box object by id.
-// 2. setBox fails to update the box state
-// 3. callFuncThatDoesStuffWithBoxData fails to mutate box since box state never updated before being called
-
-// I see that 
-
-// then
-
-//  returns resolved/rejected values in a new promise, so I don't mind that 
-
-// setBox
-
-//  returns undefined. 
-// I just can't figure out why box's value is not set before 
-
-// callFuncThatDoesStuffWithBoxData
-
-//  runs. 
-
-// const [box, setBox] = useState({});
-// const { boxId } = useParams();
-
-// const callFuncThatDoesStuffWithBoxData = () => {
-//   const updateBox = { ...box };
-//   update fields for updateBox
-//   add extra fields to updateBox
-//   setBox(updateBox);
-// }
-
-// useEffect(() => {
-//   setIsLoading(true);
-//   fetchBoxById(boxId)
-//     .then(setBox)
-//     .then(callFuncThatDoesStuffWithBoxData)
-//     .finally(setIsLoading(false))
-//     .catch((err) => console.err(`Hey, look at this error: ${err.message}`);
-// }, []);
-
-// if (isLoading) return <>Loading Box Detail. . </>;
-
-// return (
-//   <div>
-//     <other stuff here />
-//   </div>
-// )
-
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       setIsLoading(true);
-  //       const box = await getBoxByBoxId(boxId);
-  //       console.log('box ------------ box');
-  //       console.table(box);
-  //       console.log('box ------------ box');
-  //       await setBoxDetail(box);
-  //       console.log('box detail set 1');
-  //       console.table(boxDetail);
-  //       await aggregateBoxInfo();
-  //       console.log('box detail set 2');
-  //       console.table(boxDetail);
-  //     } catch (err) {
-  //       console.error(`useEffect Error: ${err}`)
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   getBoxByBoxId(boxId)
-  //     .then((_box) => setBoxDetail((prevState, _box) => {
-  //       return {
-  //         ...prevState,
-  //         ..._box,
-  //       }
-  //     }))
-  //     .then(() => aggregateBoxInfo())
-  //     .then(() => setSelected(boxDetail?.move?.moveName))
-  //     .then(getMovesByUserId)
-  //     .then(() => setIsLoading(false))
-  //     .catch((err) => console.error(`useEffect Error: ${err}`));
-  // }, []);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   aggregateBoxInfo()
-  //     .then(() => setSelected(boxDetail?.move?.moveName))
-  //     .then(getMovesByUserId)
-  //     .then(() => setIsLoading(false))
-  //     .catch((err) => console.error(`useEffect Error: ${err}`));
-  // }, [boxDetail]);
-
   useEffect(() => {
-    console.log(`use effect 2 loaded, isLoading: ${isLoading}`);
-
     if (hasSaved) {
       window.alert('Updated');
     }
-  }, [hasSaved]); // useEffect
+  }, [hasSaved]);
 
-  console.log(` end of file before if, isLoading: ${isLoading}`);
   if (isLoading) return <>Loading Box Detail. . </>;
-  console.log(`end of file after if isLoading: ${isLoading}`);
+
   return (
     <section className={styles.container}>
       <div className={styles.imgContainer}>
@@ -278,11 +151,17 @@ export const BoxDetail = () => {
               disabled
             />
           </label>
-          <label className={styles.container__dropdownLabel} htmlFor="usersMoves">Current Move Assignment
-            {/* excluding value={selected}
-            shows selected move, including it always shows default */}
-            <select id="usersMoves" value={selected} className={styles.formControl} onChange={handleControlledDropDownChange} required>
-              <option value={boxDetail?.move?.id || 0}>Move</option>
+          <label className={styles.container__dropdownLabel} htmlFor="container__dropdown">Current Move Assignment
+            {/* excluding value={dropdownSelection}
+            shows dropdownSelection move, including it always shows default */}
+            <select
+              id="container__dropdown"
+              className={styles.formControl}
+              value={dropdownSelection}
+              onChange={handleControlledDropDownChange}
+              required
+            >
+              <option value={boxDetail.move.id || 0}>Move</option>
               {moves.map((move) => (
                 <option moveid={move.id} key={move.id} value={move.moveName}>
                   {move.moveName}
@@ -317,9 +196,10 @@ export const BoxDetail = () => {
         </fieldset>
 
         <button type="submit" className={styles.container__btn__submit} onClick={submitUpdate}>Update</button>
-        <button type="button" className={styles.container__btn__delete} onClick={handleDelete} id={`btn--delete-${boxDetail?.id}`}>Delete</button>
+        <button type="button" className={styles.container__btn__delete} onClick={handleDelete} id={`btn--delete-${boxDetail?.id}`}>
+          Delete
+        </button>
       </form>
     </section>
   );
 };
-console.log('AFTER BOXDETAIL LOADS');
