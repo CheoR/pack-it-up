@@ -4,13 +4,10 @@ import { useLocation } from 'react-router-dom';
 import { UserContext } from '../auth/UserProvider';
 import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
-import { ItemContext } from '../items/ItemProvider';
 
 import { UserHeader } from '../helpers/UserHeader';
 import { Counter } from '../counter/Counter';
 import { BoxSummary } from './BoxSummary';
-
-import { getSum1 } from '../helpers/helpers';
 
 import styles from './boxList.module.css';
 
@@ -18,7 +15,6 @@ export const BoxList = () => {
   const { user } = useContext(UserContext);
   const { moves, getMovesByUserId } = useContext(MoveContext);
   const { boxes, getBoxesByUserId, addBox, setBoxes } = useContext(BoxContext);
-  const { items, getItemsByUserId } = useContext(ItemContext);
 
   const [dropdownSelection, setDropdownSelection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,14 +31,12 @@ export const BoxList = () => {
       */
       const _boxes = [...prevState];
       _boxes.forEach((box) => {
-        const itemsForThisBox = items.filter((item) => item.boxId === box.id);
-
-        box.totalItemsCount = itemsForThisBox.length;
-        box.totalItemsValue = getSum1(itemsForThisBox.map((item) => item.value || 0));
-        box.isFragile = itemsForThisBox.some((item) => item.isFragile);
+        box.totalItemsCount = box.items.length;
+        box.totalItemsValue = box.items.map((item) => item.value)
+          .reduce((acc, curr) => acc + curr, 0);
+        box.isFragile = box.items.some((item) => item.isFragile);
       }); // boxes.forEach
-      console.log('BOXES AFTER DELETE');
-      console.table(_boxes);
+
       return _boxes;
     });
   }; // aggregateBoxInfo
@@ -69,7 +63,6 @@ export const BoxList = () => {
     getMovesByUserId()
       .then(getBoxesByUserId)
       .then(aggregateBoxInfo)
-      .then(getItemsByUserId)
       .then(setDropdownSelection(moves[0].id))
       .finally(() => setIsLoading(false))
       .catch((err) => console.error(`Fetching Error: ${err}`));
@@ -94,6 +87,15 @@ export const BoxList = () => {
     }); // setNewBox
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    /*
+      Page dose not refresh/delete correctly. Sometimes delete
+      finshes after page has refreshed. Sometimes before. Adding
+      boxes as dependency in earlier useEffect causes infinite loop.
+    */
+    aggregateBoxInfo();
+  }, [boxes.length]);
 
   if (isLoading) return <>Loading . . </>;
 
