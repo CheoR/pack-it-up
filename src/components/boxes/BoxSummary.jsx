@@ -10,7 +10,8 @@ export const BoxSummary = ({ box }) => {
 
   const handleDelete = (event) => {
     event.preventDefault();
-    deleteBox(box.id).then(() => history.push('/boxes'));
+    deleteBox(box.id)
+      .then(() => history.push('/boxes'));
   }; // handleDelete
 
   return (

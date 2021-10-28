@@ -102,7 +102,7 @@ export const ItemDetail = () => {
   const handleDelete = (event) => {
     event.preventDefault();
     deleteItem(itemDetail.id)
-      .then(() => history.push('/itemDetails'));
+      .then(() => history.push('/items'));
   }; // handleDelete
 
   const handleControlledInputChange = (event) => {

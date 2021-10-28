@@ -27,14 +27,24 @@ export const BoxList = () => {
   const location = useLocation();
 
   const aggregateBoxInfo = () => {
-    boxes.forEach((box) => {
-      const itemsForThisBox = items.filter((item) => item.boxId === box.id);
+    setBoxes((prevState) => {
+      /*
+        Use prevState because set_ is asynchronous.
+        No guarantee _boxes updates before aggregateBoxInfo
+        runs so use return function.
+      */
+      const _boxes = [...prevState];
+      _boxes.forEach((box) => {
+        const itemsForThisBox = items.filter((item) => item.boxId === box.id);
 
-      box.totalItemsCount = itemsForThisBox.length;
-      box.totalItemsValue = getSum1(itemsForThisBox.map((item) => item.value || 0));
-      box.isFragile = itemsForThisBox.some((item) => item.isFragile);
-    }); // boxes.forEach
-    setBoxes(boxes);
+        box.totalItemsCount = itemsForThisBox.length;
+        box.totalItemsValue = getSum1(itemsForThisBox.map((item) => item.value || 0));
+        box.isFragile = itemsForThisBox.some((item) => item.isFragile);
+      }); // boxes.forEach
+      console.log('BOXES AFTER DELETE');
+      console.table(_boxes);
+      return _boxes;
+    });
   }; // aggregateBoxInfo
 
   const handleControlledDropDownChange = (event) => {
@@ -58,10 +68,10 @@ export const BoxList = () => {
     setIsLoading(true);
     getMovesByUserId()
       .then(getBoxesByUserId)
+      .then(aggregateBoxInfo)
       .then(getItemsByUserId)
       .then(setDropdownSelection(moves[0].id))
-      .then(aggregateBoxInfo)
-      .then(() => setIsLoading(false))
+      .finally(() => setIsLoading(false))
       .catch((err) => console.error(`Fetching Error: ${err}`));
   }, []); // useEffect
 
