@@ -30,28 +30,37 @@ export const MoveDetail = () => {
       So delete associated items first (if any) before delete move and boxes.
     */
 
-    const linkedItemsIds = moveDetail.items.map((item) => item.id);
-
-    if (linkedItemsIds.length) {
-      const addFuncs = [];
-
-      for (let i = 0; i < linkedItemsIds.length; i += 1) {
-        addFuncs.push(deleteItem);
-      }
-
-      /*
-        Delete items before deleting given moveDetail.
-      */
-      Promise.all(addFuncs.map((callback, idx) => callback(linkedItemsIds[idx])))
-        .then(() => {
-          deleteMove(moveDetail?.id).then(() => history.push('/moves'));
-        })
-        .catch((err) => {
-          console.log(`Error: ${err}`);
-        });
+    if (moveDetail.items) {
+      Promise.all(moveDetail.items.forEach((item) => deleteItem(item)))
+        .then(() => history.push('/moves'))
+        .catch((err) => console.error(`Promise all error: ${err}`));
     } else {
-      deleteMove(moveDetail?.id).then(() => history.push('/moves'));
+      deleteMove(moveDetail.id)
+        .then(() => history.push('/moves'));
     }
+
+    // const linkedItemsIds = moveDetail.items.map((item) => item.id);
+
+    // if (linkedItemsIds.length) {
+    //   const addFuncs = [];
+
+    //   for (let i = 0; i < linkedItemsIds.length; i += 1) {
+    //     addFuncs.push(deleteItem);
+    //   }
+
+    //   /*
+    //     Delete items before deleting given moveDetail.
+    //   */
+    //   Promise.all(addFuncs.map((callback, idx) => callback(linkedItemsIds[idx])))
+    //     .then(() => {
+    //       deleteMove(moveDetail.id).then(() => history.push('/moves'));
+    //     })
+    //     .catch((err) => {
+    //       console.log(`Error: ${err}`);
+    //     });
+    // } else {
+    //   deleteMove(moveDetail.id).then(() => history.push('/moves'));
+    // }
   }; // handleDelete
 
   const handleControlledInputChange = (event) => {
@@ -80,22 +89,19 @@ export const MoveDetail = () => {
     setHasSaved(true);
   }; // updateMove
 
-  const aggregateMoveInfo = () => {
-    const _move = { ...moveDetail };
-
-    _move.totalBoxesCount = _move?.boxes?.length;
-    _move.totalItemsCount = _move?.items?.length;
-    _move.totalItemsValue = _move?.items?.map((item) => item.value)
+  const aggregateMoveInfo = (move) => {
+    move.totalBoxesCount = move.boxes.length;
+    move.totalItemsCount = move.items.length;
+    move.totalItemsValue = move.items.map((item) => item.value)
       .reduce((acc, curr) => acc + curr, 0);
-    _move.isFragile = _move.items?.some((item) => item.isFragile);
+    move.isFragile = move.items.some((item) => item.isFragile);
 
-    setMoveDetail(_move);
+    setMoveDetail(move);
   }; // aggregateMoveInfo
 
   useEffect(() => {
     setIsLoading(true);
     getMoveByMoveId(moveId)
-      .then(setMoveDetail)
       .then(aggregateMoveInfo)
       .then(() => setIsLoading(false))
       .catch((err) => console.error(`useEffect Error: ${err}`));

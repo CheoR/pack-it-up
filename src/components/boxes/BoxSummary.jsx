@@ -10,7 +10,8 @@ export const BoxSummary = ({ box }) => {
 
   const handleDelete = (event) => {
     event.preventDefault();
-    deleteBox(box.id).then(() => history.push('/boxes'));
+    deleteBox(box.id)
+      .then(() => history.push('/boxes'));
   }; // handleDelete
 
   return (
@@ -26,12 +27,12 @@ export const BoxSummary = ({ box }) => {
 
       <fieldset className={styles.move__checkbox}>
         <label className={styles.move__checkboxLabel} htmlFor="summaryBox">Move
-          <input type="checkbox" id="summaryBox" checked={box.moveId} className={styles.formControl} readOnly />
+          <input type="checkbox" id="summaryBox" checked={box.moveId || 0} className={styles.formControl} readOnly />
         </label>
       </fieldset>
       <fieldset className={styles.fragile__checkbox}>
         <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">Fragile
-          <input type="checkbox" id="summaryFragile" checked={box.isFragile} className={styles.formControl} readOnly />
+          <input type="checkbox" id="summaryFragile" checked={box.isFragile || false} className={styles.formControl} readOnly />
         </label>
       </fieldset>
 

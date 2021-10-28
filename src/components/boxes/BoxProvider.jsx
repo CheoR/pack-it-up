@@ -22,7 +22,7 @@ export const BoxProvider = (props) => {
       console.log(`Error: ${err}`);
     }); // getBoxes
 
-  const getBoxesByUserId = () => fetch(`${baseURL}/boxes?userId=${user.id}`)
+  const getBoxesByUserId = () => fetch(`${baseURL}/boxes?userId=${user.id}&_embed=items&_expand=move`)
     .then((res) => res.json())
     .then(setBoxes)
     .catch((err) => {
