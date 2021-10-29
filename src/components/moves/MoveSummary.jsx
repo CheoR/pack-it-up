@@ -1,58 +1,33 @@
-/* eslint-disable */
-
 import React, { useContext } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
 import { MoveContext } from './MoveProvider';
 import { ItemContext } from '../items/ItemProvider';
-import { BoxContext } from '../boxes/BoxProvider';
 
 import styles from './moveSummary.module.css';
 
 export const MoveSummary = ({ move }) => {
   const { deleteMove } = useContext(MoveContext);
-  const { boxes } = useContext(BoxContext);
-  const { items, deleteItem } = useContext(ItemContext);
+  const { deleteItem } = useContext(ItemContext);
 
   const history = useHistory();
 
   const handleDelete = (event) => {
     event.preventDefault();
-
     /*
       json-server only deletes boxes linked to current move and not thier associated items.
       So delete associated items first (if any) before delete move and boxes.
     */
-    // deleteMove(move?.id).then(() => history.push('/moves'))
-
-    // const linkedBoxesIds = boxes.filter((box) => box.moveId === move.id).map((box) => box.id);
-    // const linkedItemsIds = items.filter((item) => linkedBoxesIds.includes(
-    //   item.boxId
-    // )).map((item) => item.id);
-
-    // if (linkedItemsIds.length) {
-    //   const addFuncs = [];
-
-    //   for (let i = 0; i < linkedItemsIds.length; i += 1) {
-    //     addFuncs.push(deleteItem);
-    //   }
-
-    //   /*
-    //     Delete items before deleing given move.
-    //   */
-    //   Promise.all(addFuncs.map((callback, idx) => callback(linkedItemsIds[idx])))
-    //     .then(() => {
-    //       deleteMove(move?.id).then(() => history.push('/moves'));
-    //     })
-    //     .catch((err) => {
-    //       console.log(`Error: ${err}`);
-    //     });
-    // } else {
-    //   deleteMove(move?.id).then(() => history.push('/moves'));
-    // }
-    console.log('move summary delete ');
+    if (move.items.length) {
+      Promise.all(move.items.map((item) => deleteItem(item.id)))
+        .then(() => deleteMove(move.id))
+        .then(() => history.push('/moves'))
+        .catch((err) => console.error(`Promise all error: ${err}`));
+    } else {
+      deleteMove(move.id)
+        .then(() => history.push('/moves'));
+    }
   }; // handleDelete
-
   return (
     <section className={styles.summary}>
 
