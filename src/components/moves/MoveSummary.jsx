@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useContext } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
@@ -23,31 +25,32 @@ export const MoveSummary = ({ move }) => {
     */
     // deleteMove(move?.id).then(() => history.push('/moves'))
 
-    const linkedBoxesIds = boxes.filter((box) => box.moveId === move.id).map((box) => box.id);
-    const linkedItemsIds = items.filter((item) => linkedBoxesIds.includes(
-      item.boxId
-    )).map((item) => item.id);
+    // const linkedBoxesIds = boxes.filter((box) => box.moveId === move.id).map((box) => box.id);
+    // const linkedItemsIds = items.filter((item) => linkedBoxesIds.includes(
+    //   item.boxId
+    // )).map((item) => item.id);
 
-    if (linkedItemsIds.length) {
-      const addFuncs = [];
+    // if (linkedItemsIds.length) {
+    //   const addFuncs = [];
 
-      for (let i = 0; i < linkedItemsIds.length; i += 1) {
-        addFuncs.push(deleteItem);
-      }
+    //   for (let i = 0; i < linkedItemsIds.length; i += 1) {
+    //     addFuncs.push(deleteItem);
+    //   }
 
-      /*
-        Delete items before deleing given move.
-      */
-      Promise.all(addFuncs.map((callback, idx) => callback(linkedItemsIds[idx])))
-        .then(() => {
-          deleteMove(move?.id).then(() => history.push('/moves'));
-        })
-        .catch((err) => {
-          console.log(`Error: ${err}`);
-        });
-    } else {
-      deleteMove(move?.id).then(() => history.push('/moves'));
-    }
+    //   /*
+    //     Delete items before deleing given move.
+    //   */
+    //   Promise.all(addFuncs.map((callback, idx) => callback(linkedItemsIds[idx])))
+    //     .then(() => {
+    //       deleteMove(move?.id).then(() => history.push('/moves'));
+    //     })
+    //     .catch((err) => {
+    //       console.log(`Error: ${err}`);
+    //     });
+    // } else {
+    //   deleteMove(move?.id).then(() => history.push('/moves'));
+    // }
+    console.log('move summary delete ');
   }; // handleDelete
 
   return (
