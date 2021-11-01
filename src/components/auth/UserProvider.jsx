@@ -18,7 +18,10 @@ export const UserProvider = (props) => {
     sessionStorage.removeItem(userStorageKey);
   };
 
-  const isUserLoggedIn = () => !!user.id;
+  const isUserLoggedIn = () => {
+    const id = parseInt(sessionStorage.getItem(userStorageKey) || 0, 10);
+    return !!id;
+  };
 
   return (
     <UserContext.Provider value={{
