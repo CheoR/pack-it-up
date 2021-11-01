@@ -22,7 +22,7 @@ export const MoveProvider = (props) => {
       console.log(`Error: ${err}`);
     }); // getMoveByMoveId
 
-  const getMovesByUserId = () => fetch(`${baseURL}/moves?userId=${user.id}`)
+  const getMovesByUserId = () => fetch(`${baseURL}/moves?userId=${user.id}&_embed=boxes&_embed=items`)
     .then((res) => res.json())
     .then(setMoves)
     .catch((err) => {

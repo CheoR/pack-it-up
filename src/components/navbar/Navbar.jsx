@@ -5,8 +5,8 @@ import { UserContext } from '../auth/UserProvider';
 import styles from './navbar.module.css';
 
 export const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { logout, isUserLoggedIn } = useContext(UserContext);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export const Navbar = () => {
                   <Link className={styles.navbar__link} to="/items">Items</Link>
                 </li>
                 <li className={styles.navbar__li}>
-                  <Link className={styles.navbar__link} to="/Settings">Settings</Link>
+                  <Link className={styles.navbar__link} to="/settings">Settings</Link>
                 </li>
                 <li className={styles.navbar__li}>
                   <button type="button" className={styles.navbar__link} onClick={handleLogout}>Logout</button>
