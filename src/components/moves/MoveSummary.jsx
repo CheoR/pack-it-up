@@ -49,7 +49,7 @@ export const MoveSummary = ({ move }) => {
       <fieldset className={styles.fragile__checkbox}>
         <label className={styles.fragile__checkboxLabel} htmlFor="summaryFragile">
           Fragile
-          <input type="checkbox" name="summaryFragile" id="summaryFragile" checked={move.isFragile} className={styles.formControl} readOnly />
+          <input type="checkbox" name="summaryFragile" id="summaryFragile" checked={move.isFragile || false} className={styles.formControl} readOnly />
         </label>
       </fieldset>
 

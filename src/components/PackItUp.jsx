@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import { LandingPage } from './pages/LandingPage';
 import { Login } from './auth/Login';
@@ -25,6 +25,7 @@ import { authApi } from './auth/authSettings';
 
 export const PackItUp = () => {
   const { userStorageKey } = authApi;
+  const userId = parseInt(sessionStorage.getItem(userStorageKey) || 0, 10);
 
   return (
     <>
@@ -33,8 +34,8 @@ export const PackItUp = () => {
         <Switch>
           <Route exact path="/">
             {
-              userStorageKey
-                ? <Redirect to="/user" />
+              userId
+                ? <UserPage />
                 : <LandingPage />
             }
           </Route>
