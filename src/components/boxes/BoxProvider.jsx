@@ -19,14 +19,14 @@ export const BoxProvider = (props) => {
   const getBoxByBoxId = (id) => fetch(`${baseURL}/boxes/${id}?_embed=items&_expand=move`)
     .then((res) => res.json())
     .catch((err) => {
-      console.log(`Error: ${err}`);
+      console.error(`Error: ${err}`);
     }); // getBoxes
 
   const getBoxesByUserId = () => fetch(`${baseURL}/boxes?userId=${user.id}&_embed=items&_expand=move`)
     .then((res) => res.json())
     .then(setBoxes)
     .catch((err) => {
-      console.log(`Error: ${err}`);
+      console.error(`Error: ${err}`);
     }); // getBoxes
 
   const addBox = (box) => fetch(`${baseURL}/boxes`, {

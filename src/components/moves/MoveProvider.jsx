@@ -19,14 +19,14 @@ export const MoveProvider = (props) => {
   const getMoveByMoveId = (id) => fetch(`${baseURL}/moves/${id}?_embed=boxes&_embed=items`)
     .then((res) => res.json())
     .catch((err) => {
-      console.log(`Error: ${err}`);
+      console.error(`Error: ${err}`);
     }); // getMoveByMoveId
 
   const getMovesByUserId = () => fetch(`${baseURL}/moves?userId=${user.id}&_embed=boxes&_embed=items`)
     .then((res) => res.json())
     .then(setMoves)
     .catch((err) => {
-      console.log(`Error: ${err}`);
+      console.error(`Error: ${err}`);
     }); // getMovesByUserId
 
   const addMove = (move) => fetch(`${baseURL}/moves`, {
