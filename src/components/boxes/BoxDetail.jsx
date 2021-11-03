@@ -171,37 +171,36 @@ export const BoxDetail = () => {
             </select>
           </label>
         </fieldset>
+
+        <div className={styles.container__itemCount}>
+          <div className={styles.container__itemCount__count}>{boxDetail?.totalItemsCount}</div>
+          <div className={styles.container__itemCount__item}>Items</div>
+        </div> {/* container__itemCount */}
+        <NavLink
+          className={styles.container__navlink}
+          to={{
+            pathname: '/items',
+            state: {
+              boxDetail: parseInt(boxId, 10),
+            },
+          }}>
+          <button type="button" id="btn--edit-items" className={styles.container__navlinkBtn}>add/update items</button>
+        </NavLink>
+        <NavLink to={`/moves/${boxDetail?.moveId}`} className={styles.container__navlink__view}>
+          <button type="button" id="btn--viewMove" className={styles.container__navlinkBtn__view}>view move</button>
+        </NavLink>
+
+        <fieldset className={styles.fragile__checkbox}>
+          <label className={styles.fragile__checkboxLabel} htmlFor="isFragile">Fragile
+            <input type="checkbox" id="isFragile" checked={boxDetail?.isFragile} className={styles.formControl} readOnly />
+          </label>
+        </fieldset>
+
+        <button type="submit" className={styles.container__btn__submit} onClick={submitUpdate}>Update</button>
+        <button type="button" className={styles.container__btn__delete} onClick={handleDelete} id={`btn--delete-${boxDetail?.id}`}>
+          Delete
+        </button>
       </form>
-
-      <div className={styles.container__itemCount}>
-        <div className={styles.container__itemCount__count}>{boxDetail?.totalItemsCount}</div>
-        <div className={styles.container__itemCount__item}>Items</div>
-      </div> {/* container__itemCount */}
-      <NavLink
-        className={styles.container__navlink}
-        to={{
-          pathname: '/items',
-          state: {
-            boxDetail: parseInt(boxId, 10),
-          },
-        }}>
-        <button type="button" id="btn--edit-items" className={styles.container__navlinkBtn}>add/update items</button>
-      </NavLink>
-      <NavLink to={`/moves/${boxDetail?.moveId}`} className={styles.container__navlink__view}>
-        <button type="button" id="btn--viewMove" className={styles.container__navlinkBtn__view}>view move</button>
-      </NavLink>
-
-      <fieldset className={styles.fragile__checkbox}>
-        <label className={styles.fragile__checkboxLabel} htmlFor="isFragile">Fragile
-          <input type="checkbox" id="isFragile" checked={boxDetail?.isFragile} className={styles.formControl} readOnly />
-        </label>
-      </fieldset>
-
-      <button type="submit" className={styles.container__btn__submit} onClick={submitUpdate}>Update</button>
-      <button type="button" className={styles.container__btn__delete} onClick={handleDelete} id={`btn--delete-${boxDetail?.id}`}>
-        Delete
-      </button>
-      {/* </form> */}
     </section>
   );
 };

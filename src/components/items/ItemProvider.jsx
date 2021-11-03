@@ -19,14 +19,14 @@ export const ItemProvider = (props) => {
   const getItemByItemId = (id) => fetch(`${baseURL}/items/${id}?_expand=box`)
     .then((res) => res.json())
     .catch((err) => {
-      console.log(`Error: ${err}`);
+      console.error(`Error: ${err}`);
     }); // getItems
 
   const getItemsByUserId = () => fetch(`${baseURL}/items?userId=${user.id}&_expand=box`)
     .then((res) => res.json())
     .then(setItems)
     .catch((err) => {
-      console.log(`Error: ${err}`);
+      console.error(`Error: ${err}`);
     }); // getItems
 
   const addItem = (item) => fetch(`${baseURL}/items`, {
