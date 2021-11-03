@@ -77,7 +77,7 @@ export const ItemDetail = () => {
         setItemDetail(newitemDetail);
         setHasSaved(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }; // imageInputChange
 
   const handleImageUpload = (event) => {
