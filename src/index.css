@@ -8,8 +8,6 @@
   text-decoration: none;
   list-style: none;
   overflow-wrap: break-word;
-
-  /* border: 1px solid red; */
 }
 
 body {
@@ -31,6 +29,6 @@ html {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100%;
   width: 100%;
 }
