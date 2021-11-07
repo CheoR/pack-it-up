@@ -7,7 +7,7 @@
 .summary {
   padding: 0.2em;
   background: var(--primary-color);
-  height: 94vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -30,7 +30,6 @@
 }
 
 .formControl {
-  /* background: rgb(150, 155, 155); */
   background: var(--secondary-color);
   padding: 0.5em;
   display: block;
