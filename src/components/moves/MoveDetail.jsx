@@ -100,8 +100,8 @@ export const MoveDetail = () => {
   return (
     <section className={styles.container}>
       <form action="" className={styles.container__form}>
-        <fieldset className={styles.container__formGroup}>
-          <label className={styles.moveNameLabel} htmlFor="moveName">Move Name:
+        <fieldset className={styles.container_fieldset}>
+          <label className={styles.moveNameLabel} htmlFor="moveName">Move:
             <input
               type="text"
               id="moveName"
@@ -111,67 +111,97 @@ export const MoveDetail = () => {
               value={moveDetail?.moveName}
               onChange={(e) => { handleControlledInputChange(e); }} />
           </label>
-          <label className={styles.moveNameLabel} htmlFor="moveName">Value:
+        </fieldset>
+        <fieldset className={styles.container_fieldset}>
+          <label className={styles.valueLabel} htmlFor="value">Value:
             <input
               type="text"
-              id="moveName"
-              name="moveName"
+              id="value"
+              name="value"
               className={styles.formControl}
-              placeholder="Add Move Name..."
+              placeholder="Move Value"
               value={`$${moveDetail?.totalItemsValue || '0.00'}`}
               disabled />
           </label>
         </fieldset>
-        <div className={styles.container__boxCount}>
-          <div className={styles.container__boxCount__count}>
-            { moveDetail?.totalBoxesCount || '0' }
+        <div className={styles.counts}>
+          <div className={styles.container__boxCount}>
+            <div>
+              { moveDetail?.totalBoxesCount || '0' }
+            </div>
+            <div>
+              Boxes
+            </div>
           </div>
-          <div className={styles.container__boxCount__box}>
-            Boxes
+          <NavLink
+            className={styles.container__navlink}
+            to={{
+              pathname: '/boxes',
+              state: {
+                move: parseInt(moveId, 10),
+              },
+            }}>
+            <button
+              type="button"
+              id="btn--edit-boxes"
+              className={styles.container__navlinkBtn}
+            >
+              add/update boxes
+            </button>
+          </NavLink>
+        </div>
+        <div className={styles.counts}>
+          <div className={styles.container__itemCount}>
+            <div>
+              {moveDetail.totalItemsCount}
+            </div>
+            <div>
+              Items
+            </div>
           </div>
-        </div> {/* container__boxCount */}
-        <NavLink
-          className={styles.container__navlink}
-          to={{
-            pathname: '/boxes',
-            state: {
-              move: parseInt(moveId, 10),
-            },
-          }}>
+          <NavLink
+            className={styles.container__navlink}
+            to={{
+              pathname: '/items',
+            }}>
+            <button
+              type="button"
+              id="btn--edit-items"
+              className={styles.container__navlinkBtn}
+            >
+              add/update items
+            </button>
+          </NavLink>
+        </div>
+
+        <div className={styles.buttons}>
+          <fieldset className={styles.fragile__checkbox}>
+            <label className={styles.fragile__checkboxLabel} htmlFor="isFragile">Fragile
+              <input
+                type="checkbox"
+                id="isFragile"
+                checked={moveDetail?.isFragile}
+                className={styles.formControl}
+                readOnly
+              />
+            </label>
+          </fieldset>
+          <button
+            type="submit"
+            className={styles.container__btn__submit}
+            onClick={submitUpdate}
+          >
+            Update
+          </button>
           <button
             type="button"
-            id="btn--edit-boxes"
-            className={styles.container__navlinkBtn}
+            id={`btn--delete-${moveDetail?.id}`}
+            className={styles.container__btn__delete}
+            onClick={handleDelete}
           >
-            add/update boxes
+            Delete
           </button>
-        </NavLink>
-        <fieldset className={styles.fragile__checkbox}>
-          <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile
-            <input
-              type="checkbox"
-              id="isFragile"
-              checked={moveDetail?.isFragile}
-              className={styles.formControl}
-              readOnly
-            />
-          </label>
-        </fieldset>
-        <button
-          className={styles.container__btn__submit}
-          type="submit"
-          onClick={submitUpdate}
-        >
-          Update
-        </button>
-        <button
-          type="button"
-          id={`btn--delete-${moveDetail?.id}`}
-          className={styles.container__btn__delete}
-          onClick={handleDelete}
-        >
-          Delete
-        </button>
+        </div>
       </form>
     </section>
   );

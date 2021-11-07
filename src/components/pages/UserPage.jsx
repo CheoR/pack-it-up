@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { UserContext } from '../auth/UserProvider';
 import { MoveContext } from '../moves/MoveProvider';
-import { BoxContext } from '../boxes/BoxProvider';
-import { ItemContext } from '../items/ItemProvider';
 
 import { UserHeader } from '../helpers/UserHeader';
 import { Instructions } from '../helpers/instructions/Instructions';
@@ -14,16 +12,12 @@ import styles from './userPage.module.css';
 export const UserPage = () => {
   const { user } = useContext(UserContext);
   const { moves, getMovesByUserId } = useContext(MoveContext);
-  const { boxes, getBoxesByUserId } = useContext(BoxContext);
-  const { items, getItemsByUserId } = useContext(ItemContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     getMovesByUserId()
-      .then(getBoxesByUserId)
-      .then(getItemsByUserId)
       .then(() => setIsLoading(false));
   }, []); // useEffect
 
@@ -33,16 +27,20 @@ export const UserPage = () => {
     count: moves.length,
   };
 
+  const totalBoxes = moves.reduce((prev, curr) => prev + curr.boxes.length, 0);
+
   const usersBoxes = {
     type: 'boxes',
-    canUse: !!moves.length,
-    count: boxes.length,
+    canUse: !!totalBoxes,
+    count: totalBoxes,
   };
+
+  const totalItems = moves.reduce((prev, curr) => prev + curr.items.length, 0);
 
   const usersItems = {
     type: 'items',
-    canUse: !!boxes.length,
-    count: items.length,
+    canUse: !!totalItems,
+    count: totalItems,
   };
 
   const dataToRender = [usersMoves, usersBoxes, usersItems];

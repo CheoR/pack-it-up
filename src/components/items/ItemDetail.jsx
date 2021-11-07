@@ -145,8 +145,8 @@ export const ItemDetail = () => {
         )}
       </div>
       <form className={styles.container__form}>
-        <fieldset className={styles.container__formGroup}>
-          <label className={styles.descriptionLabel} htmlFor="location">Description:
+        <fieldset className={styles.container_fieldset}>
+          <label className={styles.descriptionLabel} htmlFor="description">Description:
             <input
               type="text"
               id="description"
@@ -157,8 +157,9 @@ export const ItemDetail = () => {
               onChange={(e) => { handleControlledInputChange(e); }}
             />
           </label>
-
-          <label className={styles.valueLabel} htmlFor="location">Value:
+        </fieldset>
+        <fieldset className={styles.container_fieldset}>
+          <label className={styles.valueLabel} htmlFor="value">Value:
             <input
               type="text"
               id="value"
@@ -169,8 +170,9 @@ export const ItemDetail = () => {
               onChange={(e) => { handleControlledInputChange(e); }}
             />
           </label>
-
-          <label className={styles.container__dropdownLabel} htmlFor="container__dropdown">Current Box Assignment
+        </fieldset>
+        <fieldset className={styles.container_fieldset}>
+          <label className={styles.dropdownLabel} htmlFor="container__dropdown">Box
             <select
               id="container__dropdown"
               className={styles.formControl}
@@ -186,35 +188,31 @@ export const ItemDetail = () => {
               ))}
             </select>
           </label>
-
-          <NavLink to={`/boxes/${itemDetail.boxId}`} className={styles.container__navlink}>
-            <button type="button" id={`btn--view-${itemDetail.boxId}`} className={styles.container__navlinkBtn}>
-              View Box Assgined
-            </button>
-          </NavLink>
         </fieldset>
 
-        <fieldset className={styles.fragile__checkbox}>
-          <label className={styles.fragie__checkboxLabel} htmlFor="isFragile">Fragile
-            <input
-              id="isFragile"
-              className={styles.formControl}
-              type="checkbox"
-              checked={itemDetail.isFragile}
-              onChange={handleCheckboxChange}
-            />
-          </label>
-        </fieldset>
+        <NavLink to={`/boxes/${itemDetail.boxId}`} className={styles.container__navlink}>
+          <button type="button" id={`btn--view-${itemDetail.boxId}`} className={styles.container__navlinkBtn}>
+            View Box Assgined
+          </button>
+        </NavLink>
 
-        {/* <div className="form-group">
-        accept="image/*;capture=environment"
-        <input id={`imageForItemId--${itemDetail.id}`} className={styles.imgInputFile} type="file"
-          ref={imgInputFile} onChange={imageInputChange} />
-        </div> */}
-        <input className={styles.imgInputFile} id={`imageForItemId--${itemDetail.id}`} type="file" ref={imgInputFile} onChange={imageInputChange} />
-        <button className={styles.container__btn__camera} type="button" id="camera" onClick={handleImageUpload}>Camera</button>
-        <button className={styles.container__btn__submit} type="submit" id={`btn--update-${itemDetail.id}`} onClick={submitUpdate}>Update</button>
-        <button className={styles.container__btn__delete} type="button" id={`btn--delete-${itemDetail.id}`} onClick={handleDelete}>Delete</button>
+        <div className={styles.buttons}>
+          <fieldset className={styles.fragile__checkbox}>
+            <label className={styles.fragile__checkboxLabel} htmlFor="isFragile">Fragile
+              <input
+                type="checkbox"
+                id="isFragile"
+                checked={itemDetail.isFragile}
+                className={styles.checkbox__formControl}
+                onChange={handleCheckboxChange}
+              />
+            </label>
+          </fieldset>
+          <input className={styles.imgInputFile} id={`imageForItemId--${itemDetail.id}`} type="file" ref={imgInputFile} onChange={imageInputChange} />
+          <button className={styles.container__btn__camera} type="button" id="camera" onClick={handleImageUpload}>Camera</button>
+          <button className={styles.container__btn__submit} type="submit" id={`btn--update-${itemDetail.id}`} onClick={submitUpdate}>Update</button>
+          <button className={styles.container__btn__delete} type="button" id={`btn--delete-${itemDetail.id}`} onClick={handleDelete}>Delete</button>
+        </div>
       </form>
     </section>
   );
