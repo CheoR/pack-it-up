@@ -5,7 +5,7 @@
 }
 
 .registrationPage {
-  height: 93vh;
+  height: 50vh;
 }
 
 .registrationPage__form {
@@ -13,13 +13,8 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-}
-
-.registrationPage__header {
-  width: 100%;
-  text-align: center;
 }
 
 .registrationPage__fieldset {
@@ -28,9 +23,13 @@
   justify-content: space-between;
 }
 
-.formControl {
-  padding: 1rem;
+.registrationPage__register {
+  background: var(--tricery-color);
+}
+
+.dialog {
   background: var(--secondary-color);
+  text-align: center;
 }
 
 .dialog,
@@ -41,19 +40,23 @@
   border-radius: 5px;
 }
 
-.registrationPage_label {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.dialog {
-  background: var(--secondary-color);
-  text-align: center;
-}
-
 .button__close,
 .registrationPage__register {
   background: var(--tricery-color);
+}
+
+.formControl {
+  border-bottom: 1px solid black;
+  padding: 0.5rem;
+  width: 70%;
+}
+
+.formControl:focus {
+  background: var(--secondary-color);
+}
+
+.registrationPage_label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
