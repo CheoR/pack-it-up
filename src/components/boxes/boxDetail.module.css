@@ -4,114 +4,118 @@
   --tricery-color: #3f826d;
 }
 
-.container {
-  height: 94vh;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(12, 1fr);
-  gap: 10px;
-  padding: 1rem;
-}
-
-.imgContainer,
-.container__form {
-  grid-column-start: 1;
-  grid-column-end: 13;
-}
 .imgContainer {
-  grid-row-start: 1;
-  grid-row-end: 3;
+  height: 200px;
+  background: var(--tricery-color);
 }
 
-.img {
+.img,
+.imgContainer,
+.container__form,
+.container_fieldset,
+.container__navlink,
+.container__boxCount,
+.container__itemCount,
+.container__navlinkBtn,
+.counts .container__navlink,
+.counts .container__navlinkBtn {
   width: 100%;
 }
 
-.container__form {
-  grid-row-start: 6;
-  grid-row-end: 13;
-
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-}
-
-.container__formGroup {
-  grid-column-start: 1;
-  grid-column-end: 13;
-}
-
-.locationLable,
-.container__dropdownLabel {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.formControl {
-  text-align: right;
-  padding: 1rem;
-  border: 1px solid black;
-  border-radius: 10px;
-  background: white;
-}
-
-.container__itemCount {
-  grid-column-start: 1;
-  grid-column-end: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.container__navlink {
-  grid-column-start: 5;
-  grid-column-end: 13;
-  text-align: right;
-  border: 1px solid black;
-  border-radius: 10px;
+.buttons,
+.container,
+.valueLabel,
+.dropdownLabel,
+.locationLabel,
+.container_fieldset,
+.container__navlinkBtn,
+.fragile__checkboxLabel,
+.container__btn__camera,
+.container__btn__submit,
+.container__btn__delete {
   padding: 0.5rem;
-  background: white;
 }
 
-.container__navlink__view {
-  grid-column-start: 1;
-  grid-column-end: 13;
+.buttons,
+.valueLabel,
+.counts,
+.dropdownLabel,
+.locationLabel,
+.container__itemCount,
+.fragile__checkboxLabel,
+.counts .container__navlink {
+  display: flex;
 }
 
-.container__navlinkBtn__view {
-  background: white;
-  width: 100%;
-  height: 100%;
-  border: 1px solid black;
-  border-radius: 10px;
+.buttons,
+.valueLabel,
+.dropdownLabel,
+.locationLabel,
+.fragile__checkboxLabel {
+  justify-content: space-between;
 }
 
-.fragile__checkbox {
-  grid-column-start: 1;
-  grid-column-end: 4;
+select,
+.fragile__checkbox,
+.container__navlinkBtn,
+.container__btn__camera,
+.container__btn__submit,
+.container__btn__delete,
+.fragile__checkboxLabel {
+  border-radius: 5px;
+}
+
+input[type="text"] {
+  border-bottom: 1px solid black;
 }
 
 .fragile__checkboxLabel {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  padding-left: 4.5rem;
-  padding-right: 1rem;
+  width: 90px;
+}
+
+.formControl {
+  width: 50%;
+}
+
+.formControl:focus {
+  background: var(--secondary-color);
+}
+
+.container {
+  background: var(--primary-color);
 }
 
 .container__btn__submit {
-  grid-column-start: 5;
-  grid-column-end: 6;
   background: lightgreen;
-  border-radius: 10px;
 }
 
 .container__btn__delete {
-  grid-column-start: 6;
-  grid-column-end: 7;
   background: salmon;
-  border-radius: 10px;
+}
+
+.container__btn__camera {
+  background: lightblue;
+}
+
+.container__navlinkBtn {
+  border: 2px solid lightgray;
+}
+
+.imgInputFile {
+  display: none;
+}
+
+.container__boxCount,
+.container__itemCount {
+  justify-content: space-around;
+  align-items: center;
+}
+
+.counts {
+  justify-content: space-around;
+}
+
+.counts .container__navlink {
+  justify-content: center;
 }
