@@ -53,11 +53,11 @@ export const ItemList = () => {
 
     const defaultBoxId = location?.state && location?.state?.box
       ? location.state.box
-      : boxes[0].id;
+      : boxes[0]?.id;
 
     const defaultMoveId = location?.state && location?.state?.box
       ? location.state.box.moveId
-      : boxes[0].moveId;
+      : boxes[0]?.moveId;
 
     setNewItem({
       type: {
@@ -81,9 +81,9 @@ export const ItemList = () => {
   });
 
   return (
-    <section className={styles.summary}>
+    <section>
       <UserHeader user={user} text="Items" />
-      <ul>
+      <ul className={styles.summary}>
         {
           items.map((item) => <ItemSummary key={item.id} item={item} />)
         }

@@ -100,9 +100,9 @@ export const BoxList = () => {
   if (isLoading) return <>Loading . . </>;
 
   return (
-    <section className={styles.summary}>
+    <section>
       <UserHeader user={user} text="Boxes" />
-      <ul>
+      <ul className={styles.summary}>
         {
           boxes.map((box) => <BoxSummary key={box.id} box={box} />)
         }
