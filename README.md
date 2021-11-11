@@ -8,6 +8,8 @@ Initial design made with Figma and the entity relational diagram made with diagr
 
 Issue tickets follow [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development#Behavioral_specifications), Behavior-Driven Development and use Github Project board to track issue lifecyles.
 
+Sever-side repo [here](https://github.com/CheoR/pack-it-up-api).
+
 # About Me
 
 Hi, my name's Cheo.
