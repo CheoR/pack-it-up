@@ -24,6 +24,7 @@ yarn-error.log*
 
 .eslintcache
 database.json
+!heroku_db.json
 *.json
 *.sql
 *.csv
