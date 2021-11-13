@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "https://cheor.github.io/pack-it-up/static/css/main.4dbf07aa.chunk.css",
-    "main.js": "https://cheor.github.io/pack-it-up/static/js/main.fd0a9e5c.chunk.js",
-    "main.js.map": "https://cheor.github.io/pack-it-up/static/js/main.fd0a9e5c.chunk.js.map",
+    "main.js": "https://cheor.github.io/pack-it-up/static/js/main.fc7ebd24.chunk.js",
+    "main.js.map": "https://cheor.github.io/pack-it-up/static/js/main.fc7ebd24.chunk.js.map",
     "runtime-main.js": "https://cheor.github.io/pack-it-up/static/js/runtime-main.6ebd7be4.js",
     "runtime-main.js.map": "https://cheor.github.io/pack-it-up/static/js/runtime-main.6ebd7be4.js.map",
     "static/js/2.5937e809.chunk.js": "https://cheor.github.io/pack-it-up/static/js/2.5937e809.chunk.js",
@@ -16,6 +16,6 @@
     "static/js/runtime-main.6ebd7be4.js",
     "static/js/2.5937e809.chunk.js",
     "static/css/main.4dbf07aa.chunk.css",
-    "static/js/main.fd0a9e5c.chunk.js"
+    "static/js/main.fc7ebd24.chunk.js"
   ]
 }
