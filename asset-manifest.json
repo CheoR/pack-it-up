@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "http://localhost:3000/static/css/main.4dbf07aa.chunk.css",
-    "main.js": "http://localhost:3000/static/js/main.fd0a9e5c.chunk.js",
-    "main.js.map": "http://localhost:3000/static/js/main.fd0a9e5c.chunk.js.map",
-    "runtime-main.js": "http://localhost:3000/static/js/runtime-main.4c20a323.js",
-    "runtime-main.js.map": "http://localhost:3000/static/js/runtime-main.4c20a323.js.map",
-    "static/js/2.5937e809.chunk.js": "http://localhost:3000/static/js/2.5937e809.chunk.js",
-    "static/js/2.5937e809.chunk.js.map": "http://localhost:3000/static/js/2.5937e809.chunk.js.map",
-    "index.html": "http://localhost:3000/index.html",
-    "static/css/main.4dbf07aa.chunk.css.map": "http://localhost:3000/static/css/main.4dbf07aa.chunk.css.map",
-    "static/js/2.5937e809.chunk.js.LICENSE.txt": "http://localhost:3000/static/js/2.5937e809.chunk.js.LICENSE.txt",
-    "static/media/PackItUpLogo.e8660baa.png": "http://localhost:3000/static/media/PackItUpLogo.e8660baa.png"
+    "main.css": "https://cheor.github.io/pack-it-up/static/css/main.4dbf07aa.chunk.css",
+    "main.js": "https://cheor.github.io/pack-it-up/static/js/main.fd0a9e5c.chunk.js",
+    "main.js.map": "https://cheor.github.io/pack-it-up/static/js/main.fd0a9e5c.chunk.js.map",
+    "runtime-main.js": "https://cheor.github.io/pack-it-up/static/js/runtime-main.6ebd7be4.js",
+    "runtime-main.js.map": "https://cheor.github.io/pack-it-up/static/js/runtime-main.6ebd7be4.js.map",
+    "static/js/2.5937e809.chunk.js": "https://cheor.github.io/pack-it-up/static/js/2.5937e809.chunk.js",
+    "static/js/2.5937e809.chunk.js.map": "https://cheor.github.io/pack-it-up/static/js/2.5937e809.chunk.js.map",
+    "index.html": "https://cheor.github.io/pack-it-up/index.html",
+    "static/css/main.4dbf07aa.chunk.css.map": "https://cheor.github.io/pack-it-up/static/css/main.4dbf07aa.chunk.css.map",
+    "static/js/2.5937e809.chunk.js.LICENSE.txt": "https://cheor.github.io/pack-it-up/static/js/2.5937e809.chunk.js.LICENSE.txt",
+    "static/media/PackItUpLogo.e8660baa.png": "https://cheor.github.io/pack-it-up/static/media/PackItUpLogo.e8660baa.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.4c20a323.js",
+    "static/js/runtime-main.6ebd7be4.js",
     "static/js/2.5937e809.chunk.js",
     "static/css/main.4dbf07aa.chunk.css",
     "static/js/main.fd0a9e5c.chunk.js"
