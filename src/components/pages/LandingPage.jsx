@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Instructions } from '../helpers/instructions/Instructions';
 import styles from './landingPage.module.css';
 
+console.log('Landing page');
 export const LandingPage = () => (
   <main className={styles.landingPage}>
     <h1 className={styles.landingPage__header}>track what you pack, app</h1>
