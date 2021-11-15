@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "description": "NSS Frontend Capstone Project - inventory CRUD app",
-  "homepage": "https://cheor.github.io/pack-it-up",
+  "homepage": "https://packitup.netlify.app",
   "author": "CheoR",
   "keywords": [
     "inventory, CRUD, REST API"
