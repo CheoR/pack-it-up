@@ -31,7 +31,7 @@ export const UserPage = () => {
 
   const usersBoxes = {
     type: 'boxes',
-    canUse: !!totalBoxes,
+    canUse: !!moves.length,
     count: totalBoxes,
   };
 
@@ -39,7 +39,7 @@ export const UserPage = () => {
 
   const usersItems = {
     type: 'items',
-    canUse: !!totalItems,
+    canUse: !!totalBoxes,
     count: totalItems,
   };
 
