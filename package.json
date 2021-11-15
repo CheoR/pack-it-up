@@ -21,11 +21,9 @@
     "react-scripts": "4.0.3"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "env-cmd -f .env.prod react-scripts start server.js",
     "start-local": "env-cmd -f .env.local react-scripts start server.js",
-    "build": "env-cmd -f .env.prod react-scripts build",
+    "build": "CI=false && env-cmd -f .env.prod react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "npx nodemon server.js",
