@@ -26,7 +26,6 @@ import { authApi } from './auth/authSettings';
 export const PackItUp = () => {
   const { userStorageKey } = authApi;
   const userId = parseInt(sessionStorage.getItem(userStorageKey) || 0, 10);
-  console.log('PackItUp before return');
 
   return (
     <>
