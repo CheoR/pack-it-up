@@ -9,6 +9,8 @@ import { UserHeader } from '../helpers/UserHeader';
 import { Counter } from '../counter/Counter';
 import { BoxSummary } from './BoxSummary';
 
+import { Loading } from '../loading/Loading';
+
 import styles from './boxList.module.css';
 
 export const BoxList = () => {
@@ -97,7 +99,7 @@ export const BoxList = () => {
     aggregateBoxInfo();
   }, [boxes.length]);
 
-  if (isLoading) return <>Loading . . </>;
+  if (isLoading) return <Loading />;
 
   return (
     <section>

@@ -47,7 +47,7 @@ export const BoxProvider = (props) => {
   })
     .then(getBoxesByUserId); // updateBox
 
-  const deleteBox = (id) => fetch(`${baseURL}/boxes/${id}`, {
+  const deleteBox = async (id) => fetch(`${baseURL}/boxes/${id}`, {
     method: 'DELETE',
   })
     .then(getBoxesByUserId(user.id)); // deleteBox

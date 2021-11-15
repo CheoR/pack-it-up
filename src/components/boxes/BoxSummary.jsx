@@ -8,10 +8,10 @@ export const BoxSummary = ({ box }) => {
   const { deleteBox } = useContext(BoxContext);
   const history = useHistory();
 
-  const handleDelete = (event) => {
+  const handleDelete = async (event) => {
     event.preventDefault();
-    deleteBox(box.id)
-      .then(() => history.push('/boxes'));
+    await deleteBox(box.id);
+    history.push('/boxes');
   }; // handleDelete
 
   return (

@@ -7,6 +7,8 @@ import { UserHeader } from '../helpers/UserHeader';
 import { Counter } from '../counter/Counter';
 import { MoveSummary } from './MoveSummary';
 
+import { Loading } from '../loading/Loading';
+
 import styles from './moveList.module.css';
 
 export const MoveList = () => {
@@ -69,7 +71,7 @@ export const MoveList = () => {
     aggregateMoveInfo();
   }, [moves.length]);
 
-  if (isLoading) return <>Loading .. . </>;
+  if (isLoading) return <Loading />;
 
   return (
     <section>

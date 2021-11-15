@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "description": "NSS Frontend Capstone Project - inventory CRUD app",
-  "homepage": "https://cheor.github.io/pack-it-up",
+  "homepage": "https://packitup.netlify.app",
   "author": "CheoR",
   "keywords": [
     "inventory, CRUD, REST API"
@@ -21,11 +21,9 @@
     "react-scripts": "4.0.3"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "env-cmd -f .env.prod react-scripts start server.js",
     "start-local": "env-cmd -f .env.local react-scripts start server.js",
-    "build": "env-cmd -f .env.prod react-scripts build",
+    "build": "CI=false && env-cmd -f .env.prod react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "npx nodemon server.js",
@@ -59,7 +57,6 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "gh-pages": "^3.2.3",
     "json-server": "^0.17.0",
     "nodemon": "^2.0.12"
   }

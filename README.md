@@ -16,6 +16,8 @@ Hi, my name's Cheo.
 
 This is my front-end capstone project for Nashville Software School.
 
+[![Demo](https://img.shields.io/badge/Live%20Demo-PackItUp-green)](https://cr-demo--packitup.netlify.app/)
+
 ## 🔗 Links
 
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://cheor.github.io/portfolio/)

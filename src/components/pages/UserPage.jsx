@@ -7,6 +7,8 @@ import { UserHeader } from '../helpers/UserHeader';
 import { Instructions } from '../helpers/instructions/Instructions';
 import { Summary } from '../helpers/summary/Summary';
 
+import { Loading } from '../loading/Loading';
+
 import styles from './userPage.module.css';
 
 export const UserPage = () => {
@@ -31,7 +33,7 @@ export const UserPage = () => {
 
   const usersBoxes = {
     type: 'boxes',
-    canUse: !!totalBoxes,
+    canUse: !!moves.length,
     count: totalBoxes,
   };
 
@@ -39,13 +41,13 @@ export const UserPage = () => {
 
   const usersItems = {
     type: 'items',
-    canUse: !!totalItems,
+    canUse: !!totalBoxes,
     count: totalItems,
   };
 
   const dataToRender = [usersMoves, usersBoxes, usersItems];
 
-  if (isLoading) return <>Loading . . </>;
+  if (isLoading) return <Loading />;
 
   return (
     <main className={styles.userPage}>
