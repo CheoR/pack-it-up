@@ -9,6 +9,8 @@ import { UserHeader } from '../helpers/UserHeader';
 import { Counter } from '../counter/Counter';
 import { ItemSummary } from './ItemSummary';
 
+import { Loading } from '../loading/Loading';
+
 import styles from './itemList.module.css';
 
 export const ItemList = () => {
@@ -73,7 +75,7 @@ export const ItemList = () => {
     }); // setNewItem
   }, [items]);
 
-  if (isLoading) return <>Loading .. . </>;
+  if (isLoading) return <Loading />;
 
   items.forEach((item) => {
     item.hasAssociatedBox = !!item.boxId;

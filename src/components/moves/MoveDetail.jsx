@@ -4,6 +4,8 @@ import { NavLink, useLocation, useHistory, useParams } from 'react-router-dom';
 import { MoveContext } from './MoveProvider';
 import { ItemContext } from '../items/ItemProvider';
 
+import { Loading } from '../loading/Loading';
+
 import styles from './moveDetail.module.css';
 
 export const MoveDetail = () => {
@@ -95,7 +97,7 @@ export const MoveDetail = () => {
     }
   }, [hasSaved, isLoading]); // useEffect
 
-  if (isLoading) return <>Loading . . . </>;
+  if (isLoading) return <Loading />;
 
   return (
     <section className={styles.container}>

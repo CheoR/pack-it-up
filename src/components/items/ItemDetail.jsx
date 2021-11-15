@@ -4,6 +4,8 @@ import { NavLink, useHistory, useLocation, useParams } from 'react-router-dom';
 import { BoxContext } from '../boxes/BoxProvider';
 import { ItemContext } from './ItemProvider';
 
+import { Loading } from '../loading/Loading';
+
 import styles from './itemDetail.module.css';
 
 export const ItemDetail = () => {
@@ -135,7 +137,7 @@ export const ItemDetail = () => {
     }
   }, [hasSaved]); // useEffect
 
-  if (isLoading) return <>Loading itemDetail Detail. . </>;
+  if (isLoading) return <Loading />;
 
   return (
     <section className={styles.container}>
