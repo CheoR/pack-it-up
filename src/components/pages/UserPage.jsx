@@ -7,6 +7,8 @@ import { UserHeader } from '../helpers/UserHeader';
 import { Instructions } from '../helpers/instructions/Instructions';
 import { Summary } from '../helpers/summary/Summary';
 
+import { Loading } from '../loading/Loading';
+
 import styles from './userPage.module.css';
 
 export const UserPage = () => {
@@ -45,7 +47,7 @@ export const UserPage = () => {
 
   const dataToRender = [usersMoves, usersBoxes, usersItems];
 
-  if (isLoading) return <>Loading . . </>;
+  if (isLoading) return <Loading />;
 
   return (
     <main className={styles.userPage}>

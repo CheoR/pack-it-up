@@ -5,6 +5,8 @@ import { MoveContext } from '../moves/MoveProvider';
 import { BoxContext } from './BoxProvider';
 import { ItemContext } from '../items/ItemProvider';
 
+import { Loading } from '../loading/Loading';
+
 import styles from './boxDetail.module.css';
 
 export const BoxDetail = () => {
@@ -121,7 +123,7 @@ export const BoxDetail = () => {
     }
   }, [hasSaved]);
 
-  if (isLoading) return <>Loading Box Detail. . </>;
+  if (isLoading) return <Loading />;
 
   return (
     <section className={styles.container}>
