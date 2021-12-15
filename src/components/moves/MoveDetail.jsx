@@ -161,19 +161,25 @@ export const MoveDetail = () => {
               Items
             </div>
           </div>
-          <NavLink
-            className={styles.container__navlink}
-            to={{
-              pathname: '/items',
-            }}>
-            <button
-              type="button"
-              id="btn--edit-items"
-              className={styles.container__navlinkBtn}
-            >
-              add/update items
-            </button>
-          </NavLink>
+          {
+            moveDetail?.totalBoxesCount
+              ? (
+                <NavLink
+                  className={styles.container__navlink}
+                  to={{
+                    pathname: '/items',
+                  }}>
+                  <button
+                    type="button"
+                    id="btn--edit-items"
+                    className={styles.container__navlinkBtn}
+                  >
+                    add/update items
+                  </button>
+                </NavLink>
+              )
+              : <div className={styles.container__navlinkBtnHide} />
+          }
         </div>
 
         <div className={styles.buttons}>

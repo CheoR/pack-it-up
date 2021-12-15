@@ -66,7 +66,7 @@ export const ItemList = () => {
         userId: user.id,
         boxId: defaultBoxId,
         moveId: defaultMoveId,
-        description: 'Change Item Description',
+        description: 'Item Description',
         value: 0,
         isFragile: false,
         imagePath: '',
