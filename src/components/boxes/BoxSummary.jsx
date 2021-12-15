@@ -17,7 +17,7 @@ export const BoxSummary = ({ box }) => {
   return (
     <section className={styles.summary}>
       <div className={styles.summary__figure}>
-        <img className={styles.summary__image} src="https://images.unsplash.com/photo-1595079676601-f1adf5be5dee?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80" alt="QR code place holder" />
+        <img className={styles.summary__image} src="https://media.istockphoto.com/photos/close-up-of-qr-code-example-picture-id518484289" alt="QR code place holder" />
       </div>
 
       <div className={styles.container__itemCount}>

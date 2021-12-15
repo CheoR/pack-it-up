@@ -154,7 +154,7 @@ export const ItemDetail = () => {
               id="description"
               name="description"
               className={styles.formControl}
-              placeholder="Add Item Description ..."
+              placeholder="Item Description ..."
               value={itemDetail.description}
               onChange={(e) => { handleControlledInputChange(e); }}
             />

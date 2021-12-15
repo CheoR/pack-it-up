@@ -18,8 +18,8 @@
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 3;
-  background: red;
-  border: 2px solid black;
+  background: rgba(0, 0, 0, 0);
+  border: 1px solid black;
 }
 
 .summary__image {

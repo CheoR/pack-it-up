@@ -18,7 +18,7 @@ export const ItemSummary = ({ item }) => {
     <section className={styles.summary}>
       <div className={styles.summary__image_summary}>
         { item.imagePath && (
-          <img className={styles.summary__image} src={item.imagePath} alt="User-defined" />
+          <img className={styles.summary__image} src={item.imagePath || 'https://media.istockphoto.com/photos/close-up-of-qr-code-example-picture-id518484289'} alt="User-defined" />
         )}
       </div>
 
