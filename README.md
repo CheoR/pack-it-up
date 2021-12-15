@@ -130,7 +130,7 @@ Please note, as of right now, running the above command including `-w` would cau
 
 - [_] Port project to the MERN stack.
 - [_] Style with Material-Ui.
-- [_] Live launch.
+- [X] Live launch. [![Demo](https://img.shields.io/badge/Live%20Demo-PackItUp-green)](https://cr-demo--packitup.netlify.app/)
 - [_] Encode item/box/move data as a QR code that can be printed out as a label for shipping.
 - [_] Add a complentary QR decoding, so user can scan QR on a box and get information about its contents (if user has authorization). User can limit what data 3rd parties (movers, storage management, ect) can see.
 

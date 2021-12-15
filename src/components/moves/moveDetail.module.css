@@ -15,7 +15,9 @@
 .container__itemCount,
 .container__navlinkBtn,
 .counts .container__navlink,
-.counts .container__navlinkBtn {
+.counts .container__navlinkBtn,
+.container__navlinkBtnHide,
+.counts .container__navlinkBtnHide {
   width: 100%;
 }
 
@@ -28,7 +30,8 @@
 .container__navlinkBtn,
 .fragile__checkboxLabel,
 .container__btn__delete,
-.container__btn__submit {
+.container__btn__submit,
+.container__navlinkBtnHide {
   padding: 0.5rem;
 }
 
@@ -70,7 +73,8 @@
 .container__navlinkBtn,
 .fragile__checkboxLabel,
 .container__btn__submit,
-.container__btn__delete {
+.container__btn__delete,
+.container__navlinkBtnHide {
   border-radius: 5px;
 }
 
@@ -101,4 +105,9 @@
 
 .container__btn__delete {
   background: salmon;
+}
+
+.container__navlinkBtnHide {
+  display: hide;
+  border: 2px solid rgba(0, 0, 0, 0);
 }
