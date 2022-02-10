@@ -31,7 +31,7 @@ export const ItemList = () => {
     items can only be created when there is at least one box made.
     */
 
-    const dropdownSelectionIndex = parseInt(event.target.options.dropdownSelectionIndex, 10) || 1;
+    const dropdownSelectionIndex = parseInt(event.target.options.selectedIndex, 10) || 1;
     const optionId = event.target.options[dropdownSelectionIndex].getAttribute('boxid');
     const updatedItem = { ...newItem };
 
